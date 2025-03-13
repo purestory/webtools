@@ -537,6 +537,24 @@ document.addEventListener('DOMContentLoaded', function() {
             handleFiles(files);
         }
         
+        // 파일 확장자 검사 함수
+        function isValidImageFile(file) {
+            const fileExt = getFileExtension(file.name).toLowerCase();
+            const mimeType = file.type.toLowerCase();
+            
+            // 지원하는 MIME 타입
+            const supportedMimeTypes = [
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/webp',
+                'image/gif',
+                'image/bmp'
+            ];
+            
+            return supportedInputFormats.includes(fileExt) && supportedMimeTypes.includes(mimeType);
+        }
+        
         // 파일 처리 및 미리보기 표시
         function handleFiles(files) {
             if (!files || files.length === 0) {
@@ -557,48 +575,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const previewContainer = document.querySelector('.preview-container');
             previewContainer.innerHTML = '';
             
+            let validFiles = 0;
+            let invalidFiles = [];
+            
             // 파일 미리보기 처리
             for (const file of files) {
-                // 파일 확장자 검사
-                const fileExt = getFileExtension(file.name);
-                if (!fileExt || !supportedInputFormats.includes(fileExt.toLowerCase())) {
-                    showMessage(`지원되지 않는 파일 형식입니다: ${file.name}`, 'error');
+                if (!isValidImageFile(file)) {
+                    invalidFiles.push(file.name);
                     continue;
                 }
                 
+                validFiles++;
+                
                 // 파일 아이템 생성
                 const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
+                fileItem.className = 'preview-item';
                 
                 // 파일 미리보기 생성
                 const filePreview = document.createElement('div');
-                filePreview.className = 'file-preview';
-                
-                // 이미지 파일인 경우 미리보기 표시
-                const previewItem = document.createElement('div');
-                previewItem.className = 'preview-item';
+                filePreview.className = 'preview-image';
                 
                 const previewImage = document.createElement('div');
                 previewImage.className = 'preview-image';
                 
-                if (file.type.startsWith('image/')) {
-                    const img = document.createElement('img');
-                    const fileURL = URL.createObjectURL(file);
-                    img.src = fileURL;
-                    img.alt = file.name;
-                    img.onload = () => {
-                        setTimeout(() => {
-                            URL.revokeObjectURL(fileURL);
-                        }, 1000);
-                    };
-                    previewImage.appendChild(img);
-                } else {
-                    // 비이미지 파일은 아이콘 표시
-                    const icon = document.createElement('div');
-                    icon.className = 'file-icon';
-                    icon.innerHTML = '<i class="far fa-file"></i>';
-                    previewImage.appendChild(icon);
-                }
+                const img = document.createElement('img');
+                const fileURL = URL.createObjectURL(file);
+                img.src = fileURL;
+                img.alt = file.name;
+                img.onload = () => {
+                    setTimeout(() => {
+                        URL.revokeObjectURL(fileURL);
+                    }, 1000);
+                };
+                previewImage.appendChild(img);
                 
                 const previewFilename = document.createElement('div');
                 previewFilename.className = 'preview-filename';
@@ -618,9 +627,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewFilesize.className = 'preview-filesize';
                 previewFilesize.textContent = formatFileSize(file.size);
                 
-                previewItem.appendChild(previewImage);
-                previewItem.appendChild(previewFilename);
-                previewItem.appendChild(previewFilesize);
+                fileItem.appendChild(previewImage);
+                fileItem.appendChild(previewFilename);
+                fileItem.appendChild(previewFilesize);
                 
                 // 삭제 버튼 추가
                 const deleteButton = document.createElement('button');
@@ -630,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 deleteButton.onclick = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    previewItem.remove();
+                    fileItem.remove();
                     
                     // 모든 파일이 제거되었는지 확인
                     if (!document.querySelector('.preview-item')) {
@@ -639,8 +648,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 };
                 
-                previewItem.appendChild(deleteButton);
-                previewContainer.appendChild(previewItem);
+                fileItem.appendChild(deleteButton);
+                previewContainer.appendChild(fileItem);
+            }
+            
+            // 지원하지 않는 파일이 있으면 메시지 표시
+            if (invalidFiles.length > 0) {
+                showMessage(`지원하지 않는 파일 형식이 있습니다: ${invalidFiles.join(', ')}`, 'error');
+            }
+            
+            // 유효한 파일이 없으면 메시지 표시
+            if (validFiles === 0) {
+                fileList.innerHTML = '<p>선택된 파일이 없습니다.</p>';
+                uploadArea.classList.remove('has-files');
             }
         }
     }

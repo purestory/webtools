@@ -6,7 +6,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>이미지 변환기 (WebAssembly) - Web Tools</title>
+    <meta name="description" content="Free online image converter that lets you convert images directly in your browser. Supports JPG, PNG, WebP, GIF and more.">
+    <meta name="keywords" content="image converter, image format converter, image resize, image compression, WebAssembly">
+    <meta name="author" content="PureStory">
+    <meta property="og:title" content="Image Converter (WebAssembly) - Web Tools">
+    <meta property="og:description" content="Free online image converter that lets you convert images directly in your browser. Supports JPG, PNG, WebP, GIF and more.">
+    <meta property="og:type" content="website">
+    <title>Image Converter (WebAssembly) - Web Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -259,60 +265,62 @@
                 <h1>web tools</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="index.html">홈</a></li>
-                <li><a href="image-converter.html">이미지 변환</a></li>
-                <li><a href="subtitle-converter.html">자막 변환</a></li>
-                <li><a href="pdf-editor.html">PDF 편집</a></li>
-                <li><a href="programs.html">프로그램 소개</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="image-converter.html">Image Converter</a></li>
+                <li><a href="subtitle-converter.html">Subtitle Converter</a></li>
+                <li><a href="pdf-editor.html">PDF Editor</a></li>
+                <li><a href="programs.html">Programs</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="converter-section">
-            <h2>이미지 변환기 (WebAssembly)</h2>
-            <p>WebAssembly 기술을 활용해 브라우저에서 직접 이미지를 변환합니다. 서버 없이 더 빠르게 변환할 수 있습니다.</p>
+            <h2>Image Converter (WebAssembly)</h2>
+            <p>Convert images directly in your browser using WebAssembly technology. Fast conversion without server uploads.</p>
             
             <div class="upload-container">
                 <div class="upload-area" id="upload-area">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>파일을 여기에 끌어다 놓으세요</h3>
-                    <p>또는 아래 버튼을 사용하세요</p>
+                    <h3>Drop files here</h3>
+                    <p>or use the button below</p>
                     <button type="button" id="file-select-btn" class="file-select-btn">
-                        <i class="fas fa-file-image"></i> <span>파일 선택</span>
+                        <i class="fas fa-file-image"></i> <span>Select Files</span>
                     </button>
-                    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                    <input type="file" id="file-input" multiple 
+                        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/bmp" 
+                        style="display: none;">
                 </div>
                 <div class="file-list" id="file-list">
-                    <p>선택된 파일이 없습니다</p>
+                    <p>No files selected</p>
                 </div>
             </div>
         </section>
 
         <section class="converter-section">
-            <h2>변환 옵션</h2>
+            <h2>Conversion Options</h2>
             <form id="convert-form">
                 <div class="form-group">
-                    <label for="format-select">변환할 포맷</label>
+                    <label for="format-select">Output Format</label>
                     <select id="format-select" class="form-control">
-                        <option value="" disabled selected>포맷 선택</option>
+                        <option value="" disabled selected>Select Format</option>
                         <option value="jpg">JPG (JPEG)</option>
                         <option value="png">PNG</option>
                         <option value="webp">WebP</option>
-                        <option value="gif">GIF (정적)</option>
+                        <option value="gif">GIF (Static)</option>
                     </select>
                 </div>
                 <div id="format-options">
-                    <!-- 포맷 선택에 따라 동적으로 옵션이 표시됩니다 -->
+                    <!-- Format options will be displayed dynamically -->
                 </div>
-                <button type="submit" class="btn convert-btn">변환하기</button>
+                <button type="submit" class="btn convert-btn">Convert</button>
             </form>
         </section>
 
         <section class="converter-section">
-            <h2>변환 결과</h2>
+            <h2>Results</h2>
             <div id="result-area">
-                <p>변환 결과가 여기에 표시됩니다.</p>
+                <p>Conversion results will appear here.</p>
             </div>
         </section>
     </main>
