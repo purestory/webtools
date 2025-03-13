@@ -273,17 +273,19 @@
             <h2>이미지 변환기 (WebAssembly)</h2>
             <p>WebAssembly 기술을 활용해 브라우저에서 직접 이미지를 변환합니다. 서버 없이 더 빠르게 변환할 수 있습니다.</p>
             
-            <div class="upload-area" id="upload-area">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h3>파일을 여기에 끌어다 놓으세요</h3>
-                <p>또는 클릭하여 파일을 선택하세요</p>
-                <button type="button" id="file-select-btn" class="file-select-btn">
-                    <i class="fas fa-file-image"></i> <span>파일 선택</span>
-                </button>
-                <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
-            </div>
-            <div class="file-list" id="file-list">
-                <p>선택된 파일이 없습니다</p>
+            <div class="upload-container">
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>파일을 여기에 끌어다 놓으세요</h3>
+                    <p>또는 아래 버튼을 사용하세요</p>
+                    <button type="button" id="file-select-btn" class="file-select-btn">
+                        <i class="fas fa-file-image"></i> <span>파일 선택</span>
+                    </button>
+                    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                </div>
+                <div class="file-list" id="file-list">
+                    <p>선택된 파일이 없습니다</p>
+                </div>
             </div>
         </section>
 

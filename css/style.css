@@ -208,74 +208,118 @@ footer {
     border-bottom: 2px solid var(--gray-color);
 }
 
-/* 업로드 영역 스타일 */
+/* 파일 업로드 컨테이너 스타일 */
 .upload-container {
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
 }
 
 .upload-area {
-    border: 2px dashed var(--primary-color);
+    border: 2px dashed #ccc;
     border-radius: 8px;
-    padding: 30px;
+    padding: 2rem;
     text-align: center;
-    background-color: var(--light-color);
-    transition: background-color 0.3s, border-color 0.3s;
-    margin-bottom: 20px;
-    width: 100%;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     cursor: pointer;
-}
-
-.upload-area.has-files {
-    min-height: auto; /* 파일이 있으면 최소 높이 제한 해제 */
-    padding-bottom: 20px; /* 아래 패딩 줄임 */
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    margin-bottom: 1rem;
 }
 
 .upload-area.highlight {
-    border-color: var(--primary-color);
-    background-color: rgba(var(--primary-rgb), 0.05);
+    border-color: #007bff;
+    background: #e3f2fd;
 }
 
-.upload-area i.fa-cloud-upload-alt {
-    font-size: 48px;
-    color: var(--primary-color);
-    margin-bottom: 15px;
+.upload-area.has-files {
+    border-style: solid;
+    background: #fff;
 }
 
-/* 파일이 있을 때 아이콘 숨김 */
-.upload-area.has-files i.fa-cloud-upload-alt {
-    display: none;
+.file-select-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.upload-area h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    color: var(--text-color);
+.file-select-btn:hover {
+    background-color: #0056b3;
 }
 
-.upload-area p {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 14px;
+.file-list {
+    margin-top: 1rem;
 }
 
-/* 미리보기 스타일 */
 .preview-container {
-    display: flex;
-    flex-wrap: nowrap; /* 가로로 나열 */
-    overflow-x: auto; /* 가로 스크롤 */
-    overflow-y: auto; /* 세로 스크롤 추가 */
-    height: 360px; /* 높이 줄임 */
-    padding: 0; /* 패딩 제거 */
-    gap: 8px; /* 간격 줄임 */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.preview-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    background: #fff;
+}
+
+.preview-image {
     width: 100%;
-    scrollbar-width: thin; /* Firefox용 */
-    scrollbar-color: var(--primary-color) #f0f0f0; /* Firefox용 스크롤바 색상 */
-    position: relative; /* 포지션 설정 */
-    margin-top: 5px; /* 상단 여백 감소 */
+    height: 150px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+}
+
+.preview-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.preview-filename {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    word-break: break-all;
+}
+
+.preview-filesize {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.delete-file {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.delete-file:hover {
+    background: #c82333;
 }
 
 /* 미리보기 컨테이너 내부 가상 요소 제거 */
