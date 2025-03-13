@@ -1,0 +1,65 @@
+# 운영체제 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 에디터 파일
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# 로그 파일
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 캐시 파일
+.sass-cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# 환경 파일
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 임시 파일
+tmp/
+temp/
+*.tmp
+*.temp
+
+# 가상환경
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 업로드된 이미지 파일
+api/uploads/images/
+test_images/*.png
+test_images/*.jpg
+test_images/*.gif
+test_images/*.webp
+test_images/*.bmp
+test_images/*.svg
+test_images/*.avif
+test_images/*.heif
+test_images/*.ico
+test_images/*.tiff
+
+# 임시 파일
+temp_*.jpg 

@@ -1,0 +1,517 @@
+/* 기본 리셋 및 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-color: #f8f9fa;
+    --gray-color: #e9ecef;
+    --dark-gray: #495057;
+    --success-color: #2ecc71;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+ul {
+    list-style: none;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo h1 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-color);
+}
+
+.nav-links a.active::after, .nav-links a:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+/* 메인 컨텐츠 스타일 */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 5%;
+}
+
+.hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* 기능 카드 스타일 */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h2 {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.feature-card p {
+    margin-bottom: 1.5rem;
+    color: var(--dark-gray);
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    padding: 2rem 5%;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    font-size: 1.5rem;
+    color: var(--dark-gray);
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: var(--primary-color);
+}
+
+/* 변환기 페이지 스타일 */
+.converter-section {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.converter-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--gray-color);
+}
+
+/* 업로드 영역 스타일 */
+.upload-container {
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: var(--light-color);
+    transition: background-color 0.3s, border-color 0.3s;
+    margin-bottom: 20px;
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.upload-area.has-files {
+    min-height: auto; /* 파일이 있으면 최소 높이 제한 해제 */
+    padding-bottom: 20px; /* 아래 패딩 줄임 */
+}
+
+.upload-area.highlight {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.upload-area i.fa-cloud-upload-alt {
+    font-size: 48px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* 파일이 있을 때 아이콘 숨김 */
+.upload-area.has-files i.fa-cloud-upload-alt {
+    display: none;
+}
+
+.upload-area h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.upload-area p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* 미리보기 스타일 */
+.preview-container {
+    display: flex;
+    flex-wrap: nowrap; /* 가로로 나열 */
+    overflow-x: auto; /* 가로 스크롤 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+    height: 360px; /* 높이 줄임 */
+    padding: 0; /* 패딩 제거 */
+    gap: 8px; /* 간격 줄임 */
+    width: 100%;
+    scrollbar-width: thin; /* Firefox용 */
+    scrollbar-color: var(--primary-color) #f0f0f0; /* Firefox용 스크롤바 색상 */
+    position: relative; /* 포지션 설정 */
+    margin-top: 5px; /* 상단 여백 감소 */
+}
+
+/* 미리보기 컨테이너 내부 가상 요소 제거 */
+.preview-container::before,
+.preview-container::after,
+.preview-container *::before,
+.preview-container *::after {
+    display: none !important;
+}
+
+/* Chrome, Safari, Edge용 스크롤바 스타일 */
+.preview-container::-webkit-scrollbar {
+    width: 8px; /* 세로 스크롤바 너비 */
+    height: 8px; /* 가로 스크롤바 높이 */
+}
+
+.preview-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.preview-container::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* 미리보기 아이템 스타일 */
+.preview-item {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 300px; /* 최대 너비 300px로 제한 */
+    margin-right: 6px; /* 오른쪽 여백 축소 */
+    text-align: center;
+    position: relative; /* 포지션 설정 */
+}
+
+/* 미리보기 아이템 내부 가상 요소 제거 */
+.preview-item::before,
+.preview-item::after {
+    display: none !important;
+}
+
+/* 미리보기 이미지 스타일 */
+.preview-image {
+    width: auto;
+    max-width: 300px; /* 최대 너비 300px로 제한 */
+    height: 300px; /* 높이 고정 */
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: none; /* 테두리 제거 */
+    outline: none; /* 외곽선 제거 */
+}
+
+/* 미리보기 이미지 가상 요소 제거 */
+.preview-image::before,
+.preview-image::after {
+    display: none !important;
+}
+
+/* 파일명 스타일 */
+.file-name {
+    margin-top: 3px; /* 상단 여백 축소 */
+    font-size: 12px; /* 글자 크기 축소 */
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+    margin: 15px 0;
+    text-align: center;
+}
+
+/* 파일 목록 */
+.file-list {
+    display: none !important;
+}
+
+.file-info {
+    margin: 5px 0;
+    padding: 5px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.file-info:last-child {
+    border-bottom: none;
+}
+
+/* 반응형 설정 */
+@media (max-width: 768px) {
+    .preview-item {
+        width: 250px;
+    }
+    
+    .preview-image {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .preview-item {
+        width: 200px;
+    }
+    
+    .preview-image {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 400px) {
+    .preview-item {
+        width: 180px;
+    }
+    
+    .preview-image {
+        max-height: 180px;
+    }
+}
+
+/* 로딩 오버레이 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: white;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 진행 상황 게이지바 */
+.progress-container {
+    width: 80%;
+    max-width: 500px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+#current-file-info {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* WebAssembly 섹션 스타일 */
+.wasm-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.wasm-feature {
+    background-color: white;
+    border-radius: 0.8rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.wasm-feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.wasm-feature i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.wasm-feature h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+}
+
+.wasm-feature p {
+    color: var(--dark-gray);
+    font-size: 0.95rem;
+}
+
+.btn-large {
+    padding: 0.9rem 2rem;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    display: inline-block;
+} 

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>PDF Editor - Web Tools</title>
+    <script>
+        // 캐시 방지를 위한 타임스탬프 생성
+        var timestamp = new Date().getTime();
+        // 동적으로 CSS 로드
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + timestamp + '">');
+        
+        // 언어 감지 및 설정
+        function detectLanguage() {
+            // 브라우저 언어 감지
+            var userLang = navigator.language || navigator.userLanguage;
+            // 저장된 언어 설정 가져오기
+            var savedLang = localStorage.getItem('preferredLanguage');
+            
+            // 언어 설정 (저장된 설정이 있으면 사용, 없으면 영어를 기본값으로 설정)
+            var lang = savedLang || 'en';
+            
+            // HTML 언어 속성 설정
+            document.documentElement.lang = lang;
+            
+            return lang;
+        }
+        
+        // 현재 언어 설정
+        var currentLang = detectLanguage();
+        
+        // 언어 전환 함수
+        function switchLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 헤더 레이아웃 */
+        header nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        /* 로고 공간 보장을 위한 스타일 */
+        .logo {
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+        
+        /* 언어 선택 드롭다운 스타일 */
+        .language-dropdown {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .language-dropdown-btn {
+            background-color: transparent;
+            border: 1px solid var(--gray-color);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-dropdown-btn i {
+            margin-right: 5px;
+        }
+        
+        .language-dropdown-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .language-dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown:hover .language-dropdown-content {
+            display: block;
+        }
+        
+        /* 네비게이션 메뉴 간격 조정 */
+        .nav-links {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        /* 메뉴 항목 스타일 */
+        .nav-links li a {
+            font-size: 1.1rem;
+            padding: 8px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>web tools</h1>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" data-en="Home" data-ko="홈">Home</a></li>
+                <li><a href="image-converter.html" data-en="Image Converter" data-ko="이미지 변환">Image Converter</a></li>
+                <li><a href="subtitle-converter.html" data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</a></li>
+                <li><a href="pdf-editor.html" class="active" data-en="PDF Editor" data-ko="PDF 편집">PDF Editor</a></li>
+                <li><a href="programs.html" data-en="Programs" data-ko="프로그램 소개">Programs</a></li>
+                
+                <!-- 언어 선택 드롭다운 (프로그램 메뉴 옆에 배치) -->
+                <li class="language-dropdown">
+                    <button class="language-dropdown-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="current-lang">English</span>
+                        <i class="fas fa-caret-down" style="margin-left: 5px;"></i>
+                    </button>
+                    <div class="language-dropdown-content">
+                        <a href="#" onclick="switchLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="switchLanguage('ko'); return false;">한국어</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="converter-section">
+            <h2 data-en="PDF Editor" data-ko="PDF 편집기">PDF Editor</h2>
+            <p data-en="Edit, organize, and manipulate PDF files directly in your browser." data-ko="브라우저에서 직접 PDF 파일을 편집, 구성 및 조작합니다.">Edit, organize, and manipulate PDF files directly in your browser.</p>
+            
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3 data-en="Drag and drop your PDF file here" data-ko="PDF 파일을 여기에 끌어다 놓으세요">Drag and drop your PDF file here</h3>
+                <p data-en="or click to select file" data-ko="또는 클릭하여 파일을 선택하세요">or click to select file</p>
+                <button type="button" id="file-select-btn" class="file-select-btn">
+                    <i class="fas fa-file-pdf"></i> <span data-en="Select PDF" data-ko="PDF 선택">Select PDF</span>
+                </button>
+                <input type="file" id="file-input" accept=".pdf" style="display: none;">
+            </div>
+            <div class="file-list" id="file-list">
+                <p data-en="No file selected" data-ko="선택된 파일이 없습니다">No file selected</p>
+            </div>
+        </section>
+        
+        <section class="converter-section" id="pdf-editor-section" style="display: none;">
+            <h2 data-en="PDF Preview & Edit" data-ko="PDF 미리보기 및 편집">PDF Preview & Edit</h2>
+            
+            <div class="pdf-preview-container">
+                <canvas id="pdf-preview"></canvas>
+            </div>
+            
+            <div class="pdf-controls">
+                <button id="prev-page" data-en="Previous" data-ko="이전">
+                    <i class="fas fa-chevron-left"></i> <span data-en="Previous" data-ko="이전">Previous</span>
+                </button>
+                <span class="page-info">
+                    <span data-en="Page" data-ko="페이지">Page</span> <span id="current-page">1</span> <span data-en="of" data-ko="/">of</span> <span id="total-pages">0</span>
+                </span>
+                <button id="next-page" data-en="Next" data-ko="다음">
+                    <span data-en="Next" data-ko="다음">Next</span> <i class="fas fa-chevron-right"></i>
+                </button>
+                <button id="zoom-in">
+                    <i class="fas fa-search-plus"></i> <span data-en="Zoom In" data-ko="확대">Zoom In</span>
+                </button>
+                <button id="zoom-out">
+                    <i class="fas fa-search-minus"></i> <span data-en="Zoom Out" data-ko="축소">Zoom Out</span>
+                </button>
+            </div>
+            
+            <div class="pdf-edit-tools">
+                <div class="tool-group">
+                    <div class="tool-title" data-en="Page Operations" data-ko="페이지 작업">Page Operations</div>
+                    <div class="form-group">
+                        <button id="extract-page" class="btn" data-en="Extract Current Page" data-ko="현재 페이지 추출">Extract Current Page</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="delete-page" class="btn" data-en="Delete Current Page" data-ko="현재 페이지 삭제">Delete Current Page</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="page-range" data-en="Extract Page Range" data-ko="페이지 범위 추출">Extract Page Range</label>
+                        <div class="page-controls">
+                            <input type="number" id="range-start" min="1" value="1">
+                            <span>-</span>
+                            <input type="number" id="range-end" min="1" value="1">
+                            <button id="extract-range" class="btn" data-en="Extract" data-ko="추출">Extract</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-group">
+                    <div class="tool-title" data-en="Page Rotation" data-ko="페이지 회전">Page Rotation</div>
+                    <div class="form-group rotate-controls">
+                        <button id="rotate-cw" class="btn" data-en="Rotate CW" data-ko="시계 방향">
+                            <i class="fas fa-redo"></i> 90°
+                        </button>
+                        <button id="rotate-ccw" class="btn" data-en="Rotate CCW" data-ko="반시계 방향">
+                            <i class="fas fa-undo"></i> 90°
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tool-group">
+                    <div class="tool-title" data-en="PDF Split & Merge" data-ko="PDF 분할 및 병합">PDF Split & Merge</div>
+                    <div class="form-group">
+                        <button id="split-pdf" class="btn" data-en="Split PDF to Pages" data-ko="PDF를 페이지별로 분할">Split PDF to Pages</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="add-more-pdfs" class="btn" data-en="Add More PDFs to Merge" data-ko="병합할 PDF 추가">Add More PDFs to Merge</button>
+                        <input type="file" id="merge-file-input" accept=".pdf" multiple style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="tool-group">
+                    <div class="tool-title" data-en="Save Options" data-ko="저장 옵션">Save Options</div>
+                    <div class="form-group">
+                        <button id="save-pdf" class="btn convert-btn" data-en="Save PDF" data-ko="PDF 저장">Save PDF</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="export-images" class="btn" data-en="Export Pages as Images" data-ko="페이지를 이미지로 내보내기">Export Pages as Images</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 purestory. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/purestory" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-top" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; border: none; outline: none; background-color: var(--primary-color); color: white; cursor: pointer; padding: 15px; border-radius: 50%;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        var timestamp = new Date().getTime();
+        document.write('<script src="js/main.js?v=' + timestamp + '"><\/script>');
+        
+        // PDF.js 워커 설정
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // 언어 관련 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 언어 표시 업데이트
+            document.getElementById('current-lang').textContent = currentLang === 'en' ? 'English' : '한국어';
+            
+            // 텍스트 번역 적용
+            function applyTranslation() {
+                var elements = document.querySelectorAll('[data-' + currentLang + ']');
+                elements.forEach(function(element) {
+                    element.textContent = element.getAttribute('data-' + currentLang);
+                });
+                
+                // 타이틀 번역
+                document.title = currentLang === 'ko' ? 'PDF 편집기 - Web Tools' : 'PDF Editor - Web Tools';
+            }
+            
+            applyTranslation();
+            
+            // PDF 편집기 변수
+            let pdfDoc = null;
+            let pageNum = 1;
+            let pageRendering = false;
+            let pageNumPending = null;
+            let scale = 1.0;
+            let canvas = document.getElementById('pdf-preview');
+            let ctx = canvas.getContext('2d');
+            
+            // 파일 업로드 영역 설정
+            setupFileUpload();
+            
+            // PDF 페이지 컨트롤
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const currentPageSpan = document.getElementById('current-page');
+            const totalPagesSpan = document.getElementById('total-pages');
+            const zoomInBtn = document.getElementById('zoom-in');
+            const zoomOutBtn = document.getElementById('zoom-out');
+            
+            // PDF 편집 버튼
+            const extractPageBtn = document.getElementById('extract-page');
+            const deletePageBtn = document.getElementById('delete-page');
+            const extractRangeBtn = document.getElementById('extract-range');
+            const rotateCWBtn = document.getElementById('rotate-cw');
+            const rotateCCWBtn = document.getElementById('rotate-ccw');
+            const splitPdfBtn = document.getElementById('split-pdf');
+            const addMorePdfsBtn = document.getElementById('add-more-pdfs');
+            const savePdfBtn = document.getElementById('save-pdf');
+            const exportImagesBtn = document.getElementById('export-images');
+            
+            // 파일 업로드 설정 함수
+            function setupFileUpload() {
+                const uploadArea = document.getElementById('upload-area');
+                const fileInput = document.getElementById('file-input');
+                const fileList = document.getElementById('file-list');
+                const fileSelectBtn = document.getElementById('file-select-btn');
+                const pdfEditorSection = document.getElementById('pdf-editor-section');
+                const mergeFileInput = document.getElementById('merge-file-input');
+                
+                if (uploadArea && fileInput && fileSelectBtn) {
+                    // 업로드 영역 클릭 이벤트 제거하고 버튼 클릭 이벤트로 대체
+                    fileSelectBtn.addEventListener('click', function(e) {
+                        // 이벤트 버블링 방지
+                        e.stopPropagation();
+                        
+                        // 파일 선택 대화상자 열기
+                        fileInput.click();
+                    });
+                    
+                    // 드래그 앤 드롭 이벤트
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        uploadArea.addEventListener(eventName, preventDefaults, false);
+                        document.body.addEventListener(eventName, preventDefaults, false);
+                    });
+                    
+                    // 하이라이트 효과
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        uploadArea.addEventListener(eventName, highlight, false);
+                    });
+                    
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        uploadArea.addEventListener(eventName, unhighlight, false);
+                    });
+                    
+                    // 파일 드롭 처리
+                    uploadArea.addEventListener('drop', handleDrop, false);
+                    
+                    // 파일 선택 처리
+                    fileInput.addEventListener('change', function() {
+                        if (this.files.length > 0) {
+                            handleFiles(this.files);
+                        }
+                    });
+                    
+                    // 추가 PDF 로드 버튼
+                    if (addMorePdfsBtn && mergeFileInput) {
+                        addMorePdfsBtn.addEventListener('click', () => mergeFileInput.click());
+                        mergeFileInput.addEventListener('change', handleMergeFileSelect);
+                    }
+                }
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                function highlight() {
+                    uploadArea.classList.add('highlight');
+                }
+                
+                function unhighlight() {
+                    uploadArea.classList.remove('highlight');
+                }
+                
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
+                    handleFiles(files);
+                }
+                
+                // 병합용 PDF 파일 선택 처리
+                function handleMergeFileSelect(e) {
+                    const files = e.target.files;
+                    if (!files || files.length === 0) return;
+                    
+                    // 여기에서 병합 로직 구현
+                    showMessage(
+                        currentLang === 'ko' 
+                            ? `${files.length}개의 PDF 파일이 병합을 위해 추가되었습니다` 
+                            : `${files.length} PDF files added for merging`,
+                        'info'
+                    );
+                }
+                
+                // 파일 처리
+                function handleFiles(files) {
+                    if (!files || files.length === 0) {
+                        fileList.innerHTML = '<p>' + (currentLang === 'ko' ? '선택된 파일이 없습니다' : 'No file selected') + '</p>';
+                        return;
+                    }
+                    
+                    // 하나의 파일만 처리
+                    const file = files[0];
+                    
+                    // PDF 파일 확인
+                    if (file.type !== 'application/pdf') {
+                        fileList.innerHTML = '<p class="text-danger">' + (currentLang === 'ko' ? 'PDF 파일만 지원됩니다' : 'Only PDF files are supported') + '</p>';
+                        return;
+                    }
+                    
+                    // 파일 정보 표시
+                    fileList.innerHTML = `
+                        <div class="file-item">
+                            <div class="file-info">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${formatFileSize(file.size)}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // PDF 로드
+                    const fileReader = new FileReader();
+                    fileReader.onload = function(e) {
+                        const typedArray = new Uint8Array(this.result);
+                        loadPdf(typedArray);
+                    };
+                    fileReader.readAsArrayBuffer(file);
+                }
+            }
+            
+            // 파일 크기 포맷
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // PDF 로드
+            function loadPdf(pdfData) {
+                pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+                    pdfDoc = pdf;
+                    totalPagesSpan.textContent = pdf.numPages;
+                    
+                    // 범위 추출을 위한 입력 필드 최대값 설정
+                    document.getElementById('range-start').max = pdf.numPages;
+                    document.getElementById('range-end').max = pdf.numPages;
+                    document.getElementById('range-end').value = pdf.numPages;
+                    
+                    // 첫 페이지 렌더링
+                    pageNum = 1;
+                    renderPage(pageNum);
+                    
+                    // 편집기 섹션 표시
+                    pdfEditorSection.style.display = 'block';
+                    
+                    // 버튼 상태 업데이트
+                    updateButtonStates();
+                }, function(error) {
+                    showMessage(
+                        currentLang === 'ko' 
+                            ? 'PDF 로드 중 오류가 발생했습니다: ' + error.message 
+                            : 'Error loading PDF: ' + error.message,
+                        'error'
+                    );
+                });
+            }
+            
+            // 페이지 렌더링
+            function renderPage(num) {
+                pageRendering = true;
+                
+                // 페이지 불러오기
+                pdfDoc.getPage(num).then(function(page) {
+                    // 적절한 스케일 계산
+                    const viewport = page.getViewport({scale});
+                    
+                    // 캔버스 크기 조정
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    // 렌더링
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    
+                    page.render(renderContext).promise.then(function() {
+                        pageRendering = false;
+                        
+                        // 대기 중인 페이지가 있으면 렌더링
+                        if (pageNumPending !== null) {
+                            renderPage(pageNumPending);
+                            pageNumPending = null;
+                        }
+                        
+                        // 현재 페이지 표시 업데이트
+                        currentPageSpan.textContent = num;
+                        
+                        // 버튼 상태 업데이트
+                        updateButtonStates();
+                    });
+                });
+            }
+            
+            // 버튼 상태 업데이트
+            function updateButtonStates() {
+                prevPageBtn.disabled = pageNum <= 1;
+                nextPageBtn.disabled = pageNum >= pdfDoc.numPages;
+            }
+            
+            // 이전 페이지로 이동
+            function onPrevPage() {
+                if (pageNum <= 1) return;
+                pageNum--;
+                queueRenderPage(pageNum);
+            }
+            
+            // 다음 페이지로 이동
+            function onNextPage() {
+                if (pageNum >= pdfDoc.numPages) return;
+                pageNum++;
+                queueRenderPage(pageNum);
+            }
+            
+            // 페이지 렌더링 큐에 추가
+            function queueRenderPage(num) {
+                if (pageRendering) {
+                    pageNumPending = num;
+                } else {
+                    renderPage(num);
+                }
+            }
+            
+            // 확대/축소
+            function zoomIn() {
+                scale *= 1.2;
+                renderPage(pageNum);
+            }
+            
+            function zoomOut() {
+                scale /= 1.2;
+                renderPage(pageNum);
+            }
+            
+            // 버튼 이벤트 리스너 추가
+            prevPageBtn.addEventListener('click', onPrevPage);
+            nextPageBtn.addEventListener('click', onNextPage);
+            zoomInBtn.addEventListener('click', zoomIn);
+            zoomOutBtn.addEventListener('click', zoomOut);
+            
+            // 편집 버튼 이벤트 리스너
+            extractPageBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? '현재 페이지 추출 기능은 준비 중입니다' 
+                        : 'Extract current page feature is coming soon',
+                    'info'
+                );
+            });
+            
+            deletePageBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? '페이지 삭제 기능은 준비 중입니다' 
+                        : 'Delete page feature is coming soon',
+                    'info'
+                );
+            });
+            
+            extractRangeBtn.addEventListener('click', function() {
+                const start = parseInt(document.getElementById('range-start').value);
+                const end = parseInt(document.getElementById('range-end').value);
+                
+                if (isNaN(start) || isNaN(end) || start < 1 || end > pdfDoc.numPages || start > end) {
+                    showMessage(
+                        currentLang === 'ko' 
+                            ? '올바른 페이지 범위를 입력해주세요' 
+                            : 'Please enter a valid page range',
+                        'error'
+                    );
+                    return;
+                }
+                
+                showMessage(
+                    currentLang === 'ko' 
+                        ? `페이지 ${start}-${end} 추출 기능은 준비 중입니다` 
+                        : `Extract pages ${start}-${end} feature is coming soon`,
+                    'info'
+                );
+            });
+            
+            rotateCWBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? '페이지 회전 기능은 준비 중입니다' 
+                        : 'Page rotation feature is coming soon',
+                    'info'
+                );
+            });
+            
+            rotateCCWBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? '페이지 회전 기능은 준비 중입니다' 
+                        : 'Page rotation feature is coming soon',
+                    'info'
+                );
+            });
+            
+            splitPdfBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? 'PDF 분할 기능은 준비 중입니다' 
+                        : 'PDF splitting feature is coming soon',
+                    'info'
+                );
+            });
+            
+            savePdfBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? 'PDF 저장 기능은 준비 중입니다' 
+                        : 'Save PDF feature is coming soon',
+                    'info'
+                );
+            });
+            
+            exportImagesBtn.addEventListener('click', function() {
+                showMessage(
+                    currentLang === 'ko' 
+                        ? '이미지로 내보내기 기능은 준비 중입니다' 
+                        : 'Export as images feature is coming soon',
+                    'info'
+                );
+            });
+            
+            // 메시지 표시
+            function showMessage(message, type = 'info') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message message-${type}`;
+                messageDiv.textContent = message;
+                document.body.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.classList.add('message-hiding');
+                    setTimeout(() => {
+                        if (messageDiv.parentNode) {
+                            messageDiv.parentNode.removeChild(messageDiv);
+                        }
+                    }, 500);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html> 

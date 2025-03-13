@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>purestory - File Conversion Tools</title>
+    <!-- 파비콘 링크 -->
+    <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="images/favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="images/favicon/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="images/favicon/favicon-128x128.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/favicon/favicon-192x192.png">
+    <script>
+        // 캐시 방지를 위한 타임스탬프 생성
+        var timestamp = new Date().getTime();
+        // 동적으로 CSS 로드
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + timestamp + '">');
+        
+        // 언어 감지 및 설정
+        function detectLanguage() {
+            // 브라우저 언어 감지
+            var userLang = navigator.language || navigator.userLanguage;
+            // 저장된 언어 설정 가져오기
+            var savedLang = localStorage.getItem('preferredLanguage');
+            
+            // 언어 설정 (저장된 설정이 있으면 사용, 없으면 영어를 기본값으로 설정)
+            var lang = savedLang || 'en';
+            
+            // HTML 언어 속성 설정
+            document.documentElement.lang = lang;
+            
+            return lang;
+        }
+        
+        // 현재 언어 설정
+        var currentLang = detectLanguage();
+        
+        // 언어 전환 함수
+        function switchLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 헤더 레이아웃 */
+        header nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        /* 로고 공간 보장을 위한 스타일 */
+        .logo {
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+        
+        /* 언어 선택 드롭다운 스타일 */
+        .language-dropdown {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .language-dropdown-btn {
+            background-color: transparent;
+            border: 1px solid var(--gray-color);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-dropdown-btn i {
+            margin-right: 5px;
+        }
+        
+        .language-dropdown-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .language-dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown:hover .language-dropdown-content {
+            display: block;
+        }
+        
+        /* 네비게이션 메뉴 간격 조정 */
+        .nav-links {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        /* 메뉴 항목 스타일 */
+        .nav-links li a {
+            font-size: 1.1rem;
+            padding: 8px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>web tools</h1>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" class="active" data-en="Home" data-ko="홈">Home</a></li>
+                <li><a href="image-converter.html" data-en="Image Converter" data-ko="이미지 변환">Image Converter</a></li>
+                <li><a href="subtitle-converter.html" data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</a></li>
+                <li><a href="pdf-editor.html" data-en="PDF Editor" data-ko="PDF 편집">PDF Editor</a></li>
+                <li><a href="programs.html" data-en="Programs" data-ko="프로그램 소개">Programs</a></li>
+                
+                <!-- 언어 선택 드롭다운 (프로그램 메뉴 옆에 배치) -->
+                <li class="language-dropdown">
+                    <button class="language-dropdown-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="current-lang">English</span>
+                        <i class="fas fa-caret-down" style="margin-left: 5px;"></i>
+                    </button>
+                    <div class="language-dropdown-content">
+                        <a href="#" onclick="switchLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="switchLanguage('ko'); return false;">한국어</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- hero 섹션 완전히 삭제됨 -->
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-image"></i>
+                </div>
+                <h2 data-en="Image Format Conversion" data-ko="이미지 포맷 변환">Image Format Conversion</h2>
+                <p data-en="Provides conversion functions between various image formats such as JPG, PNG, WebP, GIF, etc." data-ko="JPG, PNG, WebP, GIF 등 다양한 이미지 포맷 간 변환 기능을 제공합니다.">Provides conversion functions between various image formats such as JPG, PNG, WebP, GIF, etc.</p>
+                <a href="image-converter.html" class="btn" data-en="Convert" data-ko="변환하기">Convert</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+                <h2 data-en="Image Resize" data-ko="이미지 크기 변경">Image Resize</h2>
+                <p data-en="Provides image resolution adjustment and size optimization functions." data-ko="이미지 해상도 조정 및 크기 최적화 기능을 제공합니다.">Provides image resolution adjustment and size optimization functions.</p>
+                <a href="image-resize.html" class="btn" data-en="Resize" data-ko="변환하기">Resize</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h2 data-en="Image Editing" data-ko="이미지 편집">Image Editing</h2>
+                <p data-en="Provides simple image editing and filter application functions." data-ko="간단한 이미지 편집 및 필터 적용 기능을 제공합니다.">Provides simple image editing and filter application functions.</p>
+                <a href="image-editor.html" class="btn" data-en="Edit" data-ko="편집하기">Edit</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-closed-captioning"></i>
+                </div>
+                <h2 data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</h2>
+                <p data-en="Provides conversion functions between various subtitle formats such as SRT, SMI, ASS, etc." data-ko="SRT, SMI, ASS 등 다양한 자막 포맷 간 변환 기능을 제공합니다.">Provides conversion functions between various subtitle formats such as SRT, SMI, ASS, etc.</p>
+                <a href="subtitle-converter.html" class="btn" data-en="Convert" data-ko="변환하기">Convert</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h2 data-en="Subtitle Translation" data-ko="자막 번역">Subtitle Translation</h2>
+                <p data-en="Provides a function to translate subtitle file content into various languages." data-ko="자막 파일의 내용을 다양한 언어로 번역하는 기능을 제공합니다.">Provides a function to translate subtitle file content into various languages.</p>
+                <a href="subtitle-translator.html" class="btn" data-en="Translate" data-ko="번역하기">Translate</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h2 data-en="PDF Editing" data-ko="PDF 편집">PDF Editing</h2>
+                <p data-en="Provides PDF file splitting, merging, compression and other editing functions." data-ko="PDF 파일 분할, 병합, 압축 등의 편집 기능을 제공합니다.">Provides PDF file splitting, merging, compression and other editing functions.</p>
+                <a href="pdf-editor.html" class="btn" data-en="Edit" data-ko="편집하기">Edit</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h2 data-en="Programs" data-ko="프로그램 소개">Programs</h2>
+                <p data-en="Introduces various developed programs." data-ko="개발한 다양한 프로그램들을 소개합니다.">Introduces various developed programs.</p>
+                <a href="programs.html" class="btn" data-en="View" data-ko="보러가기">View</a>
+            </div>
+        </section>
+
+        <section class="converter-section">
+            <h2 data-en="WebAssembly-based Conversion Tools" data-ko="WebAssembly 기반 변환 도구">WebAssembly-based Conversion Tools</h2>
+            <p data-en="High-performance conversion tools that are processed directly in the browser without relying on a server." data-ko="서버에 의존하지 않고 브라우저에서 직접 처리되는 고성능 변환 도구입니다.">High-performance conversion tools that are processed directly in the browser without relying on a server.</p>
+            <div class="wasm-features">
+                <div class="wasm-feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3 data-en="Fast Processing Speed" data-ko="빠른 처리 속도">Fast Processing Speed</h3>
+                    <p data-en="Near-native performance using WebAssembly" data-ko="WebAssembly를 활용한 네이티브에 가까운 성능">Near-native performance using WebAssembly</p>
+                </div>
+                <div class="wasm-feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3 data-en="Privacy Protection" data-ko="개인정보 보호">Privacy Protection</h3>
+                    <p data-en="Files are not sent to the server as all processing takes place in the browser" data-ko="모든 처리가 브라우저에서 이루어지므로 파일이 서버로 전송되지 않음">Files are not sent to the server as all processing takes place in the browser</p>
+                </div>
+                <div class="wasm-feature">
+                    <i class="fas fa-server"></i>
+                    <h3 data-en="Offline Support" data-ko="오프라인 지원">Offline Support</h3>
+                    <p data-en="Can operate without an internet connection" data-ko="인터넷 연결 없이도 작동 가능">Can operate without an internet connection</p>
+                </div>
+            </div>
+            <a href="image-converter2.html" class="btn btn-large" data-en="Use WebAssembly Image Converter" data-ko="WebAssembly 이미지 변환기 사용하기">Use WebAssembly Image Converter</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 purestory. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/purestory" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-top" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; border: none; outline: none; background-color: var(--primary-color); color: white; cursor: pointer; padding: 15px; border-radius: 50%;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        var timestamp = new Date().getTime();
+        document.write('<script src="js/main.js?v=' + timestamp + '"><\/script>');
+        
+        // 언어 관련 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 언어 표시 업데이트
+            document.getElementById('current-lang').textContent = currentLang === 'en' ? 'English' : '한국어';
+            
+            // 텍스트 번역 적용
+            function applyTranslation() {
+                var elements = document.querySelectorAll('[data-' + currentLang + ']');
+                elements.forEach(function(element) {
+                    element.textContent = element.getAttribute('data-' + currentLang);
+                });
+                
+                // 타이틀 번역
+                document.title = currentLang === 'ko' ? 'purestory - 파일 변환 도구' : 'purestory - File Conversion Tools';
+            }
+            
+            applyTranslation();
+        });
+    </script>
+</body>
+</html>

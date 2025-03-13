@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Programs - Web Tools</title>
+    <script>
+        // 캐시 방지를 위한 타임스탬프 생성
+        var timestamp = new Date().getTime();
+        // 동적으로 CSS 로드
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + timestamp + '">');
+        
+        // 언어 감지 및 설정
+        function detectLanguage() {
+            // 브라우저 언어 감지
+            var userLang = navigator.language || navigator.userLanguage;
+            // 저장된 언어 설정 가져오기
+            var savedLang = localStorage.getItem('preferredLanguage');
+            
+            // 언어 설정 (저장된 설정이 있으면 사용, 없으면 영어를 기본값으로 설정)
+            var lang = savedLang || 'en';
+            
+            // HTML 언어 속성 설정
+            document.documentElement.lang = lang;
+            
+            return lang;
+        }
+        
+        // 현재 언어 설정
+        var currentLang = detectLanguage();
+        
+        // 언어 전환 함수
+        function switchLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 헤더 레이아웃 */
+        header nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        /* 로고 공간 보장을 위한 스타일 */
+        .logo {
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+        
+        /* 언어 선택 드롭다운 스타일 */
+        .language-dropdown {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .language-dropdown-btn {
+            background-color: transparent;
+            border: 1px solid var(--gray-color);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-dropdown-btn i {
+            margin-right: 5px;
+        }
+        
+        .language-dropdown-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .language-dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown:hover .language-dropdown-content {
+            display: block;
+        }
+        
+        /* 네비게이션 메뉴 간격 조정 */
+        .nav-links {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        /* 메뉴 항목 스타일 */
+        .nav-links li a {
+            font-size: 1.1rem;
+            padding: 8px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>web tools</h1>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" data-en="Home" data-ko="홈">Home</a></li>
+                <li><a href="image-converter.html" data-en="Image Converter" data-ko="이미지 변환">Image Converter</a></li>
+                <li><a href="subtitle-converter.html" data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</a></li>
+                <li><a href="pdf-editor.html" data-en="PDF Editor" data-ko="PDF 편집">PDF Editor</a></li>
+                <li><a href="programs.html" class="active" data-en="Programs" data-ko="프로그램 소개">Programs</a></li>
+                
+                <!-- 언어 선택 드롭다운 (프로그램 메뉴 옆에 배치) -->
+                <li class="language-dropdown">
+                    <button class="language-dropdown-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="current-lang">English</span>
+                        <i class="fas fa-caret-down" style="margin-left: 5px;"></i>
+                    </button>
+                    <div class="language-dropdown-content">
+                        <a href="#" onclick="switchLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="switchLanguage('ko'); return false;">한국어</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="converter-section">
+            <h2 data-en="Programs" data-ko="프로그램 소개">Programs</h2>
+            <p data-en="Discover desktop applications and utilities created by purestory" data-ko="purestory가 개발한 데스크톱 애플리케이션 및 유틸리티 소개">Discover desktop applications and utilities created by purestory</p>
+        
+            <div class="program-list">
+                <!-- 이미지 변환기 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3 data-en="Image Converter Pro" data-ko="이미지 변환기 프로">Image Converter Pro</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Windows</span>
+                        <span class="program-tag">Python</span>
+                        <span class="program-tag">GUI</span>
+                    </div>
+                    <p data-en="Desktop application for batch converting images between various formats with advanced compression options." data-ko="다양한 형식의 이미지를 일괄 변환할 수 있는 데스크톱 애플리케이션. 고급 압축 옵션 제공.">Desktop application for batch converting images between various formats with advanced compression options.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/image-converter-pro" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+                
+                <!-- 자막 컨버터 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-closed-captioning"></i>
+                    </div>
+                    <h3 data-en="Subtitle Master" data-ko="자막 마스터">Subtitle Master</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Windows</span>
+                        <span class="program-tag">macOS</span>
+                        <span class="program-tag">Python</span>
+                    </div>
+                    <p data-en="Convert subtitles between different formats (SRT, VTT, ASS, SMI) and perform time adjustment and encoding fixes." data-ko="다양한 자막 형식(SRT, VTT, ASS, SMI) 간의 변환 및 시간 조정, 인코딩 수정 기능 제공.">Convert subtitles between different formats (SRT, VTT, ASS, SMI) and perform time adjustment and encoding fixes.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/subtitle-master" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+                
+                <!-- PDF 도구 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3 data-en="PDF Toolkit" data-ko="PDF 툴킷">PDF Toolkit</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Windows</span>
+                        <span class="program-tag">C#</span>
+                        <span class="program-tag">.NET</span>
+                    </div>
+                    <p data-en="All-in-one PDF utility for merging, splitting, compressing, and converting PDF files to other formats." data-ko="PDF 파일의 병합, 분할, 압축 및 다른 형식으로 변환할 수 있는 올인원 PDF 유틸리티.">All-in-one PDF utility for merging, splitting, compressing, and converting PDF files to other formats.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/pdf-toolkit" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+                
+                <!-- 비디오 압축기 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 data-en="Video Compressor" data-ko="비디오 압축기">Video Compressor</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Cross-platform</span>
+                        <span class="program-tag">Python</span>
+                        <span class="program-tag">FFmpeg</span>
+                    </div>
+                    <p data-en="Compress video files to smaller sizes while maintaining quality, with presets for different quality levels and platforms." data-ko="품질을 유지하며 비디오 파일을 작은 크기로 압축. 다양한 품질 레벨 및 플랫폼용 프리셋 제공.">Compress video files to smaller sizes while maintaining quality, with presets for different quality levels and platforms.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/video-compressor" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+                
+                <!-- 텍스트 도구 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <h3 data-en="Text Utilities" data-ko="텍스트 유틸리티">Text Utilities</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Windows</span>
+                        <span class="program-tag">Python</span>
+                        <span class="program-tag">NLP</span>
+                    </div>
+                    <p data-en="Collection of text processing tools including case conversion, encoding fixes, and various text transformations." data-ko="대소문자 변환, 인코딩 수정, 다양한 텍스트 변환 등 텍스트 처리 도구 모음.">Collection of text processing tools including case conversion, encoding fixes, and various text transformations.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/text-utilities" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+                
+                <!-- 파일 시스템 정리기 -->
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h3 data-en="File System Organizer" data-ko="파일 시스템 정리기">File System Organizer</h3>
+                    <div class="program-tags">
+                        <span class="program-tag">Windows</span>
+                        <span class="program-tag">Python</span>
+                        <span class="program-tag">Automation</span>
+                    </div>
+                    <p data-en="Automatically organize files into folders based on types, dates, or custom rules. Great for download folders and media collections." data-ko="파일 유형, 날짜 또는 사용자 정의 규칙에 따라 파일을 폴더로 자동 정리. 다운로드 폴더 및 미디어 컬렉션에 유용.">Automatically organize files into folders based on types, dates, or custom rules. Great for download folders and media collections.</p>
+                    <div class="program-links">
+                        <a href="https://github.com/purestory/file-organizer" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> 
+                            <span data-en="Source" data-ko="소스코드">Source</span>
+                        </a>
+                        <a href="#" data-en="Download" data-ko="다운로드">Download</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 purestory. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/purestory" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-top" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; border: none; outline: none; background-color: var(--primary-color); color: white; cursor: pointer; padding: 15px; border-radius: 50%;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        var timestamp = new Date().getTime();
+        document.write('<script src="js/main.js?v=' + timestamp + '"><\/script>');
+        
+        // 언어 관련 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 언어 표시 업데이트
+            document.getElementById('current-lang').textContent = currentLang === 'en' ? 'English' : '한국어';
+            
+            // 텍스트 번역 적용
+            function applyTranslation() {
+                var elements = document.querySelectorAll('[data-' + currentLang + ']');
+                elements.forEach(function(element) {
+                    element.textContent = element.getAttribute('data-' + currentLang);
+                });
+                
+                // 타이틀 번역
+                document.title = currentLang === 'ko' ? '프로그램 소개 - Web Tools' : 'Programs - Web Tools';
+            }
+            
+            applyTranslation();
+        });
+    </script>
+</body>
+</html> 

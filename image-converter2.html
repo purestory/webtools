@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>이미지 변환기 (WebAssembly) - Web Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .converter-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area.highlight {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+
+        .upload-area.has-files {
+            border-style: solid;
+            background: #fff;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem;
+            background: #fff;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .preview-filename {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            word-break: break-all;
+        }
+
+        .preview-filesize {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .delete-file {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .delete-file:hover {
+            background: #c82333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .quality-slider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quality-slider input[type="range"] {
+            flex: 1;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #007bff;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .result-files {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-file {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .result-preview {
+            height: 200px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .result-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .result-info {
+            padding: 1rem;
+        }
+
+        .result-info h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            word-break: break-all;
+        }
+
+        .result-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .result-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 4px;
+            color: white;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message-info {
+            background: #007bff;
+        }
+
+        .message-error {
+            background: #dc3545;
+        }
+
+        .message-success {
+            background: #28a745;
+        }
+
+        .message-hiding {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>web tools</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">홈</a></li>
+                <li><a href="image-converter.html">이미지 변환</a></li>
+                <li><a href="subtitle-converter.html">자막 변환</a></li>
+                <li><a href="pdf-editor.html">PDF 편집</a></li>
+                <li><a href="programs.html">프로그램 소개</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="converter-section">
+            <h2>이미지 변환기 (WebAssembly)</h2>
+            <p>WebAssembly 기술을 활용해 브라우저에서 직접 이미지를 변환합니다. 서버 없이 더 빠르게 변환할 수 있습니다.</p>
+            
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>파일을 여기에 끌어다 놓으세요</h3>
+                <p>또는 클릭하여 파일을 선택하세요</p>
+                <button type="button" id="file-select-btn" class="file-select-btn">
+                    <i class="fas fa-file-image"></i> <span>파일 선택</span>
+                </button>
+                <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+            </div>
+            <div class="file-list" id="file-list">
+                <p>선택된 파일이 없습니다</p>
+            </div>
+        </section>
+
+        <section class="converter-section">
+            <h2>변환 옵션</h2>
+            <form id="convert-form">
+                <div class="form-group">
+                    <label for="format-select">변환할 포맷</label>
+                    <select id="format-select" class="form-control">
+                        <option value="" disabled selected>포맷 선택</option>
+                        <option value="jpg">JPG (JPEG)</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WebP</option>
+                        <option value="gif">GIF (정적)</option>
+                    </select>
+                </div>
+                <div id="format-options">
+                    <!-- 포맷 선택에 따라 동적으로 옵션이 표시됩니다 -->
+                </div>
+                <button type="submit" class="btn convert-btn">변환하기</button>
+            </form>
+        </section>
+
+        <section class="converter-section">
+            <h2>변환 결과</h2>
+            <div id="result-area">
+                <p>변환 결과가 여기에 표시됩니다.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PureStory. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/purestory" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-top" style="display: none;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 이미지 압축 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+    
+    <!-- WebAssembly 이미지 변환기 스크립트 -->
+    <script src="js/image-converter-wasm.js"></script>
+</body>
+</html> 
