@@ -1,6 +1,7 @@
 // WebAssembly-based Image Converter Code
 let encoders = {};
 let decoders = {};
+let selectedFiles = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Initializing image converter');
@@ -36,7 +37,18 @@ function initializeEventListeners() {
     // File select button
     const fileSelectBtn = document.getElementById('select-file-btn');
     if (fileSelectBtn) {
-        fileSelectBtn.addEventListener('click', () => document.getElementById('file-input').click());
+        console.log('Adding click event to file select button');
+        fileSelectBtn.addEventListener('click', () => {
+            console.log('File select button clicked');
+            const fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                fileInput.click();
+            } else {
+                console.error('File input element not found');
+            }
+        });
+    } else {
+        console.error('File select button not found');
     }
     
     // Convert button
@@ -48,7 +60,10 @@ function initializeEventListeners() {
     // File input
     const fileInput = document.getElementById('file-input');
     if (fileInput) {
+        console.log('Adding change event to file input');
         fileInput.addEventListener('change', handleFileInputChange);
+    } else {
+        console.error('File input element not found');
     }
     
     // Upload area drag & drop
@@ -79,6 +94,12 @@ function initializeEventListeners() {
             resizeOptions.style.display = this.dataset.resize === 'none' ? 'none' : 'block';
         });
     });
+    
+    // Format select
+    const formatSelect = document.getElementById('format-select');
+    if (formatSelect) {
+        formatSelect.addEventListener('change', handleFormatChange);
+    }
 }
 
 async function convertImage(file, options) {
@@ -236,8 +257,17 @@ function handleDrop(event) {
 
 // File input change handler
 function handleFileInputChange(event) {
+    console.log('File input change event triggered');
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {
+        console.log('No files selected');
+        return;
+    }
+    
+    console.log(`${files.length} files selected`);
+    
+    // Save selected files in global array
+    selectedFiles = Array.from(files);
     
     const fileList = document.getElementById('file-list');
     const uploadArea = document.getElementById('upload-area');
@@ -246,97 +276,161 @@ function handleFileInputChange(event) {
     // Clear file list
     fileList.innerHTML = '';
     
+    // Create file list display
+    const fileListDisplay = document.createElement('div');
+    fileListDisplay.classList.add('file-list');
+    
+    const filesCount = document.createElement('div');
+    filesCount.classList.add('mb-2', 'file-info');
+    filesCount.textContent = `${files.length}개 파일 선택됨`;
+    fileListDisplay.appendChild(filesCount);
+    
+    // Create thumbnails for first 10 files
+    const maxPreview = Math.min(files.length, 10);
+    const fileGrid = document.createElement('div');
+    fileGrid.classList.add('row', 'row-cols-2', 'row-cols-md-5', 'g-2');
+    
+    for (let i = 0; i < maxPreview; i++) {
+        const file = files[i];
+        
+        // Check if file is an image
+        if (!/^image\//.test(file.type) && !/\.pdf$/i.test(file.name) && !/\.heic$/i.test(file.name)) {
+            console.warn(`File ${file.name} is not a supported image`);
+            continue;
+        }
+        
+        const fileCol = document.createElement('div');
+        fileCol.classList.add('col');
+        
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('preview-item');
+        
+        // Thumbnail container
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('preview-image');
+        
+        // Create thumbnail
+        const thumbnailImg = document.createElement('img');
+        thumbnailImg.alt = '미리보기 불가';
+        
+        if (/\.pdf$/i.test(file.name)) {
+            // PDF 파일은 기본 아이콘 표시
+            thumbnailImg.src = 'images/file-icon.png';
+        } else if (/\.heic$/i.test(file.name)) {
+            // HEIC 파일은 기본 아이콘 표시
+            thumbnailImg.src = 'images/file-icon.png';
+        } else {
+            // 일반 이미지는 썸네일 생성
+            try {
+                const objectUrl = URL.createObjectURL(file);
+                thumbnailImg.src = objectUrl;
+                
+                // Cleanup URL when image is loaded
+                thumbnailImg.onload = () => {
+                    URL.revokeObjectURL(objectUrl);
+                };
+            } catch (error) {
+                console.error(`Error creating thumbnail for ${file.name}:`, error);
+                thumbnailImg.src = 'images/file-icon.png';
+            }
+        }
+        
+        imageContainer.appendChild(thumbnailImg);
+        fileItem.appendChild(imageContainer);
+        
+        // File info
+        const fileInfo = document.createElement('div');
+        
+        const fileName = document.createElement('div');
+        fileName.classList.add('preview-filename');
+        fileName.textContent = file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name;
+        fileName.title = file.name;
+        
+        const fileSize = document.createElement('div');
+        fileSize.classList.add('preview-filesize');
+        fileSize.textContent = formatFileSize(file.size);
+        
+        fileInfo.appendChild(fileName);
+        fileInfo.appendChild(fileSize);
+        fileItem.appendChild(fileInfo);
+        
+        // Delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-file');
+        deleteBtn.innerHTML = '&times;';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeFile(i);
+        });
+        
+        fileItem.appendChild(deleteBtn);
+        fileCol.appendChild(fileItem);
+        fileGrid.appendChild(fileCol);
+    }
+    
+    fileListDisplay.appendChild(fileGrid);
+    
+    // Add "and more" text if more than 10 files
+    if (files.length > 10) {
+        const moreText = document.createElement('div');
+        moreText.classList.add('mt-2', 'text-muted');
+        moreText.textContent = `외 ${files.length - 10}개 파일...`;
+        fileListDisplay.appendChild(moreText);
+    }
+    
+    fileList.appendChild(fileListDisplay);
+    
     // Update upload area style
     uploadArea.classList.add('has-files');
     
-    // Enable convert button
-    if (convertBtn) {
+    // Enable convert button if files are selected and format is selected
+    const formatSelect = document.getElementById('format-select');
+    if (formatSelect && formatSelect.value) {
         convertBtn.disabled = false;
+    } else {
+        // Prompt user to select format
+        showMessage('출력 형식을 선택하세요.', 'info');
     }
     
-    // Display file information
-    const fileInfo = document.createElement('div');
-    fileInfo.className = 'file-info';
-    fileInfo.innerHTML = `<p><strong>Selected files: ${files.length}</strong></p>`;
-    fileList.appendChild(fileInfo);
-    
-    // Create preview container
-    const previewContainer = document.createElement('div');
-    previewContainer.className = 'preview-container';
-    previewContainer.style.display = 'grid';
-    previewContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';
-    previewContainer.style.gap = '10px';
-    previewContainer.style.marginTop = '10px';
-    fileList.appendChild(previewContainer);
-    
-    // Process each file
-    Array.from(files).forEach(file => {
-        if (!file.type.startsWith('image/')) return;
-        
-        const previewItem = document.createElement('div');
-        previewItem.className = 'preview-item';
-        previewItem.style.border = '1px solid #ddd';
-        previewItem.style.borderRadius = '4px';
-        previewItem.style.padding = '8px';
-        previewItem.style.backgroundColor = '#fff';
-        
-        const previewImage = document.createElement('div');
-        previewImage.className = 'preview-image';
-        previewImage.style.width = '100%';
-        previewImage.style.height = '120px';
-        previewImage.style.overflow = 'hidden';
-        previewImage.style.marginBottom = '5px';
-        previewImage.style.borderRadius = '4px';
-        
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'contain';
-        previewImage.appendChild(img);
-        
-        const fileName = document.createElement('div');
-        fileName.className = 'preview-filename';
-        fileName.style.fontSize = '0.8rem';
-        fileName.style.overflow = 'hidden';
-        fileName.style.textOverflow = 'ellipsis';
-        fileName.style.whiteSpace = 'nowrap';
-        fileName.title = file.name;
-        fileName.textContent = file.name;
-        
-        const fileSize = document.createElement('div');
-        fileSize.className = 'preview-filesize';
-        fileSize.style.fontSize = '0.75rem';
-        fileSize.style.color = '#666';
-        fileSize.textContent = formatFileSize(file.size);
-        
-        previewItem.appendChild(previewImage);
-        previewItem.appendChild(fileName);
-        previewItem.appendChild(fileSize);
-        
-        previewContainer.appendChild(previewItem);
-    });
-    
-    // Add cancel button
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'btn btn-danger';
-    cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancel';
-    cancelButton.style.marginTop = '10px';
-    cancelButton.onclick = function() {
-        resetFileInput();
-    };
-    fileList.appendChild(cancelButton);
+    console.log('File display updated and button state updated');
 }
 
-// Reset file input function
+// Remove file from selection
+function removeFile(index) {
+    if (index >= 0 && index < selectedFiles.length) {
+        selectedFiles.splice(index, 1);
+        
+        // Re-create file list display
+        const dummyEvent = { target: { files: selectedFiles } };
+        handleFileInputChange(dummyEvent);
+        
+        // If no files left, reset
+        if (selectedFiles.length === 0) {
+            resetFileInput();
+        }
+    }
+}
+
+// Format change handler
+function handleFormatChange(event) {
+    const convertBtn = document.getElementById('convert-btn');
+    
+    // Only enable convert button if files are selected
+    if (selectedFiles.length > 0) {
+        convertBtn.disabled = false;
+    }
+}
+
+// Reset file input and UI
 function resetFileInput() {
     const fileInput = document.getElementById('file-input');
     const fileList = document.getElementById('file-list');
     const uploadArea = document.getElementById('upload-area');
     const convertBtn = document.getElementById('convert-btn');
     
-    // Reset file input
+    // Clear file input
     fileInput.value = '';
+    selectedFiles = [];
     
     // Clear file list
     fileList.innerHTML = '';
@@ -345,145 +439,116 @@ function resetFileInput() {
     uploadArea.classList.remove('has-files');
     
     // Disable convert button
-    if (convertBtn) {
-        convertBtn.disabled = true;
-    }
-}
-
-// Format change handler
-function handleFormatChange(event) {
-    const format = event.target.value;
-    const formatOptions = document.getElementById('format-options');
-    
-    // Clear format options
-    formatOptions.innerHTML = '';
-    
-    if (!format) return;
-    
-    // Add format-specific options
-    if (format === 'jpg') {
-        formatOptions.innerHTML = `
-            <div class="form-group">
-                <label for="jpg-quality">JPEG Quality</label>
-                <div class="quality-slider">
-                    <input type="range" id="jpg-quality" min="0" max="100" value="90" class="form-control">
-                    <span id="jpg-quality-value">90%</span>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('jpg-quality').addEventListener('input', function() {
-            document.getElementById('jpg-quality-value').textContent = `${this.value}%`;
-        });
-    } else if (format === 'webp') {
-        formatOptions.innerHTML = `
-            <div class="form-group">
-                <label for="webp-quality">WebP Quality</label>
-                <div class="quality-slider">
-                    <input type="range" id="webp-quality" min="0" max="100" value="90" class="form-control">
-                    <span id="webp-quality-value">90%</span>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('webp-quality').addEventListener('input', function() {
-            document.getElementById('webp-quality-value').textContent = `${this.value}%`;
-        });
-    } else if (format === 'png') {
-        formatOptions.innerHTML = `
-            <div class="form-group">
-                <label for="png-compression">PNG Compression Level</label>
-                <div class="quality-slider">
-                    <input type="range" id="png-compression" min="0" max="9" value="6" class="form-control">
-                    <span id="png-compression-value">6</span>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('png-compression').addEventListener('input', function() {
-            document.getElementById('png-compression-value').textContent = this.value;
-        });
-    }
+    convertBtn.disabled = true;
 }
 
 // Convert button click handler
 function handleConvertButtonClick() {
-    const files = document.getElementById('file-input').files;
-    if (!files || files.length === 0) return;
+    console.log('Convert button clicked');
     
-    const format = document.getElementById('format-select').value;
-    if (!format) {
-        showMessage('출력 형식을 선택해주세요.', 'error');
+    // Check if files are selected
+    if (selectedFiles.length === 0) {
+        showMessage('변환할 파일을 선택하세요.', 'error');
         return;
     }
     
-    // 변환 옵션 수집
+    // Check if format is selected
+    const formatSelect = document.getElementById('format-select');
+    if (!formatSelect || !formatSelect.value) {
+        showMessage('출력 형식을 선택하세요.', 'error');
+        return;
+    }
+    
+    // Get conversion options
     const options = {
-        format: format,
+        format: formatSelect.value,
         quality: parseInt(document.getElementById('quality-slider').value),
-        maxFilesize: parseInt(document.getElementById('max-filesize').value) || undefined,
-        removeExif: document.getElementById('remove-exif').checked,
         resize: false,
-        maxDimension: undefined
+        width: null,
+        height: null,
+        removeExif: document.getElementById('remove-exif').checked,
+        removeTransparency: document.getElementById('remove-transparency').checked,
+        optimize: document.getElementById('compress-lossless').checked
     };
     
-    // 해상도 변경 옵션 처리
+    // Get resize option
     const activeResizeBtn = document.querySelector('.btn-group [data-resize].active');
     if (activeResizeBtn && activeResizeBtn.dataset.resize !== 'none') {
         options.resize = true;
+        
         if (activeResizeBtn.dataset.resize === 'width') {
-            options.maxDimension = parseInt(document.getElementById('width-input').value);
+            options.width = parseInt(document.getElementById('width-input').value);
         } else if (activeResizeBtn.dataset.resize === 'height') {
-            options.maxDimension = parseInt(document.getElementById('height-input').value);
+            options.height = parseInt(document.getElementById('height-input').value);
         } else if (activeResizeBtn.dataset.resize === 'custom') {
-            options.maxDimension = Math.max(
-                parseInt(document.getElementById('width-input').value) || 0,
-                parseInt(document.getElementById('height-input').value) || 0
-            );
+            options.width = parseInt(document.getElementById('width-input').value);
+            options.height = parseInt(document.getElementById('height-input').value);
         }
     }
     
-    // 변환 버튼 비활성화
-    document.getElementById('convert-btn').disabled = true;
+    // Get max filesize if specified
+    const maxFilesizeInput = document.getElementById('max-filesize');
+    if (maxFilesizeInput && maxFilesizeInput.value) {
+        options.maxFilesize = parseInt(maxFilesizeInput.value);
+    }
     
-    // 이미지 변환 시작
-    convertImages(files, options);
+    console.log('Conversion options:', options);
+    
+    // Start conversion
+    convertImages(selectedFiles, options);
 }
 
-// Image conversion processing function
+// Convert images function
 async function convertImages(files, options) {
-    const results = [];
-    const total = files.length;
-    let current = 0;
-    
     showLoading(true);
     
-    try {
-        for (const file of files) {
-            if (!file.type.startsWith('image/')) continue;
-            
-            updateProgress(current, total);
-                updateCurrentFileInfo(file.name);
+    const results = [];
+    let errorCount = 0;
+    
+    // Initialize progress
+    updateProgress(0, files.length);
+    
+    // Convert each file
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Update progress UI
+        updateProgress(i + 1, files.length);
+        updateCurrentFileInfo(file.name);
+        
+        try {
+            // Check if file is a supported image or PDF/HEIC
+            if (!/^image\//.test(file.type) && 
+                !file.name.toLowerCase().endsWith('.pdf') && 
+                !file.name.toLowerCase().endsWith('.heic')) {
+                console.warn(`Skipping unsupported file: ${file.name}`);
+                continue;
+            }
             
             const result = await convertImage(file, options);
             if (result) {
+                console.log(`Converted ${file.name} successfully`);
                 results.push(result);
+                
+                // Increment conversion counter
+                incrementConversionCounter();
             }
-            
-            current++;
+        } catch (error) {
+            console.error(`Error converting ${file.name}:`, error);
+            errorCount++;
         }
-        
-        updateProgress(total, total);
-        incrementConversionCounter(results.length);
-        displayResults(results);
-    } catch (error) {
-        console.error('Image conversion error:', error);
-        showMessage('이미지 변환 중 오류가 발생했습니다.', 'error');
-    } finally {
-        showLoading(false);
     }
     
-    return results;
+    // Hide loading
+    showLoading(false);
+    
+    // Display results
+    if (results.length > 0) {
+        displayResults(results);
+        showMessage(`${results.length}개 파일 변환 완료. ${errorCount}개 파일 변환 실패.`, 'success');
+    } else {
+        showMessage('변환 실패. 파일 형식과 설정을 확인하세요.', 'error');
+    }
 }
 
 // WebAssembly 모듈 초기화
@@ -690,88 +755,39 @@ function incrementConversionCounter(count = 1) {
     }
 }
 
+// Update statistics function
 function updateStats() {
     try {
         console.log('Starting stats update');
         
-        // Get image conversion counter
-        let imageCount = 0;
-        try {
-            const storedCount = localStorage.getItem('image_conversion_count');
-            console.log('Raw image counter value from localStorage:', storedCount);
-            
-            if (storedCount !== null && storedCount !== undefined && storedCount !== '') {
-                imageCount = parseInt(storedCount);
-                if (isNaN(imageCount)) {
-                    console.log('Image counter value is not a number, resetting to 0');
-                    imageCount = 0;
-                    // Reset if invalid value
-                    localStorage.setItem('image_conversion_count', '0');
-                }
-            } else {
-                console.log('Image counter value not found, resetting to 0');
-                // Initialize counter if not found
-                localStorage.setItem('image_conversion_count', '0');
-            }
-        } catch (e) {
-            console.error('Error reading image counter value:', e);
-        }
+        // Get visitor count
+        const visitorCount = localStorage.getItem('visitor_count') || '0';
+        console.log('Visitor count:', visitorCount);
         
-        console.log('Current image conversion count:', imageCount);
+        // Get image conversion count
+        const imageCount = localStorage.getItem('image_conversion_count') || '0';
+        console.log('Image conversion count:', imageCount);
         
-        // Get subtitle conversion counter
-        let subtitleCount = 0;
-        try {
-            const storedCount = localStorage.getItem('subtitle_conversion_count');
-            console.log('Raw subtitle counter value from localStorage:', storedCount);
-            
-            if (storedCount !== null && storedCount !== undefined && storedCount !== '') {
-                subtitleCount = parseInt(storedCount);
-                if (isNaN(subtitleCount)) {
-                    console.log('Subtitle counter value is not a number, resetting to 0');
-                    subtitleCount = 0;
-                    // Reset if invalid value
-                    localStorage.setItem('subtitle_conversion_count', '0');
-                }
-            } else {
-                console.log('Subtitle counter value not found, resetting to 0');
-                // Initialize counter if not found
-                localStorage.setItem('subtitle_conversion_count', '0');
-            }
-        } catch (e) {
-            console.error('Error reading subtitle counter value:', e);
-        }
-        
-        console.log('Current subtitle conversion count:', subtitleCount);
-        
-        // Calculate total conversion count
-        const totalCount = imageCount + subtitleCount;
-        console.log('Total conversion count:', totalCount, '(Images:', imageCount, '+ Subtitles:', subtitleCount, ')');
-        
-        // Update counter elements
-        const imageCountElement = document.getElementById('image-conversion-count');
-        const subtitleCountElement = document.getElementById('subtitle-conversion-count');
-        const totalCountElement = document.getElementById('total-conversion-count');
-        
-        if (imageCountElement) {
-            imageCountElement.textContent = imageCount.toLocaleString();
-            console.log('Image conversion counter element updated:', imageCount);
+        // Update visitor count elements
+        const visitorCountElements = document.querySelectorAll('.visitor-count');
+        if (visitorCountElements.length > 0) {
+            console.log(`Updating ${visitorCountElements.length} visitor count elements`);
+            visitorCountElements.forEach(el => {
+                el.textContent = parseInt(visitorCount).toLocaleString();
+            });
         } else {
-            console.log('Image conversion counter element not found');
+            console.log('No visitor count elements found');
         }
         
-        if (subtitleCountElement) {
-            subtitleCountElement.textContent = subtitleCount.toLocaleString();
-            console.log('Subtitle conversion counter element updated:', subtitleCount);
+        // Update conversion count elements
+        const conversionCountElements = document.querySelectorAll('.conversion-count');
+        if (conversionCountElements.length > 0) {
+            console.log(`Updating ${conversionCountElements.length} conversion count elements`);
+            conversionCountElements.forEach(el => {
+                el.textContent = parseInt(imageCount).toLocaleString();
+            });
         } else {
-            console.log('Subtitle conversion counter element not found');
-        }
-        
-        if (totalCountElement) {
-            totalCountElement.textContent = totalCount.toLocaleString();
-            console.log('Total conversion counter element updated:', totalCount);
-        } else {
-            console.log('Total conversion counter element not found');
+            console.log('No conversion count elements found');
         }
         
         // Update parent window stats (if in iframe)
