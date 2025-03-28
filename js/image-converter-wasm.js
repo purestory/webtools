@@ -36,25 +36,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 function initializeEventListeners() {
     console.log('initializeEventListeners 함수 호출됨');
     
-    // File select button
+    // File select button - 수정된 코드
     const fileSelectBtn = document.getElementById('select-file-btn');
-    console.log('파일 선택 버튼 요소:', fileSelectBtn);
+    const fileInput = document.getElementById('file-input');
     
-    if (fileSelectBtn) {
+    console.log('파일 선택 버튼 요소:', fileSelectBtn);
+    console.log('파일 입력 요소:', fileInput);
+    
+    if (fileSelectBtn && fileInput) {
+        // 기존 이벤트 리스너 제거 (중복 방지)
+        fileSelectBtn.removeEventListener('click', handleFileSelectClick);
+        
+        // 새 이벤트 리스너 등록
         console.log('파일 선택 버튼 클릭 이벤트 리스너 추가');
-        fileSelectBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('파일 선택 버튼 클릭됨');
-            const fileInput = document.getElementById('file-input');
-            if (fileInput) {
-                fileInput.click();
-            } else {
-                console.error('파일 입력 요소를 찾을 수 없음');
-            }
-        });
+        fileSelectBtn.addEventListener('click', handleFileSelectClick);
     } else {
-        console.error('파일 선택 버튼을 찾을 수 없음');
+        console.error('파일 선택 버튼 또는 파일 입력 요소를 찾을 수 없음');
     }
     
     // Convert button
@@ -64,15 +61,13 @@ function initializeEventListeners() {
     }
     
     // File input
-    const fileInput = document.getElementById('file-input');
-    console.log('파일 입력 요소:', fileInput);
-    
     if (fileInput) {
         console.log('파일 입력 변경 이벤트 리스너 추가');
-        fileInput.addEventListener('change', function(e) {
-            console.log('파일 입력 변경됨');
-            handleFileInputChange(e);
-        });
+        // 기존 이벤트 리스너 제거 (중복 방지)
+        fileInput.removeEventListener('change', handleFileInputChange);
+        
+        // 새 이벤트 리스너 등록
+        fileInput.addEventListener('change', handleFileInputChange);
     } else {
         console.error('파일 입력 요소를 찾을 수 없음');
     }
@@ -124,6 +119,21 @@ function initializeEventListeners() {
     const formatSelect = document.getElementById('format-select');
     if (formatSelect) {
         formatSelect.addEventListener('change', handleFormatChange);
+    }
+}
+
+// 파일 선택 버튼 클릭 핸들러 함수 - 새로 추가
+function handleFileSelectClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('파일 선택 버튼 클릭됨');
+    
+    const fileInput = document.getElementById('file-input');
+    if (fileInput) {
+        console.log('파일 입력 요소 클릭 시도');
+        fileInput.click();
+    } else {
+        console.error('파일 입력 요소를 찾을 수 없음');
     }
 }
 
