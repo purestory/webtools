@@ -1,0 +1,135 @@
+/* 헤더 레이아웃 */
+header nav {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* 로고 공간 보장을 위한 스타일 */
+.logo {
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* 네비게이션 메뉴 간격 조정 */
+.nav-links {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* 메뉴 항목 스타일 */
+.nav-links li a {
+    font-size: 1.1rem;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li a:hover {
+    background-color: var(--hover-color);
+}
+
+.nav-links li a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    background-color: var(--primary-light);
+}
+
+/* 언어 선택 드롭다운 스타일 */
+.language-dropdown {
+    position: relative;
+    margin-left: 20px;
+}
+
+.language-dropdown-btn {
+    background-color: transparent;
+    border: 1px solid var(--gray-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.language-dropdown-btn i {
+    margin-right: 5px;
+}
+
+.language-dropdown-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.language-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.language-dropdown-content a {
+    color: var(--text-color);
+    padding: 10px 12px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.language-dropdown-content a:hover {
+    background-color: var(--hover-color);
+}
+
+.language-dropdown:hover .language-dropdown-content {
+    display: block;
+}
+
+/* 모바일 대응 스타일 */
+@media (max-width: 768px) {
+    header nav {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-links li a {
+        font-size: 1rem;
+        padding: 6px 8px;
+    }
+    
+    .language-dropdown {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+} 

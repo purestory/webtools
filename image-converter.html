@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Image Converter v1.3 - Web Tools</title>
+    <script>
+        // 캐시 방지를 위한 타임스탬프 생성
+        var timestamp = new Date().getTime();
+        // 동적으로 CSS 로드
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + timestamp + '">');
+        document.write('<link rel="stylesheet" href="css/header.css?v=' + timestamp + '">');
+        document.write('<script type="module" src="js/image-converter.js?v=' + timestamp + '"><\/script>');
+        
+        // 페이지 로드 시 캐시 강제 새로고침
+        window.addEventListener('load', function() {
+            console.log('페이지 로드 완료, 캐시 타임스탬프:', timestamp);
+            
+            // 리사이즈 옵션 선택 문제 해결을 위한 추가 코드
+            setTimeout(function() {
+                const resizeType = document.getElementById('resize-type');
+                if (resizeType) {
+                    console.log('리사이즈 타입 이벤트 리스너 추가');
+                    resizeType.addEventListener('change', function() {
+                        console.log('리사이즈 타입 변경:', this.value);
+                        
+                        // 모든 옵션 그룹 숨기기
+                        document.querySelectorAll('.resize-option-group').forEach(el => {
+                            el.style.display = 'none';
+                        });
+                        
+                        // 선택된 옵션 그룹 표시
+                        const selectedOption = document.getElementById(this.value + '-options');
+                        if (selectedOption) {
+                            selectedOption.style.display = 'block';
+                            console.log('옵션 그룹 표시:', this.value + '-options');
+                        }
+                    });
+                    
+                    // 초기 상태 설정
+                    const currentType = resizeType.value || 'original';
+                    console.log('현재 리사이즈 타입:', currentType);
+                    
+                    // 모든 옵션 그룹 숨기기
+                    document.querySelectorAll('.resize-option-group').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                    
+                    // 선택된 옵션 그룹 표시
+                    const selectedOption = document.getElementById(currentType + '-options');
+                    if (selectedOption) {
+                        selectedOption.style.display = 'block';
+                        console.log('초기 옵션 그룹 표시:', currentType + '-options');
+                    }
+                }
+            }, 500);
+        });
+        
+        // 언어 감지 및 설정
+        function detectLanguage() {
+            // 브라우저 언어 감지
+            var userLang = navigator.language || navigator.userLanguage;
+            // 저장된 언어 설정 가져오기
+            var savedLang = localStorage.getItem('preferredLanguage');
+            
+            // 언어 설정 (저장된 설정이 있으면 사용, 없으면 영어를 기본값으로 설정)
+            var lang = savedLang || 'en';
+            
+            // HTML 언어 속성 설정
+            document.documentElement.lang = lang;
+            
+            return lang;
+        }
+        
+        // 현재 언어 설정
+        var currentLang = detectLanguage();
+        
+        // 언어 전환 함수
+        function switchLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+        
+        // 페이지 로드 시 언어에 따른 요소 표시
+        document.addEventListener('DOMContentLoaded', function() {
+            // 헤더가 로드된 후에 언어 표시 업데이트
+            setTimeout(function() {
+                const currentLangElement = document.getElementById('current-lang');
+                if (currentLangElement) {
+                    currentLangElement.textContent = currentLang === 'en' ? 'English' : '한국어';
+                }
+                
+                // 모든 다국어 요소 업데이트
+                var elements = document.querySelectorAll('[data-en], [data-ko]');
+                elements.forEach(function(element) {
+                    if(element.hasAttribute('data-' + currentLang)) {
+                        element.textContent = element.getAttribute('data-' + currentLang);
+                    }
+                });
+            }, 500); // 헤더가 로드될 시간을 주기 위해 지연
+        });
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 헤더 레이아웃 */
+        header nav {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        /* 로고 공간 보장을 위한 스타일 */
+        .logo {
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+        
+        /* 언어 선택 드롭다운 스타일 */
+        .language-dropdown {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .language-dropdown-btn {
+            background-color: transparent;
+            border: 1px solid var(--gray-color);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-dropdown-btn i {
+            margin-right: 5px;
+        }
+        
+        .language-dropdown-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .language-dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown:hover .language-dropdown-content {
+            display: block;
+        }
+        
+        /* 네비게이션 메뉴 간격 조정 */
+        .nav-links {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        /* 메뉴 항목 스타일 */
+        .nav-links li a {
+            font-size: 1.1rem;
+            padding: 8px 10px;
+        }
+        
+        /* 비율 버튼 스타일 */
+        .quick-ratio-buttons {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+        
+        .ratio-btn {
+            min-width: 45px;
+            padding: 2px 5px;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+            border-radius: 3px;
+        }
+        
+        .ratio-btn.active {
+            font-weight: bold;
+        }
+        
+        .ratio-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 컴포넌트가 로드될 컨테이너 -->
+    <div id="header-container"></div>
+
+    <main>
+        <section class="converter-section">
+            <h2 data-en="Image Converter" data-ko="이미지 변환기">Image Converter</h2>
+            
+            <div class="upload-container">
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3 data-en="Drag and drop your files here" data-ko="파일을 여기에 끌어다 놓으세요">Drag and drop your files here</h3>
+                    <p data-en="or use the button below" data-ko="또는 아래 버튼을 사용하세요">or use the button below</p>
+                    
+                    <!-- 미리보기 컨테이너 (이미지 선택 후 표시) -->
+                    <div class="preview-container" id="preview-container" style="display: none; margin-top: 5px; width: 100%;"></div>
+                </div>
+                
+                <!-- 파일 선택 버튼을 업로드 영역 밖으로 이동 -->
+                <div class="button-container" style="text-align: center; margin-top: 15px;">
+                    <button type="button" id="select-file-btn" class="btn">
+                        <i class="fas fa-file-image"></i> <span data-en="Select Files" data-ko="파일 선택">Select Files</span>
+                    </button>
+                    
+                    <!-- 취소 버튼 추가 -->
+                    <button type="button" id="cancel-btn" class="btn" style="margin-left: 10px; display: none;">
+                        <i class="fas fa-times"></i> <span data-en="Cancel" data-ko="취소">Cancel</span>
+                    </button>
+                </div>
+                
+                <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                
+                <div class="file-list" id="file-list">
+                    <p data-en="No file selected" data-ko="선택된 파일이 없습니다">No file selected</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="converter-section">
+            <h2 data-en="Conversion Options" data-ko="변환 옵션">Conversion Options</h2>
+            <form id="convert-form">
+                <div class="form-group">
+                    <label for="format-select" data-en="Convert to Format" data-ko="Convert to Format">Convert to Format</label>
+                    <select id="format-select" class="form-control">
+                        <option value="" disabled data-en="Select Format" data-ko="Select Format">Select Format</option>
+                        <option value="jpg" selected>JPG (JPEG)</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WebP</option>
+                        <option value="gif">GIF</option>
+                        <option value="bmp">BMP</option>
+                        <option value="tiff">TIFF</option>
+                        <option value="ico">ICO</option>
+                        <option value="svg">SVG</option>
+                        <option value="avif">AVIF</option>
+                        <option value="heif">HEIF/HEIC</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Resize Image" data-ko="Resize Image">Resize Image</label>
+                    
+                    <select id="resize-type" class="form-control mb-2">
+                        <option value="original" selected data-en="Original Size" data-ko="Original Size">Original Size</option>
+                        <option value="percentage" data-en="Resize by Percentage" data-ko="Resize by Percentage">Resize by Percentage</option>
+                        <option value="free" data-en="Free Resize" data-ko="Free Resize">Free Resize</option>
+                    </select>
+                    
+                    <div id="resize-options-container">
+                        <!-- 원본 크기 옵션 -->
+                        <div id="original-size-options" class="resize-option-group" style="display: block;">
+                            <p class="text-muted" data-en="The image will maintain its original dimensions." data-ko="The image will maintain its original dimensions.">The image will maintain its original dimensions.</p>
+                        </div>
+                        
+                        <!-- 비율 옵션 -->
+                        <div id="percentage-options" class="resize-option-group" style="display: none;">
+                            <div class="input-group mb-2">
+                                <input type="number" id="percentage-input" class="form-control" value="100" min="1" max="200">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <div class="quick-ratio-buttons mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary ratio-btn" data-ratio="10">1/10</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary ratio-btn" data-ratio="33.33">1/3</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary ratio-btn" data-ratio="50">1/2</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary ratio-btn" data-ratio="75">3/4</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary ratio-btn" data-ratio="100">원본</button>
+                            </div>
+                            <small class="form-text" data-en="Enter a percentage between 1% and 200%." data-ko="1%에서 200% 사이의 값을 입력하세요.">Enter a percentage between 1% and 200%.</small>
+                            <!-- 원본 크기 및 변환 후 크기 정보 표시 -->
+                            <div class="size-info mt-2">
+                                <div class="original-size">
+                                    <small>Original: <span id="percentage-original-width">0</span> × <span id="percentage-original-height">0</span> px</small>
+                                </div>
+                                <div class="resized-size">
+                                    <small>Resized: <span id="percentage-resized-width">0</span> × <span id="percentage-resized-height">0</span> px</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 자유 조정 옵션 -->
+                        <div id="free-options" class="resize-option-group" style="display: none;">
+                            <div class="input-group mb-2">
+                                <input type="number" id="width-input" class="form-control" placeholder="Width" data-en="Width" data-ko="Width">
+                                <span class="input-group-text">×</span>
+                                <input type="number" id="height-input" class="form-control" placeholder="Height" data-en="Height" data-ko="Height">
+                                <span class="input-group-text">px</span>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input type="checkbox" class="form-check-input" id="keep-ratio-checkbox">
+                                <label class="form-check-label" for="keep-ratio-checkbox">Keep aspect ratio</label>
+                            </div>
+                            <small class="form-text" data-en="Specify dimensions in pixels. Check 'Keep aspect ratio' to maintain proportions." data-ko="Specify dimensions in pixels. Check 'Keep aspect ratio' to maintain proportions.">Specify dimensions in pixels. Check 'Keep aspect ratio' to maintain proportions.</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quality-input" data-en="Image Quality (1-100)" data-ko="Image Quality (1-100)">Image Quality (1-100)</label>
+                    <div class="quality-slider">
+                        <input type="range" id="quality-input" class="form-control-range" min="1" max="100" value="90">
+                        <span id="quality-value">90</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn convert-btn" data-en="Convert" data-ko="Convert">Convert</button>
+            </form>
+        </section>
+
+        <section class="converter-section">
+            <h2 data-en="Conversion Results" data-ko="변환 결과">Conversion Results</h2>
+            <div id="result-area">
+                <p data-en="Conversion results will be displayed here." data-ko="Conversion results will be displayed here.">Conversion results will be displayed here.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 <span data-en="Web Tools" data-ko="PureStory">Web Tools</span>. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/purestory" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-top" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; border: none; outline: none; background-color: var(--primary-color); color: white; cursor: pointer; padding: 15px; border-radius: 50%;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 기존 스크립트 로드 -->
+    <script>
+        var timestamp = new Date().getTime();
+        document.write('<script src="js/main.js?v=' + timestamp + '"><\/script>');
+    </script>
+
+    <!-- 헤더 로더 스크립트 -->
+    <script src="js/header-loader.js?v=20250327" type="module"></script>
+</body>
+</html> 

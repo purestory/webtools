@@ -1,0 +1,70 @@
+# Netlify 설정 파일
+
+# 빌드 설정 (정적 사이트이므로 빌드 명령 필요 없음)
+[build]
+  publish = "/"
+  command = ""
+
+# API 프록시 설정 - CORS 문제 해결
+[[redirects]]
+  from = "/convert-image"
+  to = "http://itsmyzone.iptime.org/convert-image"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+[[redirects]]
+  from = "/convert-subtitle"
+  to = "http://itsmyzone.iptime.org/convert-subtitle"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+[[redirects]]
+  from = "/download/*"
+  to = "http://itsmyzone.iptime.org/download/:splat"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+[[redirects]]
+  from = "/status"
+  to = "http://itsmyzone.iptime.org/status"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+# 이전 API 경로에 대한 리디렉션 설정
+[[redirects]]
+  from = "/api/*"
+  to = "http://itsmyzone.iptime.org/:splat"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+# SPA 라우팅 지원 (새로고침 시 404 오류 방지)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 정적 파일 캐싱 설정
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000" 

@@ -1,0 +1,28 @@
+<header>
+    <nav>
+        <div class="logo">
+            <h1>web tools</h1>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link" data-page="index" data-en="Home" data-ko="홈">Home</a></li>
+            <li><a href="image-converter.html" class="nav-link" data-page="image-converter" data-en="Image Converter" data-ko="이미지 변환">Image Converter</a></li>
+            <li><a href="subtitle-converter.html" class="nav-link" data-page="subtitle-converter" data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</a></li>
+            <li><a href="pdf-editor.html" class="nav-link" data-page="pdf-editor" data-en="PDF Editor" data-ko="PDF 편집">PDF Editor</a></li>
+            <li><a href="programs.html" class="nav-link" data-page="programs" data-en="Programs" data-ko="프로그램 소개">Programs</a></li>
+            
+            <!-- 언어 선택 드롭다운 -->
+            <li class="language-dropdown">
+                <button class="language-dropdown-btn">
+                    <i class="fas fa-globe"></i>
+                    <span id="current-lang">English</span>
+                    <i class="fas fa-caret-down" style="margin-left: 5px;"></i>
+                </button>
+                <div class="language-dropdown-content">
+                    <a href="#" onclick="switchLanguage('en'); return false;">English</a>
+                    <a href="#" onclick="switchLanguage('ko'); return false;">한국어</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</header> 
