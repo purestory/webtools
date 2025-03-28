@@ -32,7 +32,7 @@ public_html/
 ├── HTML 파일들:
 │   ├── index.html            # 메인 페이지
 │   ├── image-converter.html  # 서버 기반 이미지 변환 도구
-│   ├── image-converter2.html # WebAssembly 기반 이미지 변환 도구
+│   ├── wasm-image-converter.html # WebAssembly 기반 이미지 변환 도구
 │   ├── image-resize.html     # 이미지 리사이징 도구
 │   ├── image-editor.html     # 이미지 편집 도구
 │   ├── pdf-editor.html       # PDF 편집 도구
