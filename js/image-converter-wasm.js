@@ -34,21 +34,27 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 function initializeEventListeners() {
+    console.log('initializeEventListeners 함수 호출됨');
+    
     // File select button
     const fileSelectBtn = document.getElementById('select-file-btn');
+    console.log('파일 선택 버튼 요소:', fileSelectBtn);
+    
     if (fileSelectBtn) {
-        console.log('Adding click event to file select button');
-        fileSelectBtn.addEventListener('click', () => {
-            console.log('File select button clicked');
+        console.log('파일 선택 버튼 클릭 이벤트 리스너 추가');
+        fileSelectBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('파일 선택 버튼 클릭됨');
             const fileInput = document.getElementById('file-input');
             if (fileInput) {
                 fileInput.click();
             } else {
-                console.error('File input element not found');
+                console.error('파일 입력 요소를 찾을 수 없음');
             }
         });
     } else {
-        console.error('File select button not found');
+        console.error('파일 선택 버튼을 찾을 수 없음');
     }
     
     // Convert button
@@ -59,11 +65,16 @@ function initializeEventListeners() {
     
     // File input
     const fileInput = document.getElementById('file-input');
+    console.log('파일 입력 요소:', fileInput);
+    
     if (fileInput) {
-        console.log('Adding change event to file input');
-        fileInput.addEventListener('change', handleFileInputChange);
+        console.log('파일 입력 변경 이벤트 리스너 추가');
+        fileInput.addEventListener('change', function(e) {
+            console.log('파일 입력 변경됨');
+            handleFileInputChange(e);
+        });
     } else {
-        console.error('File input element not found');
+        console.error('파일 입력 요소를 찾을 수 없음');
     }
     
     // Upload area drag & drop
@@ -72,6 +83,20 @@ function initializeEventListeners() {
         uploadArea.addEventListener('dragover', handleDragOver);
         uploadArea.addEventListener('dragleave', handleDragLeave);
         uploadArea.addEventListener('drop', handleDrop);
+        
+        // 업로드 영역 클릭 시 파일 선택 대화상자 표시
+        uploadArea.addEventListener('click', function(e) {
+            // 버튼 클릭은 이벤트 전파 방지
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+            
+            console.log('업로드 영역 클릭됨');
+            const fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                fileInput.click();
+            }
+        });
     }
     
     // Quality slider
