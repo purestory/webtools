@@ -45,11 +45,23 @@ function initializeEventListeners() {
     
     if (fileSelectBtn && fileInput) {
         // 기존 이벤트 리스너 제거 (중복 방지)
-        fileSelectBtn.removeEventListener('click', handleFileSelectClick);
+        fileSelectBtn.removeEventListener('click', function(){});
         
-        // 새 이벤트 리스너 등록
+        // 새 이벤트 리스너 등록 - 인라인 함수로 직접 정의
         console.log('파일 선택 버튼 클릭 이벤트 리스너 추가');
-        fileSelectBtn.addEventListener('click', handleFileSelectClick);
+        fileSelectBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('파일 선택 버튼 클릭됨');
+            
+            const fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                console.log('파일 입력 요소 클릭 시도');
+                fileInput.click();
+            } else {
+                console.error('파일 입력 요소를 찾을 수 없음');
+            }
+        });
     } else {
         console.error('파일 선택 버튼 또는 파일 입력 요소를 찾을 수 없음');
     }
@@ -64,10 +76,13 @@ function initializeEventListeners() {
     if (fileInput) {
         console.log('파일 입력 변경 이벤트 리스너 추가');
         // 기존 이벤트 리스너 제거 (중복 방지)
-        fileInput.removeEventListener('change', handleFileInputChange);
+        fileInput.removeEventListener('change', function(){});
         
-        // 새 이벤트 리스너 등록
-        fileInput.addEventListener('change', handleFileInputChange);
+        // 새 이벤트 리스너 등록 - 인라인 함수로 직접 정의
+        fileInput.addEventListener('change', function(e) {
+            console.log('파일 입력 변경됨');
+            handleFileInputChange(e);
+        });
     } else {
         console.error('파일 입력 요소를 찾을 수 없음');
     }
@@ -119,21 +134,6 @@ function initializeEventListeners() {
     const formatSelect = document.getElementById('format-select');
     if (formatSelect) {
         formatSelect.addEventListener('change', handleFormatChange);
-    }
-}
-
-// 파일 선택 버튼 클릭 핸들러 함수 - 새로 추가
-function handleFileSelectClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('파일 선택 버튼 클릭됨');
-    
-    const fileInput = document.getElementById('file-input');
-    if (fileInput) {
-        console.log('파일 입력 요소 클릭 시도');
-        fileInput.click();
-    } else {
-        console.error('파일 입력 요소를 찾을 수 없음');
     }
 }
 
