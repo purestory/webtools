@@ -36,34 +36,27 @@ document.addEventListener('DOMContentLoaded', async function() {
 function initializeEventListeners() {
     console.log('initializeEventListeners 함수 호출됨');
     
-    // File select button - 수정된 코드
+    // File select button
     const fileSelectBtn = document.getElementById('select-file-btn');
     const fileInput = document.getElementById('file-input');
     
     console.log('파일 선택 버튼 요소:', fileSelectBtn);
     console.log('파일 입력 요소:', fileInput);
     
-    if (fileSelectBtn && fileInput) {
-        // 기존 이벤트 리스너 제거 (중복 방지)
-        fileSelectBtn.removeEventListener('click', function(){});
-        
-        // 새 이벤트 리스너 등록 - 인라인 함수로 직접 정의
+    if (fileSelectBtn) {
         console.log('파일 선택 버튼 클릭 이벤트 리스너 추가');
-        fileSelectBtn.addEventListener('click', function(e) {
+        fileSelectBtn.onclick = function(e) {
             e.preventDefault();
-            e.stopPropagation();
             console.log('파일 선택 버튼 클릭됨');
-            
-            const fileInput = document.getElementById('file-input');
             if (fileInput) {
-                console.log('파일 입력 요소 클릭 시도');
+                console.log('파일 입력 요소 클릭 실행');
                 fileInput.click();
             } else {
                 console.error('파일 입력 요소를 찾을 수 없음');
             }
-        });
+        };
     } else {
-        console.error('파일 선택 버튼 또는 파일 입력 요소를 찾을 수 없음');
+        console.error('파일 선택 버튼을 찾을 수 없음');
     }
     
     // Convert button
@@ -75,14 +68,10 @@ function initializeEventListeners() {
     // File input
     if (fileInput) {
         console.log('파일 입력 변경 이벤트 리스너 추가');
-        // 기존 이벤트 리스너 제거 (중복 방지)
-        fileInput.removeEventListener('change', function(){});
-        
-        // 새 이벤트 리스너 등록 - 인라인 함수로 직접 정의
-        fileInput.addEventListener('change', function(e) {
-            console.log('파일 입력 변경됨');
+        fileInput.onchange = function(e) {
+            console.log('파일 입력 변경됨:', e.target.files);
             handleFileInputChange(e);
-        });
+        };
     } else {
         console.error('파일 입력 요소를 찾을 수 없음');
     }
@@ -102,7 +91,6 @@ function initializeEventListeners() {
             }
             
             console.log('업로드 영역 클릭됨');
-            const fileInput = document.getElementById('file-input');
             if (fileInput) {
                 fileInput.click();
             }
@@ -292,10 +280,20 @@ function handleDrop(event) {
 
 // File input change handler
 function handleFileInputChange(event) {
-    console.log('File input change event triggered');
+    console.log('handleFileInputChange 함수 호출됨');
+    
+    // 이벤트 객체 검사
+    if (!event || !event.target) {
+        console.error('이벤트 객체 또는 타겟이 없음:', event);
+        return;
+    }
+    
+    // 파일 리스트 가져오기
     const files = event.target.files;
+    console.log('선택된 파일:', files);
+    
     if (!files || files.length === 0) {
-        console.log('No files selected');
+        console.warn('선택된 파일이 없음');
         return;
     }
     
@@ -307,6 +305,11 @@ function handleFileInputChange(event) {
     const fileList = document.getElementById('file-list');
     const uploadArea = document.getElementById('upload-area');
     const convertBtn = document.getElementById('convert-btn');
+    
+    if (!fileList || !uploadArea || !convertBtn) {
+        console.error('필요한 DOM 요소를 찾을 수 없음');
+        return;
+    }
     
     // Clear file list
     fileList.innerHTML = '';
