@@ -15,14 +15,13 @@ mkdir -p backend/api/uploads/images backend/api/uploads/subtitles
 # WSGI 서버 시작
 echo "WSGI 서버 시작 중..."
 gunicorn --workers 3 \
-         --bind unix:/home/purestory/public_html/backend/api/api.sock \
-         --umask 007 \
+         --bind 0.0.0.0:3801 \
          --daemon \
          --log-level debug \
-         --error-logfile /home/purestory/public_html/backend/api/gunicorn_error.log \
-         --access-logfile /home/purestory/public_html/backend/api/gunicorn_access.log \
-         --pid /home/purestory/public_html/backend/api/gunicorn.pid \
-         --chdir /home/purestory/public_html/backend/api \
+         --error-logfile /home/purestory/converter/backend/api/gunicorn_error.log \
+         --access-logfile /home/purestory/converter/backend/api/gunicorn_access.log \
+         --pid /home/purestory/converter/backend/api/gunicorn.pid \
+         --chdir /home/purestory/converter/backend/api \
          wsgi:app
 
 # 서버 상태 확인

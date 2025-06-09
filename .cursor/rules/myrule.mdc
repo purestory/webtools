@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+
+PROJECT_OVERVIEW.md를 참고해서 프로젝트 구조 및 상황을 이해하고 진행해
+수정후 기록이 수정사항은 반영하고
+
+깃허브에는 frontend만 등록하면되
+
+깃허브 주소
+https://github.com/purestory/webtools
+
+
+
+"페이지 레이아웃/구조를 변경하지 말 것"
+수정 시 다른 기능에 영향을 주지 않도록 최소한의 변경만 적용할것
+
