@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>purestory - File Conversion Tools</title>
+    <title>WebTools - 이미지 변환 도구</title>
     <!-- 파비콘 링크 -->
     <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
@@ -54,108 +54,120 @@
     <div id="header-container"></div>
 
     <main>
-        <!-- 카운터 섹션 추가 -->
-        <section class="stats-section">
-            <div class="stats-container">
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <h3 data-en="Total Visitors" data-ko="총 방문자 수">Total Visitors</h3>
-                    <p id="visitor-count">0</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-sync-alt"></i>
-                    <h3 data-en="Total Conversions" data-ko="총 변환 횟수">Total Conversions</h3>
-                    <p id="conversion-count">0</p>
-                </div>
-            </div>
-        </section>
-
+        <!-- 메인 기능 섹션 -->
         <section class="features">
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-file-image"></i>
                 </div>
                 <h2 data-en="Image Format Conversion" data-ko="이미지 포맷 변환">Image Format Conversion</h2>
-                <p data-en="Provides conversion functions between various image formats such as JPG, PNG, WebP, GIF, etc." data-ko="JPG, PNG, WebP, GIF 등 다양한 이미지 포맷 간 변환 기능을 제공합니다.">Provides conversion functions between various image formats such as JPG, PNG, WebP, GIF, etc.</p>
-                <a href="image-converter.html" class="btn" data-en="Convert" data-ko="변환하기">Convert</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                </div>
-                <h2 data-en="Image Resize" data-ko="이미지 크기 변경">Image Resize</h2>
-                <p data-en="Provides image resolution adjustment and size optimization functions." data-ko="이미지 해상도 조정 및 크기 최적화 기능을 제공합니다.">Provides image resolution adjustment and size optimization functions.</p>
-                <a href="image-resize.html" class="btn" data-en="Resize" data-ko="변환하기">Resize</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-paint-brush"></i>
-                </div>
-                <h2 data-en="Image Editing" data-ko="이미지 편집">Image Editing</h2>
-                <p data-en="Provides simple image editing and filter application functions." data-ko="간단한 이미지 편집 및 필터 적용 기능을 제공합니다.">Provides simple image editing and filter application functions.</p>
-                <a href="image-editor.html" class="btn" data-en="Edit" data-ko="편집하기">Edit</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-closed-captioning"></i>
-                </div>
-                <h2 data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</h2>
-                <p data-en="Provides conversion functions between various subtitle formats such as SRT, SMI, ASS, etc." data-ko="SRT, SMI, ASS 등 다양한 자막 포맷 간 변환 기능을 제공합니다.">Provides conversion functions between various subtitle formats such as SRT, SMI, ASS, etc.</p>
-                <a href="subtitle-converter.html" class="btn" data-en="Convert" data-ko="변환하기">Convert</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-language"></i>
-                </div>
-                <h2 data-en="Subtitle Translation" data-ko="자막 번역">Subtitle Translation</h2>
-                <p data-en="Provides a function to translate subtitle file content into various languages." data-ko="자막 파일의 내용을 다양한 언어로 번역하는 기능을 제공합니다.">Provides a function to translate subtitle file content into various languages.</p>
-                <a href="subtitle-translator.html" class="btn" data-en="Translate" data-ko="번역하기">Translate</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-file-pdf"></i>
-                </div>
-                <h2 data-en="PDF Editing" data-ko="PDF 편집">PDF Editing</h2>
-                <p data-en="Provides PDF file splitting, merging, compression and other editing functions." data-ko="PDF 파일 분할, 병합, 압축 등의 편집 기능을 제공합니다.">Provides PDF file splitting, merging, compression and other editing functions.</p>
-                <a href="pdf-editor.html" class="btn" data-en="Edit" data-ko="편집하기">Edit</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-laptop-code"></i>
-                </div>
-                <h2 data-en="Programs" data-ko="프로그램 소개">Programs</h2>
-                <p data-en="Introduces various developed programs." data-ko="개발한 다양한 프로그램들을 소개합니다.">Introduces various developed programs.</p>
-                <a href="programs.html" class="btn" data-en="View" data-ko="보러가기">View</a>
+                <p data-en="Convert between various image formats such as JPG, PNG, WebP, GIF, SVG, and more." data-ko="JPG, PNG, WebP, GIF, SVG 등 다양한 이미지 포맷 간 변환 기능을 제공합니다.">Convert between various image formats such as JPG, PNG, WebP, GIF, SVG, and more.</p>
+                <a href="image-converter.html" class="btn" data-en="Convert Images" data-ko="이미지 변환하기">Convert Images</a>
             </div>
         </section>
 
+        <!-- 웹 도구 모음 섹션 -->
+        <section class="tools-section">
+            <h2 data-en="Web Tools Collection" data-ko="웹 도구 모음">Web Tools Collection</h2>
+            <p data-en="Useful utilities for everyday tasks" data-ko="일상적인 작업을 위한 유용한 유틸리티">Useful utilities for everyday tasks</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3 data-en="QR Code Generator" data-ko="QR 코드 생성기">QR Code Generator</h3>
+                    <p data-en="Generate QR codes from text or URLs" data-ko="텍스트나 URL에서 QR 코드 생성">Generate QR codes from text or URLs</p>
+                    <a href="qr-generator.html" class="btn-small" data-en="Generate" data-ko="생성하기">Generate</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 data-en="Base64 Encoder/Decoder" data-ko="Base64 인코더/디코더">Base64 Encoder/Decoder</h3>
+                    <p data-en="Encode and decode Base64 strings" data-ko="Base64 문자열 인코딩/디코딩">Encode and decode Base64 strings</p>
+                    <a href="base64.html" class="btn-small" data-en="Convert" data-ko="변환하기">Convert</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 data-en="Hash Generator" data-ko="해시 생성기">Hash Generator</h3>
+                    <p data-en="Generate MD5, SHA1, SHA256, SHA512 hashes" data-ko="MD5, SHA1, SHA256, SHA512 해시 생성">Generate MD5, SHA1, SHA256, SHA512 hashes</p>
+                    <a href="hash-generator.html" class="btn-small" data-en="Generate" data-ko="생성하기">Generate</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 data-en="Password Generator" data-ko="패스워드 생성기">Password Generator</h3>
+                    <p data-en="Create secure random passwords" data-ko="안전한 랜덤 패스워드 생성">Create secure random passwords</p>
+                    <a href="password-generator.html" class="btn-small" data-en="Generate" data-ko="생성하기">Generate</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-brackets-curly"></i>
+                    </div>
+                    <h3 data-en="JSON Formatter" data-ko="JSON 포맷터">JSON Formatter</h3>
+                    <p data-en="Format and validate JSON data" data-ko="JSON 데이터 포맷팅 및 검증">Format and validate JSON data</p>
+                    <a href="json-formatter.html" class="btn-small" data-en="Format" data-ko="포맷하기">Format</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3 data-en="URL Encoder/Decoder" data-ko="URL 인코더/디코더">URL Encoder/Decoder</h3>
+                    <p data-en="Encode and decode URLs" data-ko="URL 인코딩/디코딩">Encode and decode URLs</p>
+                    <a href="url-encoder.html" class="btn-small" data-en="Convert" data-ko="변환하기">Convert</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3 data-en="IP Information" data-ko="IP 정보 확인">IP Information</h3>
+                    <p data-en="Check your IP address and location" data-ko="IP 주소와 위치 정보 확인">Check your IP address and location</p>
+                    <a href="ip-info.html" class="btn-small" data-en="Check" data-ko="확인하기">Check</a>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 data-en="Audio Editor" data-ko="오디오 편집기">Audio Editor</h3>
+                    <p data-en="Edit audio files with waveform visualization" data-ko="파형 시각화를 통한 오디오 파일 편집">Edit audio files with waveform visualization</p>
+                    <a href="audio-editor.html" class="btn-small" data-en="Edit" data-ko="편집하기">Edit</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- WebAssembly 기반 변환 도구 섹션 -->
         <section class="converter-section">
-            <h2 data-en="WebAssembly-based Conversion Tools" data-ko="WebAssembly 기반 변환 도구">WebAssembly-based Conversion Tools</h2>
-            <p data-en="High-performance conversion tools that are processed directly in the browser without relying on a server." data-ko="서버에 의존하지 않고 브라우저에서 직접 처리되는 고성능 변환 도구입니다.">High-performance conversion tools that are processed directly in the browser without relying on a server.</p>
+            <h2 data-en="WebAssembly-based Image Converter" data-ko="WebAssembly 기반 이미지 변환기">WebAssembly-based Image Converter</h2>
+            <p data-en="High-performance image conversion tool that processes files directly in your browser without uploading to server." data-ko="서버에 업로드하지 않고 브라우저에서 직접 처리되는 고성능 이미지 변환 도구입니다.">High-performance image conversion tool that processes files directly in your browser without uploading to server.</p>
             <div class="wasm-features">
                 <div class="wasm-feature">
                     <i class="fas fa-bolt"></i>
-                    <h3 data-en="Fast Processing Speed" data-ko="빠른 처리 속도">Fast Processing Speed</h3>
+                    <h3 data-en="Fast Processing" data-ko="빠른 처리 속도">Fast Processing</h3>
                     <p data-en="Near-native performance using WebAssembly" data-ko="WebAssembly를 활용한 네이티브에 가까운 성능">Near-native performance using WebAssembly</p>
                 </div>
                 <div class="wasm-feature">
                     <i class="fas fa-shield-alt"></i>
                     <h3 data-en="Privacy Protection" data-ko="개인정보 보호">Privacy Protection</h3>
-                    <p data-en="Files are not sent to the server as all processing takes place in the browser" data-ko="모든 처리가 브라우저에서 이루어지므로 파일이 서버로 전송되지 않음">Files are not sent to the server as all processing takes place in the browser</p>
+                    <p data-en="All processing happens in your browser - no files uploaded" data-ko="모든 처리가 브라우저에서 이루어지므로 파일이 서버로 전송되지 않음">All processing happens in your browser - no files uploaded</p>
                 </div>
                 <div class="wasm-feature">
                     <i class="fas fa-server"></i>
                     <h3 data-en="Offline Support" data-ko="오프라인 지원">Offline Support</h3>
-                    <p data-en="Can operate without an internet connection" data-ko="인터넷 연결 없이도 작동 가능">Can operate without an internet connection</p>
+                    <p data-en="Works without internet connection" data-ko="인터넷 연결 없이도 작동 가능">Works without internet connection</p>
                 </div>
             </div>
-            <a href="image-converter-wasm.html" class="btn btn-large" data-en="Use WebAssembly Image Converter" data-ko="WebAssembly 이미지 변환기 사용하기">Use WebAssembly Image Converter</a>
+            <a href="image-converter-wasm.html" class="btn btn-large" data-en="Use WebAssembly Converter" data-ko="WebAssembly 변환기 사용하기">Use WebAssembly Converter</a>
         </section>
     </main>
 
@@ -163,7 +175,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3 data-en="About" data-ko="소개">About</h3>
-                <p data-en="This website provides various file conversion tools." data-ko="이 웹사이트는 다양한 파일 변환 도구를 제공합니다.">This website provides various file conversion tools.</p>
+                <p data-en="WebTools provides powerful image conversion capabilities with both server-side and client-side processing options." data-ko="WebTools는 서버 기반과 클라이언트 기반 처리 옵션을 모두 제공하는 강력한 이미지 변환 기능을 제공합니다.">WebTools provides powerful image conversion capabilities with both server-side and client-side processing options.</p>
             </div>
             <div class="footer-section">
                 <h3 data-en="Contact" data-ko="연락처">Contact</h3>
@@ -174,7 +186,7 @@
                 <ul>
                     <li><a href="index.html" data-en="Home" data-ko="홈">Home</a></li>
                     <li><a href="image-converter.html" data-en="Image Converter" data-ko="이미지 변환">Image Converter</a></li>
-                    <li><a href="subtitle-converter.html" data-en="Subtitle Converter" data-ko="자막 변환">Subtitle Converter</a></li>
+                    <li><a href="image-converter-wasm.html" data-en="WebAssembly Converter" data-ko="WebAssembly 변환기">WebAssembly Converter</a></li>
                 </ul>
             </div>
         </div>
@@ -187,22 +199,6 @@
     <script src="js/header-loader.js?v=20250327" type="module"></script>
     
     <script>
-        // 방문자 및 변환 카운터 가져오기
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/status')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('visitor-count').textContent = data.visitor_count.toLocaleString();
-                    document.getElementById('conversion-count').textContent = data.conversion_count.toLocaleString();
-                })
-                .catch(error => {
-                    console.error('카운터 데이터를 가져오는 중 오류 발생:', error);
-                });
-                
-            // 언어 적용
-            applyTranslation();
-        });
-        
         // 언어 적용 함수
         function applyTranslation() {
             // 현재 언어에 맞는 텍스트 표시
@@ -214,6 +210,11 @@
             // HTML lang 속성 설정
             document.documentElement.lang = currentLang;
         }
+        
+        // 페이지 로드 시 언어 적용
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslation();
+        });
     </script>
 </body>
 </html>

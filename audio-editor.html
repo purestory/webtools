@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>WebTools - 오디오 편집기</title>
+    <!-- 파비콘 링크 -->
+    <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="images/favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="images/favicon/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="images/favicon/favicon-128x128.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/favicon/favicon-192x192.png">
+    
+    <script>
+        // 캐시 방지를 위한 타임스탬프 생성
+        var timestamp = new Date().getTime();
+        // 동적으로 CSS 로드
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + timestamp + '">');
+        document.write('<link rel="stylesheet" href="css/header.css?v=' + timestamp + '">');
+        
+        // 언어 감지 및 설정
+        function detectLanguage() {
+            var userLang = navigator.language || navigator.userLanguage;
+            var savedLang = localStorage.getItem('preferredLanguage');
+            var lang = savedLang || 'en';
+            document.documentElement.lang = lang;
+            return lang;
+        }
+        
+        var currentLang = detectLanguage();
+        
+        function switchLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .audio-editor-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .audio-upload-area {
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .audio-upload-area:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+            border-color: var(--secondary-color);
+        }
+        
+        .audio-upload-area.dragover {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: var(--secondary-color);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .control-btn:disabled {
+            background: var(--gray-color);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .waveform-container {
+            width: 100%;
+            height: 200px;
+            background: #f8f9fa;
+            border: 1px solid var(--gray-color);
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .waveform-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .timeline {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--accent-color);
+            z-index: 10;
+            transition: left 0.1s ease;
+        }
+        
+        .selection-area {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--accent-color);
+            z-index: 5;
+        }
+        
+        .audio-info {
+            background: var(--light-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .audio-info.show {
+            display: block;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 200px;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            height: 5px;
+            background: var(--gray-color);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .time-display {
+            font-family: monospace;
+            background: var(--dark-gray);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+        }
+        
+        .edit-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .edit-controls {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+        
+        .format-select {
+            padding: 0.7rem;
+            border: 1px solid var(--gray-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background: white;
+        }
+        
+        .volume-adjust-container {
+            background: white;
+            border: 1px solid var(--gray-color);
+            border-radius: 0.5rem;
+            padding: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100px;
+        }
+        
+        .volume-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .volume-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .volume-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .volume-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        
+        .volume-input {
+            width: 100%;
+            padding: 0.4rem 1.5rem 0.4rem 0.4rem;
+            border: 1px solid var(--gray-color);
+            border-radius: 0.3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: border-color 0.3s ease;
+            min-width: 60px;
+            height: 32px;
+            box-sizing: border-box;
+            line-height: 1.2;
+        }
+        
+        .volume-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .volume-unit {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .volume-apply-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.3rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            height: 32px;
+            box-sizing: border-box;
+        }
+        
+        .volume-apply-btn:hover:not(:disabled) {
+            background: #2980b9;
+        }
+        
+        .volume-apply-btn:disabled {
+            background: var(--gray-color);
+            cursor: not-allowed;
+        }
+        
+        .volume-presets {
+            display: flex;
+            gap: 0.3rem;
+            justify-content: space-between;
+        }
+        
+        .preset-btn {
+            flex: 1;
+            padding: 0.2rem 0.1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 0.2rem;
+            background: white;
+            color: var(--primary-color);
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 22px;
+            box-sizing: border-box;
+        }
+        
+        .preset-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .preset-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .reset-btn:hover:not(:disabled) {
+            background: #c82333;
+        }
+        
+        .time-ruler {
+            height: 30px;
+            position: relative;
+            background: #f8f9fa;
+            border-top: 1px solid var(--gray-color);
+            font-size: 0.75rem;
+            color: var(--dark-gray);
+        }
+        
+        .time-controls {
+            background: white;
+            border: 1px solid var(--gray-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .time-controls h3 {
+            margin: 0 0 1rem 0;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .time-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .time-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .time-input-group:last-child {
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .time-input-group label {
+            font-weight: 500;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            background: white;
+            border: 2px solid var(--gray-color);
+            border-radius: 0.4rem;
+            padding: 0.3rem 0.6rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .time-input-container:focus-within {
+            border-color: var(--primary-color);
+        }
+        
+        .time-number-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: monospace;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0.3rem;
+            width: 50px;
+        }
+        
+        .time-number-input::-webkit-outer-spin-button,
+        .time-number-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .time-number-input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        .time-separator {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--dark-gray);
+            user-select: none;
+        }
+        
+        .time-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 0.4rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            justify-content: center;
+        }
+        
+        .time-btn:hover:not(:disabled) {
+            background: #2980b9;
+        }
+        
+        .time-btn:disabled {
+            background: var(--gray-color);
+            cursor: not-allowed;
+        }
+        
+        .apply-selection-btn {
+            background: var(--success-color);
+        }
+        
+        .apply-selection-btn:hover:not(:disabled) {
+            background: #1e7e34;
+        }
+        
+        .clear-selection-btn {
+            background: #dc3545;
+        }
+        
+        .clear-selection-btn:hover:not(:disabled) {
+            background: #c82333;
+        }
+        
+        .progress-container {
+            display: none;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-container.show {
+            display: block;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        @media (max-width: 768px) {
+            .audio-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-btn {
+                justify-content: center;
+            }
+            
+            .volume-control {
+                min-width: auto;
+            }
+            
+            .edit-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 컴포넌트가 로드될 컨테이너 -->
+    <div id="header-container"></div>
+
+    <main>
+        <div class="hero">
+            <h1 data-en="Audio Editor" data-ko="오디오 편집기">Audio Editor</h1>
+            <p data-en="Edit your audio files directly in your browser with our powerful Web Audio API based editor. Cut, trim, adjust volume, and convert between formats." data-ko="강력한 Web Audio API 기반 편집기로 브라우저에서 직접 오디오 파일을 편집하세요. 자르기, 트림, 볼륨 조절, 포맷 변환이 가능합니다.">Edit your audio files directly in your browser with our powerful Web Audio API based editor. Cut, trim, adjust volume, and convert between formats.</p>
+        </div>
+
+        <div class="audio-editor-container">
+            <!-- 파일 업로드 영역 -->
+            <div class="audio-upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3 data-en="Upload Audio File" data-ko="오디오 파일 업로드">Upload Audio File</h3>
+                <p data-en="Drag and drop your audio file here or click to select" data-ko="오디오 파일을 여기에 드래그하거나 클릭하여 선택하세요">Drag and drop your audio file here or click to select</p>
+                <p data-en="Supported formats: MP3, WAV, AAC, OGG, M4A" data-ko="지원 포맷: MP3, WAV, AAC, OGG, M4A">Supported formats: MP3, WAV, AAC, OGG, M4A</p>
+                <input type="file" id="audioInput" accept="audio/*" style="display: none;">
+            </div>
+
+            <!-- 오디오 정보 -->
+            <div class="audio-info" id="audioInfo">
+                <h3 data-en="Audio Information" data-ko="오디오 정보">Audio Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span data-en="File Name:" data-ko="파일명:">File Name:</span>
+                        <span id="fileName">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span data-en="Duration:" data-ko="재생시간:">Duration:</span>
+                        <span id="duration">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span data-en="Sample Rate:" data-ko="샘플링 레이트:">Sample Rate:</span>
+                        <span id="sampleRate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span data-en="Channels:" data-ko="채널:">Channels:</span>
+                        <span id="channels">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오디오 컨트롤 -->
+            <div class="audio-controls">
+                <button class="control-btn" id="playBtn" disabled>
+                    <i class="fas fa-play"></i>
+                    <span data-en="Play" data-ko="재생">Play</span>
+                </button>
+                <button class="control-btn" id="pauseBtn" disabled>
+                    <i class="fas fa-pause"></i>
+                    <span data-en="Pause" data-ko="일시정지">Pause</span>
+                </button>
+                <button class="control-btn" id="stopBtn" disabled>
+                    <i class="fas fa-stop"></i>
+                    <span data-en="Stop" data-ko="정지">Stop</span>
+                </button>
+                
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="50" disabled>
+                    <i class="fas fa-volume-up"></i>
+                    <span id="volumeValue">50%</span>
+                </div>
+                
+                <div class="time-display">
+                    <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
+                </div>
+            </div>
+
+            <!-- 파형 표시 -->
+            <div class="waveform-container">
+                <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
+                <div class="timeline" id="timeline"></div>
+                <div class="selection-area" id="selectionArea" style="display: none;"></div>
+                <div class="time-ruler" id="timeRuler"></div>
+            </div>
+
+            <!-- 시간 직접 입력 컨트롤 -->
+            <div class="time-controls" id="timeControls" style="display: none;">
+                <h3 data-en="Time Controls" data-ko="시간 조절">Time Controls</h3>
+                <div class="time-inputs">
+                    <div class="time-input-group">
+                        <label data-en="Current Position:" data-ko="현재 위치:">Current Position:</label>
+                        <div class="time-input-container">
+                            <input type="number" id="currentHours" class="time-number-input" min="0" max="99" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="currentMinutes" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="currentSeconds" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">.</span>
+                            <input type="number" id="currentMilliseconds" class="time-number-input" min="0" max="999" value="0" disabled>
+                        </div>
+                        <button class="time-btn" id="goToPositionBtn" disabled>
+                            <i class="fas fa-play"></i>
+                            <span data-en="Go" data-ko="이동">Go</span>
+                        </button>
+                    </div>
+                    <div class="time-input-group">
+                        <label data-en="Selection Start:" data-ko="선택 시작:">Selection Start:</label>
+                        <div class="time-input-container">
+                            <input type="number" id="startHours" class="time-number-input" min="0" max="99" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="startMinutes" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="startSeconds" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">.</span>
+                            <input type="number" id="startMilliseconds" class="time-number-input" min="0" max="999" value="0" disabled>
+                        </div>
+                        <button class="time-btn" id="setStartBtn" disabled>
+                            <i class="fas fa-step-backward"></i>
+                            <span data-en="Set" data-ko="설정">Set</span>
+                        </button>
+                    </div>
+                    <div class="time-input-group">
+                        <label data-en="Selection End:" data-ko="선택 끝:">Selection End:</label>
+                        <div class="time-input-container">
+                            <input type="number" id="endHours" class="time-number-input" min="0" max="99" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="endMinutes" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">:</span>
+                            <input type="number" id="endSeconds" class="time-number-input" min="0" max="59" value="0" disabled>
+                            <span class="time-separator">.</span>
+                            <input type="number" id="endMilliseconds" class="time-number-input" min="0" max="999" value="0" disabled>
+                        </div>
+                        <button class="time-btn" id="setEndBtn" disabled>
+                            <i class="fas fa-step-forward"></i>
+                            <span data-en="Set" data-ko="설정">Set</span>
+                        </button>
+                    </div>
+                    <div class="time-input-group">
+                        <button class="time-btn apply-selection-btn" id="applySelectionBtn" disabled>
+                            <i class="fas fa-check"></i>
+                            <span data-en="Apply Selection" data-ko="선택 적용">Apply Selection</span>
+                        </button>
+                        <button class="time-btn clear-selection-btn" id="clearSelectionBtn" disabled>
+                            <i class="fas fa-times"></i>
+                            <span data-en="Clear Selection" data-ko="선택 해제">Clear Selection</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 편집 컨트롤 -->
+            <div class="edit-controls">
+                <button class="control-btn" id="trimBtn" disabled>
+                    <i class="fas fa-cut"></i>
+                    <span data-en="Trim Selection" data-ko="선택 구간 자르기">Trim Selection</span>
+                </button>
+                <button class="control-btn" id="deleteBtn" disabled>
+                    <i class="fas fa-trash"></i>
+                    <span data-en="Delete Selection" data-ko="선택 구간 삭제">Delete Selection</span>
+                </button>
+                <div class="volume-adjust-container">
+                    <div class="volume-header">
+                        <i class="fas fa-volume-up"></i>
+                        <span data-en="Volume Adjust" data-ko="볼륨 조절" class="volume-title">Volume Adjust</span>
+                    </div>
+                    <div class="volume-controls">
+                        <div class="volume-input-wrapper">
+                            <input type="number" id="volumeAdjustInput" class="volume-input" min="1" max="500" value="150" step="10" disabled>
+                            <span class="volume-unit">%</span>
+                        </div>
+                        <button class="volume-apply-btn" id="applyVolumeBtn" disabled>
+                            <span data-en="Apply" data-ko="적용">Apply</span>
+                        </button>
+                    </div>
+                    <div class="volume-presets">
+                        <button class="preset-btn" id="volume50Btn" disabled>50%</button>
+                        <button class="preset-btn" id="volume100Btn" disabled>100%</button>
+                        <button class="preset-btn" id="volume150Btn" disabled>150%</button>
+                    </div>
+                </div>
+                <button class="control-btn" id="fadeInBtn" disabled>
+                    <i class="fas fa-long-arrow-alt-up"></i>
+                    <span data-en="Fade In" data-ko="페이드 인">Fade In</span>
+                </button>
+                <button class="control-btn" id="fadeOutBtn" disabled>
+                    <i class="fas fa-long-arrow-alt-down"></i>
+                    <span data-en="Fade Out" data-ko="페이드 아웃">Fade Out</span>
+                </button>
+                <button class="control-btn reset-btn" id="resetBtn" disabled>
+                    <i class="fas fa-undo"></i>
+                    <span data-en="Reset Audio" data-ko="오디오 초기화">Reset Audio</span>
+                </button>
+                <select class="format-select" id="formatSelect" disabled>
+                    <option value="wav" data-en="Export as WAV" data-ko="WAV로 내보내기">Export as WAV</option>
+                    <option value="mp3" data-en="Export as MP3" data-ko="MP3로 내보내기">Export as MP3</option>
+                    <option value="ogg" data-en="Export as OGG" data-ko="OGG로 내보내기">Export as OGG</option>
+                </select>
+                <button class="control-btn" id="downloadBtn" disabled>
+                    <i class="fas fa-download"></i>
+                    <span data-en="Download" data-ko="다운로드">Download</span>
+                </button>
+            </div>
+
+            <!-- 진행률 표시 -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Processing...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 data-en="About" data-ko="소개">About</h3>
+                <p data-en="WebTools Audio Editor provides powerful audio editing capabilities directly in your browser using Web Audio API." data-ko="WebTools 오디오 편집기는 Web Audio API를 사용하여 브라우저에서 직접 강력한 오디오 편집 기능을 제공합니다.">WebTools Audio Editor provides powerful audio editing capabilities directly in your browser using Web Audio API.</p>
+            </div>
+            <div class="footer-section">
+                <h3 data-en="Contact" data-ko="연락처">Contact</h3>
+                <p>Email: <a href="mailto:info@purestory.org">info@purestory.org</a></p>
+            </div>
+            <div class="footer-section">
+                <h3 data-en="Links" data-ko="링크">Links</h3>
+                <ul>
+                    <li><a href="index.html" data-en="Home" data-ko="홈">Home</a></li>
+                    <li><a href="tools.html" data-en="All Tools" data-ko="모든 도구">All Tools</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 purestory <span data-en="All rights reserved." data-ko="모든 권리 보유.">All rights reserved.</span></p>
+        </div>
+    </footer>
+    
+    <!-- 헤더 로더 스크립트 -->
+    <script src="js/header-loader.js?v=20250327" type="module"></script>
+    
+    <!-- 오디오 편집기 스크립트 -->
+    <script src="js/audio-editor.js"></script>
+    
+    <script>
+        // 언어 적용 함수
+        function applyTranslation() {
+            var elements = document.querySelectorAll('[data-' + currentLang + ']');
+            elements.forEach(function(element) {
+                element.textContent = element.getAttribute('data-' + currentLang);
+            });
+        }
+        
+        // DOM 로드 후 언어 적용
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslation();
+        });
+    </script>
+</body>
+</html> 
