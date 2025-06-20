@@ -63,3 +63,12 @@ test_images/*.tiff
 
 # 임시 파일
 temp_*.jpg 
+# Node.js
+node_modules/
+package-lock.json
+
+# Build output
+frontend/dist/
+
+# Nginx config backup
+nginx-webtools2-config.txt
