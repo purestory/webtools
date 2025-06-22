@@ -8,6 +8,7 @@ import Base64ConverterPage from './pages/Base64ConverterPage';
 import IPInfoPage from './pages/IPInfoPage';
 import PDFEditorPage from './pages/PDFEditorPage';
 import URLEncoderPage from './pages/URLEncoderPage';
+import TestPage from './pages/TestPage';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/test" element={<TestPage />} />
           <Route path="/audio-editor" element={<AudioEditorPage />} />
           <Route path="/image-editor" element={<ImageEditorPage />} />
           <Route path="/qr-generator" element={<QRGeneratorPage />} />
