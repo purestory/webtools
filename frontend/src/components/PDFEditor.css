@@ -1,0 +1,728 @@
+.pdf-editor-page {
+  min-height: 100vh;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--secondary) / 0.1) 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header p {
+  color: hsl(var(--muted-foreground));
+  font-size: 1.125rem;
+}
+
+/* 에러 및 로딩 메시지 */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--destructive) / 0.1);
+  border: 1px solid hsl(var(--destructive) / 0.2);
+  border-radius: var(--radius);
+  color: hsl(var(--destructive));
+  margin-bottom: 1rem;
+}
+
+.loading-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--primary) / 0.1);
+  border: 1px solid hsl(var(--primary) / 0.2);
+  border-radius: var(--radius);
+  color: hsl(var(--primary));
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 모드 선택 */
+.mode-selection {
+  margin-bottom: 2rem;
+}
+
+.mode-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.mode-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+.mode-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: hsl(var(--primary) / 0.1);
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  color: hsl(var(--primary));
+}
+
+.mode-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: hsl(var(--foreground));
+}
+
+.mode-card p {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.mode-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.mode-card li {
+  padding: 0.5rem 0;
+  color: hsl(var(--muted-foreground));
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.mode-card li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: hsl(var(--primary));
+  font-weight: bold;
+}
+
+/* 공통 컴포넌트 */
+.card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: hsl(var(--foreground));
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+  min-height: 40px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.button-primary:hover:not(:disabled) {
+  background: hsl(var(--primary) / 0.9);
+}
+
+.button-outline {
+  background: transparent;
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+}
+
+.button-outline:hover:not(:disabled) {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.back-button {
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.back-button:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* 파일 드롭 존 */
+.file-drop-zone {
+  border: 2px dashed hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: hsl(var(--muted) / 0.3);
+}
+
+.file-drop-zone:hover {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.05);
+}
+
+.file-drop-zone svg {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1rem;
+}
+
+.file-drop-zone p {
+  color: hsl(var(--muted-foreground));
+  margin: 0.5rem 0;
+}
+
+.file-drop-zone .text-sm {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+/* 모드 헤더 */
+.mode-header {
+  margin-bottom: 2rem;
+}
+
+.mode-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin: 0;
+}
+
+/* 병합 모드 */
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--muted) / 0.1);
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.file-size {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.page-range-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.page-range-input label {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.page-range-input select,
+.page-range-input input {
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.file-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.file-controls button {
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 32px;
+  height: 32px;
+}
+
+.file-controls button:hover {
+  background: hsl(var(--accent));
+}
+
+.file-controls .delete-btn {
+  color: hsl(var(--destructive));
+}
+
+.file-controls .delete-btn:hover {
+  background: hsl(var(--destructive) / 0.1);
+}
+
+.merge-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--border));
+  text-align: center;
+}
+
+/* 편집 모드 */
+.range-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: hsl(var(--secondary) / 0.1);
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+}
+
+.range-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.range-selector label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.range-label {
+  color: hsl(var(--foreground));
+  font-size: 0.95rem;
+}
+
+.range-selector input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: hsl(var(--primary));
+}
+
+.range-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  margin-left: 2rem;
+}
+
+.range-input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .pdf-editor-page {
+    padding: 1rem 0;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .mode-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .mode-card {
+    padding: 1.5rem;
+  }
+  
+  .file-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .page-range-input {
+    min-width: auto;
+  }
+  
+  .edit-actions {
+    flex-direction: column;
+  }
+  
+  .edit-actions .button {
+    width: 100%;
+  }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  .button {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .file-controls button {
+    min-width: 44px;
+    height: 44px;
+  }
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .file-drop-zone:hover {
+    background: hsl(var(--primary) / 0.1);
+  }
+}
+
+/* 고급 편집 모드 스타일 */
+.advanced-edit-controls {
+  width: 100%;
+}
+
+.advanced-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.advanced-header .file-info-section h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.advanced-header .file-info-section p {
+  margin: 0.5rem 0 0 0;
+  color: hsl(var(--muted-foreground));
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.multi-select-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.selected-info {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid hsl(var(--primary) / 0.2);
+}
+
+.batch-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.batch-actions .button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.page-preview {
+  background: hsl(var(--card));
+  border: 2px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.page-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.page-preview.selected {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.05);
+}
+
+.page-preview.deleted {
+  opacity: 0.6;
+  background: hsl(var(--destructive) / 0.05);
+  border-color: hsl(var(--destructive) / 0.3);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.page-number {
+  flex: 1;
+  color: hsl(var(--foreground));
+}
+
+.rotation-indicator {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.preview-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.preview-container img.preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  /* transition은 이제 JavaScript에서 인라인으로 처리 */
+}
+
+/* 회전 관련 CSS 제거 - 이제 JavaScript에서 누적 각도로 처리 */
+
+.deleted-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.page-controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+}
+
+.control-btn:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  transform: scale(1.05);
+}
+
+.control-btn.delete {
+  color: hsl(var(--destructive));
+}
+
+.control-btn.delete:hover {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+/* 파일 정보 개선 */
+.file-details {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.file-size {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+.page-count {
+  color: hsl(var(--primary));
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: hsl(var(--primary) / 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* 편집 모드 개선 */
+.edit-file-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.file-info-section h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.file-info-section p {
+  margin: 0.5rem 0 0 0;
+  color: hsl(var(--muted-foreground));
+}
+
+.edit-status {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: hsl(var(--secondary) / 0.5);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+}
+
+.status-icon {
+  font-size: 1rem;
+} 

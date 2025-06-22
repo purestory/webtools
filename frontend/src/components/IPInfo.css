@@ -1,0 +1,184 @@
+.ip-info-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--secondary)) 100%);
+  padding: 2rem 0;
+}
+
+.ip-info-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.ip-info-page .card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 hsl(var(--shadow) / 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.ip-info-page .card:hover {
+  box-shadow: 0 4px 12px 0 hsl(var(--shadow) / 0.15);
+}
+
+.ip-info-page .card-content {
+  color: hsl(var(--card-foreground));
+}
+
+.ip-info-page .input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.ip-info-page .input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+}
+
+.ip-info-page .input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+.ip-info-page .label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.ip-info-page .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.ip-info-page .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ip-info-page .button-primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.ip-info-page .button-primary:hover:not(:disabled) {
+  background: hsl(var(--primary) / 0.9);
+  transform: translateY(-1px);
+}
+
+.ip-info-page .button-outline {
+  border-color: hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.ip-info-page .button-outline:hover:not(:disabled) {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  transform: translateY(-1px);
+}
+
+/* IP 정보 표시 */
+.ip-info-page .info-section {
+  background: hsl(var(--muted) / 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.ip-info-page .info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ip-info-page .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid hsl(var(--border) / 0.3);
+}
+
+.ip-info-page .info-item:last-child {
+  border-bottom: none;
+}
+
+.ip-info-page .info-label {
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  min-width: 80px;
+}
+
+.ip-info-page .info-value {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.ip-info-page .copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+}
+
+.ip-info-page .copy-btn:hover {
+  background: hsl(var(--accent));
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .ip-info-page {
+    padding: 1rem 0;
+  }
+  
+  .ip-info-page .container {
+    padding: 0 0.5rem;
+  }
+  
+  .ip-info-page .card-content {
+    padding: 0.75rem !important;
+  }
+  
+  .ip-info-page h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .ip-info-page .button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .ip-info-page .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .ip-info-page .info-value {
+    justify-content: flex-start;
+  }
+} 
