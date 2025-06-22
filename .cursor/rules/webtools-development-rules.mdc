@@ -1,0 +1,173 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# WebTools 개발 규칙
+
+## 🚨 절대 하지 말 것
+
+### 1. nginx sites-enabled 폴더 관리
+```bash
+# ❌ 절대 하지 마세요!
+cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.backup
+cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.bak
+```
+**이유**: nginx는 sites-enabled 폴더의 **모든** 파일을 설정으로 읽습니다. 백업 파일도 예외가 아닙니다!
+
+### 2. 파일 권한 무시
+- 파일 수정 전 반드시 `ls -la [파일경로]` 로 권한 확인
+- root 소유 파일 발견 시 즉시 `sudo chown purestory:purestory [파일경로]` 실행
+- nginx 설정은 반드시 `/home/purestory/tmp/`에서 편집
+
+### 3. 경로 및 포트 임의 설정
+- 포트번호를 임의로 지정하지 말고 사용자에게 확인
+- `~` 경로 사용 금지 (폴더로 생성될 수 있음)
+- basename은 `/webtools`로 고정
+
+### 4. 불필요한 nginx 상태 확인
+- 빌드 완료 후 nginx 상태 확인(`sudo systemctl status nginx`)은 불필요
+- nginx 설정 변경이 없었다면 상태 확인하지 말 것
+- 단순 프론트엔드 코드 수정 후에는 nginx 재시작 불필요
+
+## ✅ 필수 준수 사항
+
+### 1. 파일 수정 프로세스
+```bash
+# nginx 설정 파일 수정 시
+sudo cp /etc/nginx/sites-available/purestory /home/purestory/tmp/nginx_backup_$(date +%Y%m%d_%H%M%S).conf
+sudo cp /etc/nginx/sites-available/purestory /home/purestory/tmp/nginx_edit.conf
+sudo chown purestory:purestory /home/purestory/tmp/nginx_edit.conf
+# 편집 후
+sudo cp /home/purestory/tmp/nginx_edit.conf /etc/nginx/sites-available/purestory
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### 2. React 컴포넌트 구조
+```jsx
+import { useState, useEffect } from 'react';
+import './ComponentName.css';
+
+const ComponentName = () => {
+  const [state, setState] = useState(initialValue);
+  
+  const handleEvent = () => {
+    // 로직
+  };
+  
+  useEffect(() => {
+    // 부수 효과
+  }, []);
+  
+  return (
+    <div className="component-name">
+      {/* JSX 내용 */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### 3. 에러 처리 패턴
+```jsx
+const handleApiCall = async () => {
+  try {
+    setLoading(true);
+    setError('');
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    // 성공 처리
+  } catch (err) {
+    console.error('API 호출 실패:', err);
+    setError('서비스에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+## 📁 파일 구조 규칙
+
+### 프로젝트 구조
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── ComponentName.jsx
+│   │   └── ComponentName.css
+│   ├── pages/
+│   │   └── ComponentNamePage.jsx
+│   └── hooks/
+│       └── useComponentName.js
+```
+
+### 명명 규칙
+- **컴포넌트**: PascalCase (`AudioEditor`, `PDFEditor`)
+- **파일명**: 컴포넌트와 동일 (`AudioEditor.jsx`)
+- **CSS 클래스**: kebab-case (`audio-editor`, `pdf-editor-page`)
+- **함수/변수**: camelCase (`handleSubmit`, `isLoading`)
+
+## 🔧 개발 워크플로우
+
+### 빌드 및 배포
+```bash
+cd /home/purestory/webtools/frontend
+npm run build
+```
+
+### 서버 구동 시 체크
+```bash
+# systemd 서비스 확인
+sudo systemctl status nginx
+# 가동 중이면 중지 후 재시작
+sudo systemctl stop nginx
+sudo systemctl start nginx
+```
+
+### 배포 전 체크리스트
+- [ ] 콘솔 에러가 없는가?
+- [ ] nginx 설정 테스트: `sudo nginx -t`
+- [ ] 빌드 성공: `npm run build`
+- [ ] 파일 권한 확인: `ls -la`
+
+## 🛡️ 보안 및 성능
+
+### API 사용 시 주의사항
+- HTTPS 사이트에서는 반드시 HTTPS API 사용 (Mixed Content 방지)
+- 클라이언트 사이드 처리 원칙 유지
+
+### 파일 처리 검증
+```jsx
+const handleFileUpload = (file) => {
+  // 파일 크기 검사
+  if (file.size > 10 * 1024 * 1024) { // 10MB
+    setError('파일 크기는 10MB를 초과할 수 없습니다.');
+    return;
+  }
+  
+  // 파일 형식 검사
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!allowedTypes.includes(file.type)) {
+    setError('지원하지 않는 파일 형식입니다.');
+    return;
+  }
+};
+```
+
+## 📋 중요 파일 참조
+
+### 핵심 설정 파일
+- [frontend/package.json](mdc:frontend/package.json) - 의존성 관리
+- [frontend/vite.config.js](mdc:frontend/vite.config.js) - 빌드 설정
+- [frontend/src/App.jsx](mdc:frontend/src/App.jsx) - 메인 애플리케이션
+
+### 메인 컴포넌트
+- [frontend/src/pages/Home.jsx](mdc:frontend/src/pages/Home.jsx) - 홈페이지
+- [frontend/src/components/Layout/Layout.jsx](mdc:frontend/src/components/Layout/Layout.jsx) - 레이아웃
