@@ -89,25 +89,25 @@ const QRGenerator = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="container min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4">
-            <QrCode className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-4">
+            <QrCode className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">QR 코드 생성기</h1>
-          <p className="text-lg text-gray-600">
+          <h1 className="text-4xl font-bold text-foreground mb-2">QR 코드 생성기</h1>
+          <p className="text-lg text-muted-foreground">
             텍스트나 URL을 QR 코드로 변환하여 다운로드하세요.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Input Section */}
-          <Card className="shadow-lg">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-blue-600" />
+                <QrCode className="w-5 h-5 text-primary" />
                 QR 코드 설정
               </CardTitle>
               <CardDescription>
@@ -126,9 +126,9 @@ const QRGenerator = () => {
                       <button
                         key={index}
                         onClick={() => setText(example.value)}
-                        className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors text-left"
+                        className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary hover:bg-accent transition-colors text-left"
                       >
-                        <IconComponent className="w-4 h-4 text-blue-600" />
+                        <IconComponent className="w-4 h-4 text-primary" />
                         <span className="text-sm font-medium">{example.label}</span>
                       </button>
                     );
@@ -203,117 +203,128 @@ const QRGenerator = () => {
               {/* Generate Button */}
               <Button 
                 onClick={generateQR} 
-                disabled={isLoading || !text.trim()}
+                disabled={!text.trim() || isLoading}
                 className="w-full"
+                size="lg"
               >
                 {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    QR 코드 생성 중...
-                  </>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    생성 중...
+                  </div>
                 ) : (
-                  <>
-                    <QrCode className="w-4 h-4 mr-2" />
-                    QR 코드 생성하기
-                  </>
+                  <div className="flex items-center gap-2">
+                    <QrCode className="w-4 h-4" />
+                    QR 코드 생성
+                  </div>
                 )}
               </Button>
+
+              {/* Error Display */}
+              {error && (
+                <div className="flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                  <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-destructive">{error}</p>
+                </div>
+              )}
+
+              {/* Tips */}
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium mb-1">사용 팁</h4>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      <li>• URL, 텍스트, 연락처, Wi-Fi 정보 등을 입력할 수 있습니다</li>
+                      <li>• 크기가 클수록 스캔이 더 잘됩니다</li>
+                      <li>• 여백이 있어야 QR 코드가 제대로 인식됩니다</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Result Section */}
-          <div className="space-y-6">
-            {/* Error Display */}
-            {error && (
-              <Card className="border-red-200 bg-red-50">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-2 text-red-700">
-                    <AlertCircle className="w-5 h-5" />
-                    <span className="font-medium">{error}</span>
+          {/* Preview Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Scan className="w-5 h-5 text-primary" />
+                미리보기
+              </CardTitle>
+              <CardDescription>
+                생성된 QR 코드를 확인하고 다운로드하세요.
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent>
+              <div className="space-y-6">
+                {/* QR Code Display */}
+                <div className="flex justify-center">
+                  <div className="bg-muted/50 p-6 rounded-lg border-2 border-dashed border-border">
+                    {qrCodeUrl ? (
+                      <div className="text-center">
+                        <img 
+                          src={qrCodeUrl} 
+                          alt="Generated QR Code" 
+                          className="mx-auto rounded-lg shadow-lg"
+                          style={{ maxWidth: '100%' }}
+                        />
+                        <div className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                          <CheckCircle className="w-4 h-4 text-primary" />
+                          QR 코드가 생성되었습니다!
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <QrCode className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                        <p className="text-muted-foreground">
+                          텍스트를 입력하고 생성 버튼을 눌러주세요
+                        </p>
+                      </div>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                </div>
 
-            {/* QR Code Result */}
-            {qrCodeUrl ? (
-              <Card className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-700">
-                    <CheckCircle className="w-5 h-5" />
-                    QR 코드 생성 완료
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <div className="inline-block bg-white p-4 rounded-lg shadow-md border">
-                    <img 
-                      src={qrCodeUrl} 
-                      alt="Generated QR Code" 
-                      className="max-w-full h-auto" 
-                    />
-                  </div>
-                  
-                  <Button onClick={downloadQR} className="w-full">
+                {/* Hidden Canvas */}
+                <canvas ref={canvasRef} style={{ display: 'none' }} />
+
+                {/* Download Button */}
+                {qrCodeUrl && (
+                  <Button 
+                    onClick={downloadQR}
+                    className="w-full"
+                    size="lg"
+                  >
                     <Download className="w-4 h-4 mr-2" />
-                    QR 코드 다운로드
+                    PNG로 다운로드
                   </Button>
+                )}
 
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                    <div className="flex items-start gap-2">
-                      <Lightbulb className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <div className="text-left">
-                        <p className="text-sm font-medium text-blue-700">
-                          스캔 방법
-                        </p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          스마트폰 카메라를 QR 코드에 향하게 하면 자동으로 인식됩니다.
-                        </p>
+                {/* QR Code Info */}
+                {qrCodeUrl && text && (
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium mb-2">QR 코드 정보</h4>
+                    <div className="space-y-1 text-xs text-muted-foreground">
+                      <div className="flex justify-between">
+                        <span>크기:</span>
+                        <span>{size}x{size}px</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>여백:</span>
+                        <span>{margin}px</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>내용 길이:</span>
+                        <span>{text.length}자</span>
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ) : (
-              /* Guide Card */
-              <Card className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-blue-600" />
-                    QR 코드 활용 가이드
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground leading-relaxed">
-                    QR(Quick Response) 코드는 스마트폰으로 쉽게 스캔하여 정보를 빠르게 접근할 수 있는 2차원 바코드입니다.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 gap-3">
-                    {[
-                      { icon: Globe, title: "웹사이트 공유", desc: "URL을 QR 코드로 변환하여 쉽게 공유" },
-                      { icon: Wifi, title: "Wi-Fi 설정", desc: "비밀번호를 자동으로 입력" },
-                      { icon: MapPin, title: "위치 정보", desc: "지도 앱에서 바로 열기" },
-                      { icon: User, title: "연락처 정보", desc: "명함 대신 간편하게 활용" }
-                    ].map((item, index) => {
-                      const IconComponent = item.icon;
-                      return (
-                        <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50">
-                          <IconComponent className="w-5 h-5 text-blue-600 mt-0.5" />
-                          <div>
-                            <h3 className="font-medium text-sm">{item.title}</h3>
-                            <p className="text-xs text-muted-foreground">{item.desc}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        {/* Hidden Canvas for QR generation */}
-        <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
     </div>
   );

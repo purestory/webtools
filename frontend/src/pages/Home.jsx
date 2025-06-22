@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Card, CardContent } from '../components/ui/card';
 
 const Home = () => {
   const tools = [
@@ -75,71 +76,30 @@ const Home = () => {
   ];
 
   return (
-    <div className="container">
+    <div className="container py-12">
       {/* Hero Section */}
-      <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <h1 style={{ 
-          fontSize: '3rem', 
-          fontWeight: '800', 
-          marginBottom: '1rem',
-          background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7))',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
-        }}>
+      <div className="text-center mb-16">
+        <h1 className="text-6xl font-extrabold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
           WebTools
         </h1>
-        <p style={{ 
-          fontSize: '1.25rem', 
-          color: 'hsl(var(--muted-foreground))', 
-          maxWidth: '600px', 
-          margin: '0 auto 2rem',
-          lineHeight: '1.6'
-        }}>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
           현대적인 웹 도구 모음집입니다. 오디오 편집, 이미지 편집, QR 코드 생성 등 다양한 기능을 제공합니다.
         </p>
         
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: 'hsl(var(--muted))',
-            borderRadius: 'var(--radius)',
-            fontSize: '0.875rem',
-            color: 'hsl(var(--muted-foreground))'
-          }}>
+        <div className="flex gap-4 justify-center flex-wrap">
+          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="20,6 9,17 4,12"></polyline>
             </svg>
             React + Vite
           </div>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: 'hsl(var(--muted))',
-            borderRadius: 'var(--radius)',
-            fontSize: '0.875rem',
-            color: 'hsl(var(--muted-foreground))'
-          }}>
+          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="20,6 9,17 4,12"></polyline>
             </svg>
             반응형 디자인
           </div>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: 'hsl(var(--muted))',
-            borderRadius: 'var(--radius)',
-            fontSize: '0.875rem',
-            color: 'hsl(var(--muted-foreground))'
-          }}>
+          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="20,6 9,17 4,12"></polyline>
             </svg>
@@ -149,182 +109,84 @@ const Home = () => {
       </div>
 
       {/* Tools Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {tools.map((tool) => (
-          <Link key={tool.id} to={tool.href} style={{ textDecoration: 'none' }}>
-            <div className="card" style={{ 
-              height: '100%',
-              background: `linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted) / 0.3))`,
-              border: '1px solid hsl(var(--border))',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)';
-            }}>
-              <div className="card-content" style={{ padding: '2rem' }}>
+          <Link key={tool.id} to={tool.href} className="group">
+            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50 hover:border-primary/50">
+              <CardContent className="p-8">
                 {/* Icon */}
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  width: '4rem', 
-                  height: '4rem', 
-                  backgroundColor: 'hsl(var(--primary) / 0.1)',
-                  borderRadius: '1rem',
-                  marginBottom: '1.5rem',
-                  border: '1px solid hsl(var(--primary) / 0.2)'
-                }}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6 border border-primary/20 group-hover:bg-primary/20 transition-colors">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d={tool.icon}></path>
                   </svg>
                 </div>
 
                 {/* Content */}
-                <h3 style={{ 
-                  fontSize: '1.5rem', 
-                  fontWeight: '600', 
-                  marginBottom: '0.75rem',
-                  color: 'hsl(var(--foreground))'
-                }}>
+                <h3 className="text-2xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
                   {tool.name}
                 </h3>
                 
-                <p style={{ 
-                  color: 'hsl(var(--muted-foreground))', 
-                  marginBottom: '1.5rem',
-                  lineHeight: '1.6'
-                }}>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
                   {tool.description}
                 </p>
 
                 {/* Features */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                <div className="flex flex-wrap gap-2">
                   {tool.features.map((feature, index) => (
-                    <span key={index} style={{
-                      padding: '0.25rem 0.75rem',
-                      backgroundColor: 'hsl(var(--muted))',
-                      color: 'hsl(var(--muted-foreground))',
-                      borderRadius: 'calc(var(--radius) - 2px)',
-                      fontSize: '0.75rem',
-                      fontWeight: '500'
-                    }}>
+                    <span 
+                      key={index} 
+                      className="px-3 py-1 bg-secondary text-secondary-foreground text-xs rounded-full border"
+                    >
                       {feature}
                     </span>
                   ))}
                 </div>
-
-                {/* CTA */}
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '0.5rem',
-                  color: 'hsl(var(--primary))',
-                  fontWeight: '500'
-                }}>
-                  시작하기
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14"></path>
-                    <path d="M12 5l7 7-7 7"></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </Link>
         ))}
       </div>
 
-      {/* Features Section */}
-      <div className="card" style={{ marginBottom: '3rem' }}>
-        <div className="card-content" style={{ padding: '2rem' }}>
-          <h2 style={{ 
-            fontSize: '2rem', 
-            fontWeight: '700', 
-            marginBottom: '1rem',
-            textAlign: 'center',
-            color: 'hsl(var(--foreground))'
-          }}>
-            주요 특징
-          </h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                width: '3rem', 
-                height: '3rem', 
-                backgroundColor: 'hsl(var(--primary) / 0.1)',
-                borderRadius: '0.75rem',
-                margin: '0 auto 1rem',
-                border: '1px solid hsl(var(--primary) / 0.2)'
-              }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+      {/* Footer Section */}
+      <div className="text-center mt-16 pt-12 border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4 text-foreground">모든 도구가 한 곳에</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            웹브라우저에서 바로 사용할 수 있는 다양한 유틸리티 도구들을 제공합니다. 
+            설치가 필요 없고, 개인정보는 안전하게 보호됩니다.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               </div>
-              <h3 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>빠른 성능</h3>
-              <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.875rem' }}>
-                React와 Vite 기반으로 빠른 로딩과 원활한 사용자 경험을 제공합니다.
-              </p>
+              <h3 className="text-lg font-semibold mb-2">안전한 처리</h3>
+              <p className="text-sm text-muted-foreground">모든 데이터는 브라우저에서만 처리되어 외부로 전송되지 않습니다.</p>
             </div>
-            
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                width: '3rem', 
-                height: '3rem', 
-                backgroundColor: 'hsl(var(--primary) / 0.1)',
-                borderRadius: '0.75rem',
-                margin: '0 auto 1rem',
-                border: '1px solid hsl(var(--primary) / 0.2)'
-              }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <line x1="8" x2="16" y1="21" y2="21"></line>
-                  <line x1="12" x2="12" y1="17" y2="21"></line>
+            <div>
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
               </div>
-              <h3 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>반응형 디자인</h3>
-              <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.875rem' }}>
-                모든 기기에서 최적화된 사용자 인터페이스를 제공합니다.
-              </p>
+              <h3 className="text-lg font-semibold mb-2">빠른 실행</h3>
+              <p className="text-sm text-muted-foreground">설치 없이 웹브라우저에서 바로 실행할 수 있습니다.</p>
             </div>
-            
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                width: '3rem', 
-                height: '3rem', 
-                backgroundColor: 'hsl(var(--primary) / 0.1)',
-                borderRadius: '0.75rem',
-                margin: '0 auto 1rem',
-                border: '1px solid hsl(var(--primary) / 0.2)'
-              }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <div>
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
                 </svg>
               </div>
-              <h3 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>클라이언트 사이드</h3>
-              <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.875rem' }}>
-                모든 처리가 브라우저에서 이루어져 개인정보가 안전하게 보호됩니다.
-              </p>
+              <h3 className="text-lg font-semibold mb-2">오픈소스</h3>
+              <p className="text-sm text-muted-foreground">모든 코드가 공개되어 투명하고 신뢰할 수 있습니다.</p>
             </div>
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };
