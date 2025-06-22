@@ -72,6 +72,26 @@ const Home = () => {
       features: ['URL 인코딩', 'URL 디코딩', '다양한 타입', '예시 제공'],
       bgColor: 'from-indigo-500/10 to-purple-500/10',
       borderColor: 'border-indigo-500/20'
+    },
+    {
+      id: 'json-formatter',
+      name: 'JSON 포맷터',
+      description: 'JSON 데이터를 포맷팅, 압축, 검증할 수 있는 도구입니다. 개발자를 위한 필수 JSON 처리 유틸리티입니다.',
+      icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M12 9l2 2 4-4',
+      href: '/json-formatter',
+      features: ['JSON 포맷팅', 'JSON 압축', '유효성 검사', '구문 강조'],
+      bgColor: 'from-violet-500/10 to-purple-500/10',
+      borderColor: 'border-violet-500/20'
+    },
+    {
+      id: 'test-components',
+      name: 'UI 컴포넌트 테스트',
+      description: 'shadcn/ui 컴포넌트들의 테스트 페이지입니다. 개발자를 위한 UI 컴포넌트 동작 확인 도구입니다.',
+      icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+      href: '/test',
+      features: ['Button 테스트', 'Input 테스트', 'Select 테스트', 'CSS 변수 확인'],
+      bgColor: 'from-yellow-500/10 to-amber-500/10',
+      borderColor: 'border-yellow-500/20'
     }
   ];
 

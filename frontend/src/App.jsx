@@ -9,6 +9,7 @@ import IPInfoPage from './pages/IPInfoPage';
 import PDFEditorPage from './pages/PDFEditorPage';
 import URLEncoderPage from './pages/URLEncoderPage';
 import TestPage from './pages/TestPage';
+import JSONFormatterPage from './pages/JSONFormatterPage';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/json-formatter" element={<JSONFormatterPage />} />
           <Route path="/audio-editor" element={<AudioEditorPage />} />
           <Route path="/image-editor" element={<ImageEditorPage />} />
           <Route path="/qr-generator" element={<QRGeneratorPage />} />
