@@ -5,9 +5,25 @@ alwaysApply: false
 ---
 # WebTools 개발 규칙
 
-## 🚨 절대 하지 말 것
+## �� 절대 하지 말 것
 
-### 1. 서버 상태 확인 금지
+### 1. 개발 서버 실행 절대 금지 ⚠️⚠️⚠️
+```bash
+# ❌❌❌ 절대로, 어떤 상황에서도 실행하지 마세요! ❌❌❌
+npm run dev
+cd /home/purestory/webtools/frontend && npm run dev
+vite
+npm start
+yarn dev
+pnpm dev
+```
+**이유**:
+- 이 프로젝트는 nginx로 정적 파일을 서빙하는 방식입니다
+- 개발 서버가 필요하지 않으며, 빌드 후 nginx로 바로 구동합니다
+- `npm run build` 후 nginx 재시작만으로 변경사항이 반영됩니다
+- **사용자가 명시적으로 "개발 서버 실행해" 또는 "npm run dev 해"라고 요청하지 않는 한 절대 실행 금지**
+
+### 2. systemd 서비스 상태 확인 금지
 ```bash
 # ❌ 절대 하지 마세요!
 sudo systemctl status webtools
@@ -19,7 +35,7 @@ sudo systemctl stop webtools
 - backend가 없으므로 별도의 systemd 서비스가 필요하지 않습니다
 - 프론트엔드 빌드 후에는 nginx 재시작만 필요합니다
 
-### 2. nginx sites-enabled 폴더 관리
+### 3. nginx sites-enabled 폴더 관리
 ```bash
 # ❌ 절대 하지 마세요!
 cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.backup
@@ -27,26 +43,15 @@ cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.bak
 ```
 **이유**: nginx는 sites-enabled 폴더의 **모든** 파일을 설정으로 읽습니다. 백업 파일도 예외가 아닙니다!
 
-### 3. 파일 권한 무시
+### 4. 파일 권한 무시
 - 파일 수정 전 반드시 `ls -la [파일경로]` 로 권한 확인
 - root 소유 파일 발견 시 즉시 `sudo chown purestory:purestory [파일경로]` 실행
 - nginx 설정은 반드시 `/home/purestory/tmp/`에서 편집
 
-### 4. 경로 및 포트 임의 설정
+### 5. 경로 및 포트 임의 설정
 - 포트번호를 임의로 지정하지 말고 사용자에게 확인
 - `~` 경로 사용 금지 (폴더로 생성될 수 있음)
 - basename은 `/webtools`로 고정
-
-### 5. 개발 서버 실행 금지
-```bash
-# ❌ 절대 하지 마세요!
-npm run dev
-cd /home/purestory/webtools/frontend && npm run dev
-```
-**이유**:
-- 이 프로젝트는 nginx로 정적 파일을 서빙하는 방식입니다
-- 개발 서버가 필요하지 않으며, 빌드 후 nginx로 바로 구동합니다
-- `npm run build` 후 nginx 재시작만으로 변경사항이 반영됩니다
 
 ### 6. 불필요한 서버 상태 체크
 - 단순 프론트엔드 코드 수정 후에는 서버 상태 확인 불필요

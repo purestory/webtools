@@ -38,6 +38,16 @@ const Home = () => {
       borderColor: 'border-emerald-500/20'
     },
     {
+      id: 'pdf-editor',
+      name: t(language, 'home.tools.pdfEditor.name'),
+      description: t(language, 'home.tools.pdfEditor.description'),
+      icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
+      href: '/pdf-editor',
+      features: t(language, 'home.tools.pdfEditor.features'),
+      bgColor: 'from-rose-500/10 to-pink-500/10',
+      borderColor: 'border-rose-500/20'
+    },
+    {
       id: 'qr-generator',
       name: t(language, 'home.tools.qrGenerator.name'),
       description: t(language, 'home.tools.qrGenerator.description'),
@@ -66,16 +76,6 @@ const Home = () => {
       features: t(language, 'home.tools.ipInfo.features'),
       bgColor: 'from-teal-500/10 to-cyan-500/10',
       borderColor: 'border-teal-500/20'
-    },
-    {
-      id: 'pdf-editor',
-      name: t(language, 'home.tools.pdfEditor.name'),
-      description: t(language, 'home.tools.pdfEditor.description'),
-      icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
-      href: '/pdf-editor',
-      features: t(language, 'home.tools.pdfEditor.features'),
-      bgColor: 'from-rose-500/10 to-pink-500/10',
-      borderColor: 'border-rose-500/20'
     },
     {
       id: 'url-encoder',
@@ -113,7 +113,7 @@ const Home = () => {
     <div className="container py-12">
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-6xl font-extrabold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+        <h1 className="text-6xl font-extrabold mb-6 text-black">
           {t(language, 'common.appName')}
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">

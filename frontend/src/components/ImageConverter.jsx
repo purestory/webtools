@@ -5,9 +5,12 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Upload, RefreshCw, Download, Image as ImageIcon, FileImage, Package, Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 import './ImageConverter.css';
 
 const ImageConverter = () => {
+  const { language } = useLanguage();
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -116,11 +119,11 @@ const ImageConverter = () => {
     if (file && (file.type.startsWith('image/') || supportedExtensions.includes(fileExtension))) {
       // RAW 파일이나 특수 형식의 경우 경고 메시지
       if (['cr2', 'nef', 'arw', 'dng', 'raf', 'orf', 'rw2', 'pef', 'srw'].includes(fileExtension)) {
-        alert('RAW files may not be processed directly in the browser. Please convert to JPG/PNG first.');
+        alert(t(language, 'imageConverter.upload.rawWarning'));
       }
       
       if (['heic', 'heif'].includes(fileExtension)) {
-        alert('HEIC/HEIF files may not be supported in some browsers.');
+        alert(t(language, 'imageConverter.upload.heicWarning'));
       }
       
       const img = new Image();
@@ -131,11 +134,11 @@ const ImageConverter = () => {
       };
       img.onerror = (error) => {
         console.error('Image load error:', error);
-        alert(`Unable to load image. ${fileExtension.toUpperCase()} format may not be supported.`);
+        alert(t(language, 'imageConverter.errorImageLoad').replace('{format}', fileExtension.toUpperCase()));
       };
       img.src = URL.createObjectURL(file);
     } else {
-      alert('Only supported image files can be uploaded.');
+      alert(t(language, 'imageConverter.errorSupportedOnly'));
     }
   }, []);
 
@@ -319,7 +322,7 @@ const ImageConverter = () => {
       <div className="max-w-6xl mx-auto space-y-4">
         {/* 헤더 */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold tracking-tight">Image Converter</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t(language, 'imageConverter.title')}</h1>
         </div>
 
         {/* 업로드 영역 */}
@@ -336,9 +339,9 @@ const ImageConverter = () => {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">이미지 업로드</h3>
+                <h3 className="text-lg font-semibold mb-2">{t(language, 'imageConverter.upload.title')}</h3>
                 <p className="text-muted-foreground mb-4">
-                  변환할 이미지 파일을 드래그하거나 클릭해서 선택하세요
+                  {t(language, 'imageConverter.upload.subtitle')}
                 </p>
                 <div className="flex gap-2 justify-center flex-wrap">
                   <span className="px-2 py-1 bg-muted rounded text-xs">JPG</span>
@@ -376,7 +379,7 @@ const ImageConverter = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <ImageIcon className="h-5 w-5" />
-                  원본 이미지
+                  {t(language, 'common.image')} ({t(language, 'imageConverter.original')})
                 </CardTitle>
                 <CardDescription>
                   {originalImage.width} × {originalImage.height}px
@@ -400,7 +403,7 @@ const ImageConverter = () => {
                   className="w-full mt-4"
                 >
                   <Upload className="h-4 w-4 mr-2" />
-                  새 이미지 선택
+                  {t(language, 'imageConverter.newImage')}
                 </Button>
               </CardContent>
             </Card>
@@ -410,41 +413,41 @@ const ImageConverter = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileImage className="h-5 w-5" />
-                  변환 설정
+                  {t(language, 'imageConverter.conversion')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* 파일명 설정 */}
                 <div className="space-y-2">
-                  <Label className="text-sm">파일명</Label>
+                  <Label className="text-sm">{t(language, 'imageConverter.filename')}</Label>
                   <Input
                     value={fileName}
                     onChange={(e) => setFileName(e.target.value)}
-                    placeholder="파일명 입력"
+                    placeholder={t(language, 'imageConverter.filenamePlaceholder')}
                   />
                 </div>
 
                 {/* 단일 형식 변환 */}
                 <div className="space-y-3 p-3 border rounded-lg">
-                  <h4 className="font-medium">단일 형식 변환</h4>
+                  <h4 className="font-medium">{t(language, 'imageConverter.singleConversion')}</h4>
                   
                   <div className="space-y-2">
-                    <Label className="text-sm">출력 형식</Label>
+                    <Label className="text-sm">{t(language, 'imageConverter.outputFormat')}</Label>
                     <Select value={outputFormat} onValueChange={setOutputFormat}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="png">PNG (무손실)</SelectItem>
-                        <SelectItem value="jpeg">JPG (압축)</SelectItem>
-                        <SelectItem value="webp">WebP (최신)</SelectItem>
+                        <SelectItem value="png">{t(language, 'imageConverter.pngLossless')}</SelectItem>
+                        <SelectItem value="jpeg">{t(language, 'imageConverter.jpgCompressed')}</SelectItem>
+                        <SelectItem value="webp">{t(language, 'imageConverter.webpModern')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   {(outputFormat === 'jpeg' || outputFormat === 'webp') && (
                     <div className="space-y-2">
-                      <Label className="text-sm">품질: {Math.round(quality * 100)}%</Label>
+                      <Label className="text-sm">{t(language, 'imageConverter.qualityLabel')}: {Math.round(quality * 100)}%</Label>
                       <input
                         type="range"
                         min="0.1"
@@ -465,12 +468,12 @@ const ImageConverter = () => {
                     {isConverting ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        변환 중...
+                        {t(language, 'imageConverter.converting')}
                       </>
                     ) : (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2" />
-                        형식 변환
+                        {t(language, 'imageConverter.formatConvert')}
                       </>
                     )}
                   </Button>
@@ -480,10 +483,10 @@ const ImageConverter = () => {
                 <div className="space-y-3 p-3 border rounded-lg bg-blue-50/50">
                   <h4 className="font-medium flex items-center gap-2">
                     <Package className="h-4 w-4" />
-                    윈도우 아이콘 생성
+                    {t(language, 'imageConverter.iconGeneration')}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    윈도우 아이콘에서 사용하는 표준 사이즈로 일괄 변환합니다.
+                    {t(language, 'imageConverter.iconDescription')}
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {iconSizes.map(size => (
@@ -503,12 +506,12 @@ const ImageConverter = () => {
                       {isConverting ? (
                         <>
                           <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          변환 중...
+                          {t(language, 'imageConverter.converting')}
                         </>
                       ) : (
                         <>
                           <Package className="h-4 w-4 mr-2" />
-                          PNG 파일 생성 ({iconSizes.length}개)
+                          {t(language, 'imageConverter.pngFilesGenerate')} ({iconSizes.length}개)
                         </>
                       )}
                     </Button>
@@ -521,12 +524,12 @@ const ImageConverter = () => {
                       {isConverting ? (
                         <>
                           <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          변환 중...
+                          {t(language, 'imageConverter.converting')}
                         </>
                       ) : (
                         <>
                           <Star className="h-4 w-4 mr-2" />
-                          ICO 파일 생성 (통합)
+                          {t(language, 'imageConverter.icoFileGenerate')}
                         </>
                       )}
                     </Button>
@@ -541,7 +544,7 @@ const ImageConverter = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <Download className="h-5 w-5" />
-                    변환 결과
+                    {t(language, 'imageConverter.results')}
                   </CardTitle>
                   {convertedImages.length > 1 && (
                     <Button 
@@ -549,13 +552,13 @@ const ImageConverter = () => {
                       size="sm"
                       variant="outline"
                     >
-                      전체 다운로드
+                      {t(language, 'imageConverter.allDownload')}
                     </Button>
                   )}
                 </div>
                 {convertedImages.length > 0 && (
                   <CardDescription>
-                    {convertedImages.length}개 파일 생성됨
+                    {t(language, 'imageConverter.filesGenerated').replace('{count}', convertedImages.length)}
                   </CardDescription>
                 )}
               </CardHeader>
@@ -563,7 +566,7 @@ const ImageConverter = () => {
                 {convertedImages.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <FileImage className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                    <p>변환된 이미지가 여기에 표시됩니다</p>
+                    <p>{t(language, 'imageConverter.noResults')}</p>
                   </div>
                 ) : (
                   <div className="space-y-3 max-h-96 overflow-y-auto">

@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import './PDFEditor.css';
 
 const PDFEditor = () => {
+  const { language } = useContext(LanguageContext);
+  
   // 기본 상태
   const [mode, setMode] = useState('select'); // 'select', 'merge', 'edit', 'advanced'
   const [loading, setLoading] = useState(false);
@@ -66,12 +68,12 @@ const PDFEditor = () => {
               <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
             </svg>
           </div>
-          <h3>PDF 병합</h3>
-          <p>여러 PDF 파일을 하나로 합치기</p>
+          <h3>{t(language, 'pdfEditor.mergeMode')}</h3>
+          <p>{t(language, 'pdfEditor.mergeModeDescription')}</p>
           <ul>
-            <li>여러 파일 선택</li>
-            <li>페이지 범위 지정</li>
-            <li>파일 순서 변경</li>
+            {t(language, 'pdfEditor.mergeFeatures').map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
           </ul>
         </div>
 
@@ -85,12 +87,12 @@ const PDFEditor = () => {
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
           </div>
-          <h3>PDF 편집</h3>
-          <p>페이지 범위를 지정하여 편집</p>
+          <h3>{t(language, 'pdfEditor.editMode')}</h3>
+          <p>{t(language, 'pdfEditor.editModeDescription')}</p>
           <ul>
-            <li>페이지 범위 지정</li>
-            <li>페이지 삭제</li>
-            <li>페이지 회전</li>
+            {t(language, 'pdfEditor.editFeatures').map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
           </ul>
         </div>
 
@@ -105,12 +107,12 @@ const PDFEditor = () => {
               <path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
             </svg>
           </div>
-          <h3>고급 편집</h3>
-          <p>페이지별 미리보기와 세부 편집</p>
+          <h3>{t(language, 'pdfEditor.advancedMode')}</h3>
+          <p>{t(language, 'pdfEditor.advancedModeDescription')}</p>
           <ul>
-            <li>페이지 미리보기</li>
-            <li>개별 페이지 조작</li>
-            <li>실시간 편집</li>
+            {t(language, 'pdfEditor.advancedFeatures').map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
           </ul>
         </div>
       </div>
@@ -123,7 +125,7 @@ const PDFEditor = () => {
     const pdfFiles = files.filter(file => file.type === 'application/pdf');
     
     if (pdfFiles.length !== files.length) {
-      setErrorMessage('PDF 파일만 선택해주세요.');
+      setErrorMessage(t(language, 'pdfEditor.errorFileFormat'));
       return;
     }
 
@@ -195,7 +197,7 @@ const PDFEditor = () => {
   // PDF 병합 실행
   const executeMerge = async () => {
     if (mergeFiles.length < 2) {
-      setErrorMessage('최소 2개의 PDF 파일이 필요합니다.');
+      setErrorMessage(t(language, 'pdfEditor.errorMinFiles'));
       return;
     }
 
@@ -277,15 +279,15 @@ const PDFEditor = () => {
     <div className="merge-mode">
       <div className="mode-header">
         <button className="back-button" onClick={() => setMode('select')}>
-          ← 뒤로가기
+          ← {t(language, 'common.back')}
         </button>
-        <h2>PDF 병합</h2>
+        <h2>{t(language, 'pdfEditor.mergeMode')}</h2>
       </div>
 
       {/* 파일 업로드 */}
       <div className="card">
         <div className="card-content">
-          <h3>파일 선택</h3>
+          <h3>{t(language, 'pdfEditor.fileSelect')}</h3>
           <div 
             className="file-drop-zone"
             onClick={() => fileInputRef.current?.click()}
@@ -304,8 +306,8 @@ const PDFEditor = () => {
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14,2 14,8 20,8"/>
             </svg>
-            <p>PDF 파일을 선택하거나 드래그하세요</p>
-            <p className="text-sm">여러 파일 선택 가능</p>
+            <p>{t(language, 'pdfEditor.fileSelectDescription')}</p>
+            <p className="text-sm">{t(language, 'common.multipleFilesSupported')}</p>
           </div>
           <input
             ref={fileInputRef}
@@ -322,7 +324,7 @@ const PDFEditor = () => {
       {mergeFiles.length > 0 && (
         <div className="card">
           <div className="card-content">
-            <h3>선택된 파일 ({mergeFiles.length}개)</h3>
+            <h3>{t(language, 'pdfEditor.filesSelected')} ({mergeFiles.length}개)</h3>
             <div className="file-list">
               {mergeFiles.map((fileData, index) => {
                 const file = fileData.file || fileData;
@@ -337,13 +339,13 @@ const PDFEditor = () => {
                       <div className="file-details">
                         <span className="file-size">{formatFileSize(fileSize)}</span>
                         {pageCount > 0 && (
-                          <span className="page-count">{pageCount} 페이지</span>
+                          <span className="page-count">{pageCount} {t(language, 'common.pages')}</span>
                         )}
                       </div>
                     </div>
                     
                     <div className="page-range-input">
-                      <label>페이지 범위:</label>
+                      <label>{t(language, 'pdfEditor.pageRange')}:</label>
                       <select 
                         value={mergeSettings.pageRanges[index] === 'all' || !mergeSettings.pageRanges[index] ? 'all' : 'custom'}
                         onChange={(e) => {
@@ -354,14 +356,14 @@ const PDFEditor = () => {
                           }
                         }}
                       >
-                        <option value="all">전체 ({pageCount} 페이지)</option>
-                        <option value="custom">직접 입력</option>
+                        <option value="all">{t(language, 'pdfEditor.allPages')} ({pageCount} {t(language, 'common.pages')})</option>
+                        <option value="custom">{t(language, 'pdfEditor.customRange')}</option>
                       </select>
                       
                       {mergeSettings.pageRanges[index] !== 'all' && mergeSettings.pageRanges[index] !== undefined && (
                         <input
                           type="text"
-                          placeholder="예: 1-3,5,7-9"
+                          placeholder={t(language, 'pdfEditor.rangeExample')}
                           value={mergeSettings.pageRanges[index] === 'all' ? '' : mergeSettings.pageRanges[index] || ''}
                           onChange={(e) => setPageRange(index, e.target.value)}
                         />
@@ -379,7 +381,7 @@ const PDFEditor = () => {
                         onClick={() => setMergeFiles(prev => prev.filter((_, i) => i !== index))}
                         className="delete-btn"
                       >
-                        삭제
+                        {t(language, 'pdfEditor.remove')}
                       </button>
                     </div>
                   </div>
@@ -393,7 +395,7 @@ const PDFEditor = () => {
                 onClick={executeMerge}
                 disabled={loading || mergeFiles.length < 2}
               >
-                {loading ? '병합 중...' : 'PDF 병합하기'}
+{loading ? t(language, 'pdfEditor.processing') : t(language, 'pdfEditor.merge')}
               </button>
             </div>
           </div>
@@ -434,7 +436,7 @@ const PDFEditor = () => {
       setEditPages(pages);
       
     } catch (err) {
-      setErrorMessage('PDF 로드 중 오류가 발생했습니다: ' + err.message);
+      setErrorMessage(t(language, 'pdfEditor.errorProcessing') + ': ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -445,15 +447,15 @@ const PDFEditor = () => {
     <div className="edit-mode">
       <div className="mode-header">
         <button className="back-button" onClick={() => setMode('select')}>
-          ← 뒤로가기
+          ← {t(language, 'common.back')}
         </button>
-        <h2>PDF 편집</h2>
+        <h2>{t(language, 'pdfEditor.editMode')}</h2>
       </div>
 
       {!editFile ? (
         <div className="card">
           <div className="card-content">
-            <h3>편집할 PDF 파일 선택</h3>
+            <h3>{t(language, 'pdfEditor.fileSelect')}</h3>
             <div 
               className="file-drop-zone"
               onClick={() => fileInputRef.current?.click()}
@@ -462,7 +464,7 @@ const PDFEditor = () => {
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14,2 14,8 20,8"/>
               </svg>
-              <p>편집할 PDF 파일을 선택하세요</p>
+              <p>{t(language, 'pdfEditor.fileSelectDescription')}</p>
             </div>
             <input
               ref={fileInputRef}
@@ -498,7 +500,7 @@ const PDFEditor = () => {
                     });
                   }}
                 >
-                  새 파일 선택
+{t(language, 'common.select')} {t(language, 'common.file')}
                 </button>
               </div>
               
@@ -507,19 +509,19 @@ const PDFEditor = () => {
                 {editPages.some(p => p.rotation !== 0) && (
                   <div className="status-item">
                     <span className="status-icon">🔄</span>
-                    <span>회전된 페이지: {editPages.filter(p => p.rotation !== 0).length}개</span>
+                    <span>{t(language, 'pdfEditor.rotatedPages')}: {editPages.filter(p => p.rotation !== 0).length}개</span>
                   </div>
                 )}
                 {editPages.some(p => p.deleted) && (
                   <div className="status-item">
                     <span className="status-icon">🗑️</span>
-                    <span>삭제된 페이지: {editPages.filter(p => p.deleted).length}개</span>
+                    <span>{t(language, 'pdfEditor.deletedPages')}: {editPages.filter(p => p.deleted).length}개</span>
                   </div>
                 )}
                 {editPages.filter(p => !p.deleted).length !== editPages.length && (
                   <div className="status-item">
                     <span className="status-icon">📄</span>
-                    <span>최종 페이지: {editPages.filter(p => !p.deleted).length}개</span>
+                    <span>{t(language, 'pdfEditor.finalPages')}: {editPages.filter(p => !p.deleted).length}개</span>
                   </div>
                 )}
               </div>
@@ -534,7 +536,7 @@ const PDFEditor = () => {
                       checked={editSettings.includeAll}
                       onChange={() => setEditSettings(prev => ({ ...prev, includeAll: true }))}
                     />
-                    <span className="range-label">전체 페이지 ({editPages.length} 페이지)</span>
+                    <span className="range-label">{t(language, 'pdfEditor.allPages')} ({editPages.length} {t(language, 'common.pages')})</span>
                   </label>
                 </div>
                 
@@ -547,14 +549,14 @@ const PDFEditor = () => {
                       checked={!editSettings.includeAll}
                       onChange={() => setEditSettings(prev => ({ ...prev, includeAll: false }))}
                     />
-                    <span className="range-label">페이지 범위 지정</span>
+                    <span className="range-label">{t(language, 'pdfEditor.customRange')}</span>
                   </label>
                   
                   {!editSettings.includeAll && (
                     <input
                       type="text"
                       className="range-input"
-                      placeholder="예: 1-3,5,7-9"
+                      placeholder={t(language, 'pdfEditor.rangeExample')}
                       value={editSettings.pageRanges}
                       onChange={(e) => setEditSettings(prev => ({ ...prev, pageRanges: e.target.value }))}
                     />
@@ -567,14 +569,14 @@ const PDFEditor = () => {
                   className="button button-outline"
                   onClick={() => rotatePages(-90)}
                 >
-                  ← 왼쪽 회전 (-90°)
+← {t(language, 'pdfEditor.rotateLeft')}
                 </button>
                 
                 <button 
                   className="button button-outline"
                   onClick={() => rotatePages(90)}
                 >
-                  오른쪽 회전 (+90°) →
+{t(language, 'pdfEditor.rotateRight')} →
                 </button>
                 
                 <button 
@@ -582,7 +584,7 @@ const PDFEditor = () => {
                   onClick={deletePages}
                   style={{ color: 'var(--destructive)' }}
                 >
-                  페이지 삭제
+{t(language, 'pdfEditor.deletePages')}
                 </button>
                 
                 <button 
@@ -591,7 +593,7 @@ const PDFEditor = () => {
                   disabled={loading}
                   style={{ color: 'var(--primary)' }}
                 >
-                  페이지 추출
+{t(language, 'pdfEditor.extract')}
                 </button>
                 
                 <button 
@@ -599,7 +601,7 @@ const PDFEditor = () => {
                   onClick={saveEditedPDF}
                   disabled={loading}
                 >
-                  {loading ? '저장 중...' : 'PDF 저장'}
+{loading ? t(language, 'pdfEditor.processing') : t(language, 'common.save') + ' PDF'}
                 </button>
               </div>
             </div>
@@ -635,7 +637,7 @@ const PDFEditor = () => {
       });
       
     } catch (err) {
-      setErrorMessage('페이지 회전 중 오류가 발생했습니다: ' + err.message);
+      setErrorMessage(t(language, 'pdfEditor.errorProcessing') + ': ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -682,7 +684,7 @@ const PDFEditor = () => {
       downloadPDF(pdfBytes, `extracted-${pageRangeText}-${editFile.name}`);
       
     } catch (err) {
-      setErrorMessage('페이지 추출 중 오류가 발생했습니다: ' + err.message);
+      setErrorMessage(t(language, 'pdfEditor.errorProcessing') + ': ' + err.message);
     } finally {
       setLoading(false);
     }
