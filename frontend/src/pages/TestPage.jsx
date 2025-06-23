@@ -23,10 +23,14 @@ const TestPage = () => {
         </div>
 
         <Tabs defaultValue="buttons" className="w-full">
-          <TabsList className="grid grid-cols-5 mb-8">
+          <TabsList className="grid grid-cols-6 mb-8">
             <TabsTrigger value="buttons" className="flex items-center gap-2">
               <Terminal className="h-4 w-4" />
               <span>Button</span>
+            </TabsTrigger>
+            <TabsTrigger value="playback" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              <span>Playback</span>
             </TabsTrigger>
             <TabsTrigger value="inputs" className="flex items-center gap-2">
               <Type className="h-4 w-4" />
@@ -81,6 +85,125 @@ const TestPage = () => {
                   <div className="flex flex-col items-center justify-between p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
                     <span className="text-xs text-muted-foreground mb-2">Link</span>
                     <Button variant="link">Link</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Playback Controls 테스트 */}
+          <TabsContent value="playback" className="space-y-6">
+            <Card className="overflow-hidden border-2 shadow-md">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-primary" />
+                  Playback Controls 테스트
+                </CardTitle>
+                <CardDescription>AudioEditor와 동일한 아이콘 버튼들을 테스트합니다</CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-8">
+                  {/* 실제 AudioEditor CSS 클래스 사용 */}
+                  <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4">AudioEditor CSS 클래스 사용</h3>
+                    <div className="label mb-2">Playback Controls</div>
+                    <div className="playback-controls mb-4">
+                      <button className="button button-primary button-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="5,3 19,12 5,21"></polygon>
+                        </svg>
+                      </button>
+                      <button className="button button-outline button-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="6" y="4" width="4" height="16"></rect>
+                          <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                      </button>
+                      <button className="button button-outline button-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Tailwind CSS 클래스 사용 */}
+                  <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4">Tailwind CSS 클래스 사용</h3>
+                    <div className="text-sm font-medium mb-2">Playback Controls</div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Button size="icon" className="h-10 w-10">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="5,3 19,12 5,21"></polygon>
+                        </svg>
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-10 w-10">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="6" y="4" width="4" height="16"></rect>
+                          <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-10 w-10">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        </svg>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* 다양한 크기 테스트 */}
+                  <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4">다양한 크기 테스트</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-sm font-medium mb-2">Small (16px)</div>
+                        <div className="flex items-center gap-2">
+                          <button className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-8 w-8">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <polygon points="5,3 19,12 5,21"></polygon>
+                            </svg>
+                          </button>
+                          <button className="inline-flex items-center justify-center rounded-md border border-input bg-background h-8 w-8">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="6" y="4" width="4" height="16"></rect>
+                              <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium mb-2">Medium (24px)</div>
+                        <div className="flex items-center gap-2">
+                          <button className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-10 w-10">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <polygon points="5,3 19,12 5,21"></polygon>
+                            </svg>
+                          </button>
+                          <button className="inline-flex items-center justify-center rounded-md border border-input bg-background h-10 w-10">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="6" y="4" width="4" height="16"></rect>
+                              <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium mb-2">Large (32px)</div>
+                        <div className="flex items-center gap-2">
+                          <button className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-12 w-12">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <polygon points="5,3 19,12 5,21"></polygon>
+                            </svg>
+                          </button>
+                          <button className="inline-flex items-center justify-center rounded-md border border-input bg-background h-12 w-12">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="6" y="4" width="4" height="16"></rect>
+                              <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -295,18 +295,30 @@ const AudioEditor = () => {
                   <div className="label">Playback Controls</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <div className="playback-controls">
-                      <button className="button button-primary button-icon" onClick={play} disabled={!audioInfo.fileName || isPlaying}>
+                      <button 
+                        className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-10 w-10" 
+                        onClick={play} 
+                        disabled={!audioInfo.fileName || isPlaying}
+                      >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polygon points="5,3 19,12 5,21"></polygon>
                         </svg>
                       </button>
-                      <button className="button button-outline button-icon" onClick={pause} disabled={!audioInfo.fileName || !isPlaying}>
+                      <button 
+                        className="inline-flex items-center justify-center rounded-md border border-input bg-background h-10 w-10" 
+                        onClick={pause} 
+                        disabled={!audioInfo.fileName || !isPlaying}
+                      >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="6" y="4" width="4" height="16"></rect>
                           <rect x="14" y="4" width="4" height="16"></rect>
                         </svg>
                       </button>
-                      <button className="button button-outline button-icon" onClick={stop} disabled={!audioInfo.fileName}>
+                      <button 
+                        className="inline-flex items-center justify-center rounded-md border border-input bg-background h-10 w-10" 
+                        onClick={stop} 
+                        disabled={!audioInfo.fileName}
+                      >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         </svg>

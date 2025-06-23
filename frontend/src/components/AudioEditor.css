@@ -132,6 +132,7 @@ body {
 .button-outline {
   border: 1px solid hsl(var(--border));
   background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 .button-outline:hover {
@@ -185,14 +186,21 @@ body {
   width: 16px;
   height: 16px;
   display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .button-primary svg {
   color: hsl(var(--primary-foreground));
+  stroke: hsl(var(--primary-foreground));
 }
 
 .button-outline svg {
   color: hsl(var(--foreground));
+  stroke: hsl(var(--foreground));
 }
 
 .input {
