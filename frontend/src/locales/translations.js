@@ -168,7 +168,23 @@ export const translations = {
         normalize: "정규화",
         reverse: "역재생",
         fadeIn: "페이드 인",
-        fadeOut: "페이드 아웃"
+        fadeOut: "페이드 아웃",
+        usage: "사용법:",
+        usageText: "마우스로 드래그하거나 시간을 입력하여 구간을 선택한 후 버튼을 클릭하세요.",
+        volumeControlTitle: "볼륨 조절",
+        amplifyTitle: "증폭",
+        reduceTitle: "감소",
+        applyAmplifyButton: "증폭 적용",
+        applyReduceButton: "감소 적용",
+        fadeInButton: "페이드 인",
+        fadeOutButton: "페이드 아웃",
+        normalizeButton: "정규화",
+        reverseButton: "역재생",
+        fileFormat: "파일 형식:",
+        downloadButton: "편집된 오디오 다운로드"
+      },
+      errors: {
+        invalidFileType: "오디오 또는 비디오 파일만 업로드할 수 있습니다. (MP3, WAV, OGG, MP4, MOV, AVI 등)"
       }
     },
 
@@ -629,7 +645,23 @@ export const translations = {
         normalize: "Normalize",
         reverse: "Reverse",
         fadeIn: "Fade In",
-        fadeOut: "Fade Out"
+        fadeOut: "Fade Out",
+        usage: "Usage:",
+        usageText: "Drag with mouse or input time to select section, then click button.",
+        volumeControlTitle: "Volume Control",
+        amplifyTitle: "Amplify",
+        reduceTitle: "Reduce",
+        applyAmplifyButton: "Apply Amplify",
+        applyReduceButton: "Apply Reduce",
+        fadeInButton: "Fade In",
+        fadeOutButton: "Fade Out",
+        normalizeButton: "Normalize",
+        reverseButton: "Reverse",
+        fileFormat: "File Format:",
+        downloadButton: "Download Edited Audio"
+      },
+      errors: {
+        invalidFileType: "Only audio or video files can be uploaded. (MP3, WAV, OGG, MP4, MOV, AVI, etc.)"
       }
     },
 

@@ -77,7 +77,7 @@ const AudioEditor = () => {
           // 성공적으로 로드됨
         }
       } else {
-        alert('Only audio or video files can be uploaded. (MP3, WAV, OGG, MP4, MOV, AVI, etc.)');
+        alert(t(language, 'audioEditor.errors.invalidFileType'));
       }
     }
   };
@@ -435,7 +435,7 @@ const AudioEditor = () => {
                       <line x1="10" x2="10" y1="11" y2="17"></line>
                       <line x1="14" x2="14" y1="11" y2="17"></line>
                     </svg>
-                    Delete Selection
+                    {t(language, 'audioEditor.controls.deleteSelection')}
                   </button>
                 </div>
                 <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'hsl(var(--muted) / 0.3)', borderRadius: 'var(--radius)', fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))' }}>
@@ -444,21 +444,21 @@ const AudioEditor = () => {
                       <circle cx="12" cy="12" r="10"></circle>
                       <path d="M12 6v6l4 2"></path>
                     </svg>
-                    <span style={{ fontWeight: '500' }}>Usage:</span>
+                    <span style={{ fontWeight: '500' }}>{t(language, 'audioEditor.controls.usage')}</span>
                   </div>
                   <div style={{ marginLeft: '1.25rem' }}>
-                    Drag with mouse or input time to select section, then click button.
+                    {t(language, 'audioEditor.controls.usageText')}
                   </div>
                 </div>
               </div>
 
               {/* Volume Controls Section - 두 번째로 배치 */}
               <div className="volume-effects-section" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--muted) / 0.3)' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>Volume Control</h4>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.controls.volumeControlTitle')}</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
                   {/* 증폭 컨트롤 */}
                   <div className="volume-control-group">
-                    <div className="label" style={{ marginBottom: '0.5rem' }}>Amplify</div>
+                    <div className="label" style={{ marginBottom: '0.5rem' }}>{t(language, 'audioEditor.controls.amplifyTitle')}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <input 
                         ref={amplifySliderRef} 
@@ -489,13 +489,13 @@ const AudioEditor = () => {
                         <line x1="22" x2="22" y1="9" y2="15"></line>
                         <line x1="19" x2="25" y1="12" y2="12"></line>
                       </svg>
-                      Apply Amplify
+                      {t(language, 'audioEditor.controls.applyAmplifyButton')}
                     </button>
                   </div>
                   
                   {/* 감소 컨트롤 */}
                   <div className="volume-control-group">
-                    <div className="label" style={{ marginBottom: '0.5rem' }}>Reduce</div>
+                    <div className="label" style={{ marginBottom: '0.5rem' }}>{t(language, 'audioEditor.controls.reduceTitle')}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <input 
                         ref={reduceSliderRef} 
@@ -525,7 +525,7 @@ const AudioEditor = () => {
                         <line x1="23" x2="17" y1="9" y2="15"></line>
                         <line x1="17" x2="23" y1="9" y2="15"></line>
                       </svg>
-                      Apply Reduce
+                      {t(language, 'audioEditor.controls.applyReduceButton')}
                     </button>
                   </div>
                 </div>
@@ -540,7 +540,7 @@ const AudioEditor = () => {
                       <path d="M3 12h18l-3-3m0 6l3-3"></path>
                     </svg>
                   </div>
-                  <span>Fade In</span>
+                  <span>{t(language, 'audioEditor.controls.fadeInButton')}</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={applyFadeOut}>
                   <div className="effect-icon">
@@ -548,7 +548,7 @@ const AudioEditor = () => {
                       <path d="M21 12H3l3-3m0 6l-3-3"></path>
                     </svg>
                   </div>
-                  <span>Fade Out</span>
+                  <span>{t(language, 'audioEditor.controls.fadeOutButton')}</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={handleApplyNormalize}>
                   <div className="effect-icon">
@@ -556,7 +556,7 @@ const AudioEditor = () => {
                       <path d="M12 2v20M2 7l10-5 10 5-10 5z"></path>
                     </svg>
                   </div>
-                  <span>Normalize</span>
+                  <span>{t(language, 'audioEditor.controls.normalizeButton')}</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={handleApplyReverse}>
                   <div className="effect-icon">
@@ -565,7 +565,7 @@ const AudioEditor = () => {
                       <path d="M8 21l4-7 4 7"></path>
                     </svg>
                   </div>
-                  <span>Reverse</span>
+                  <span>{t(language, 'audioEditor.controls.reverseButton')}</span>
                 </button>
               </div>
             </div>
@@ -583,7 +583,7 @@ const AudioEditor = () => {
                     <polyline points="8,12 12,16 16,12"></polyline>
                     <line x1="12" x2="12" y1="2" y2="16"></line>
                   </svg>
-                  <span style={{ fontWeight: '500', color: 'hsl(var(--primary))' }}>File Format:</span>
+                  <span style={{ fontWeight: '500', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.controls.fileFormat')}</span>
                   <select className="input" style={{ width: 'auto', minWidth: '80px' }} value={exportFormat} onChange={(e) => setExportFormat(e.target.value)}>
                     <option value="wav">WAV</option>
                     <option value="mp3">MP3</option>
@@ -596,7 +596,7 @@ const AudioEditor = () => {
                     <polyline points="8,12 12,16 16,12"></polyline>
                     <line x1="12" x2="12" y1="2" y2="16"></line>
                   </svg>
-                  Download Edited Audio
+                  {t(language, 'audioEditor.controls.downloadButton')}
                 </button>
               </div>
             </div>
