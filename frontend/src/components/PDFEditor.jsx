@@ -1252,7 +1252,6 @@ const PDFEditor = () => {
       <div className="container">
         <div className="header">
           <h1>PDF 에디터</h1>
-          <p>PDF 파일을 병합하거나 편집할 수 있습니다</p>
         </div>
 
         {/* 에러 표시 */}

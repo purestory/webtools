@@ -11,9 +11,6 @@ const Layout = ({ children }) => {
       {/* Header */}
       <header className="header">
         <div className="header-content">
-          <div className="header-left">
-            <h1 className="app-title">{t(language, 'common.appName')}</h1>
-          </div>
           <div className="header-right">
             <LanguageToggle />
           </div>

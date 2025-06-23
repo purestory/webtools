@@ -137,13 +137,10 @@ const JSONFormatter = () => {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-4">
         {/* Page Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'jsonFormatter.title')}</h1>
-          <p className="text-muted-foreground">
-            {t(language, 'jsonFormatter.description')}
-          </p>
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold tracking-tight">{t(language, 'jsonFormatter.title')}</h1>
         </div>
 
         {/* Settings Section */}

@@ -477,16 +477,10 @@ const ImageEditor = () => {
 
   if (!image) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-background p-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-4">
-              <ImageIcon className="w-8 h-8 text-primary-foreground" />
-            </div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">{t(language, 'imageEditor.title')}</h1>
-            <p className="text-lg text-muted-foreground">
-              {t(language, 'imageEditor.description')}
-            </p>
+          <div className="text-center mb-4">
+            <h1 className="text-2xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
           </div>
 
           <Card 
@@ -497,12 +491,9 @@ const ImageEditor = () => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <Upload className="w-12 h-12 text-muted-foreground mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t(language, 'imageEditor.uploadTitle')}</h3>
-              <p className="text-muted-foreground mb-6">
-                {t(language, 'imageEditor.uploadDescription')}
-              </p>
+            <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+              <Upload className="w-8 h-8 text-muted-foreground mb-3" />
+              <h3 className="text-lg font-medium mb-4">{t(language, 'imageEditor.uploadTitle')}</h3>
               <Button onClick={() => fileInputRef.current?.click()}>
                 <Upload className="w-4 h-4 mr-2" />
                 {t(language, 'imageEditor.selectImage')}
@@ -522,13 +513,10 @@ const ImageEditor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">{t(language, 'imageEditor.title')}</h1>
-          <p className="text-lg text-muted-foreground">
-            {t(language, 'imageEditor.currentSize').replace('{width}', dimensions.width).replace('{height}', dimensions.height)}
-          </p>
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
         </div>
 
         {/* Toolbar */}
@@ -577,17 +565,13 @@ const ImageEditor = () => {
             {/* Resize Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Move className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Move className="h-4 w-4" />
                   {t(language, 'imageEditor.resize')}
                 </CardTitle>
-                <CardDescription>
-                  {t(language, 'imageEditor.resizeDescription')}
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>{t(language, 'imageEditor.mode')}</Label>
                   <Select value={resizeMode} onValueChange={setResizeMode}>
                     <SelectTrigger>
                       <SelectValue />
@@ -607,7 +591,6 @@ const ImageEditor = () => {
                 {resizeMode === 'manual' && (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label>{t(language, 'imageEditor.newDimensions')}</Label>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
                           <Label className="text-xs">{t(language, 'common.width')}</Label>
@@ -648,7 +631,6 @@ const ImageEditor = () => {
 
                 {resizeMode === 'preset' && (
                   <div className="space-y-2">
-                    <Label>{t(language, 'imageEditor.presetSizes')}</Label>
                     <div className="grid gap-2">
                       {['1920x1080', '1280x720', '800x600', '640x480', '400x400', '300x300'].map(preset => (
                         <Button
@@ -665,7 +647,6 @@ const ImageEditor = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label>{t(language, 'imageEditor.scaleResize')}</Label>
                   <div className="grid grid-cols-3 gap-2">
                     {[0.25, 0.5, 0.75, 1.5, 2].map(scale => (
                       <Button
@@ -685,13 +666,10 @@ const ImageEditor = () => {
             {/* Crop Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Scissors className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Scissors className="h-4 w-4" />
                   {t(language, 'imageEditor.crop')}
                 </CardTitle>
-                <CardDescription>
-                  {t(language, 'imageEditor.cropDescription')}
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Button
@@ -725,17 +703,13 @@ const ImageEditor = () => {
             {/* Export Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Download className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Download className="h-4 w-4" />
                   {t(language, 'imageEditor.export')}
                 </CardTitle>
-                <CardDescription>
-                  {t(language, 'imageEditor.exportDescription')}
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>{t(language, 'imageEditor.exportFormat')}</Label>
                   <Select value={exportFormat} onValueChange={setExportFormat}>
                     <SelectTrigger>
                       <SelectValue />

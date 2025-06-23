@@ -92,17 +92,11 @@ const QRGenerator = () => {
   ];
 
   return (
-    <div className="container min-h-screen bg-background p-6">
+    <div className="container min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-4">
-            <QrCode className="w-8 h-8 text-primary-foreground" />
-          </div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">{t(language, 'qrGenerator.title')}</h1>
-          <p className="text-lg text-muted-foreground">
-            {t(language, 'qrGenerator.description')}
-          </p>
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold text-foreground">{t(language, 'qrGenerator.title')}</h1>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">

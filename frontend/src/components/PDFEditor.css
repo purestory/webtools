@@ -1,6 +1,6 @@
 .pdf-editor-page {
   min-height: 100vh;
-  padding: 2rem 0;
+  padding: 1rem 0;
   background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--secondary) / 0.1) 100%);
 }
 
@@ -12,22 +12,17 @@
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .header h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.header p {
-  color: hsl(var(--muted-foreground));
-  font-size: 1.125rem;
 }
 
 /* 에러 및 로딩 메시지 */

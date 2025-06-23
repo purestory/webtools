@@ -316,14 +316,10 @@ const ImageConverter = () => {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-4">
         {/* 헤더 */}
-        <div className="text-center space-y-2">
-          <RefreshCw className="h-12 w-12 mx-auto text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">Image Converter</h1>
-          <p className="text-muted-foreground">
-            이미지 파일 형식 변환과 윈도우 아이콘 생성을 위한 도구입니다.
-          </p>
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold tracking-tight">Image Converter</h1>
         </div>
 
         {/* 업로드 영역 */}
