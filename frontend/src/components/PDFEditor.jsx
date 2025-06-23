@@ -1255,7 +1255,7 @@ const PDFEditor = () => {
     <div className="pdf-editor-page">
       <div className="container">
         <div className="header">
-          <h1 className="text-2xl font-bold text-black">{t(language, 'pdfEditor.title')}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t(language, 'pdfEditor.title')}</h1>
         </div>
 
         {/* 에러 표시 */}
