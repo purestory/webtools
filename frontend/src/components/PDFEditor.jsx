@@ -1093,7 +1093,7 @@ const PDFEditor = () => {
                           setSelectedPages(new Set()); // 복제 후 선택 해제
                         }}
                       >
-                        복제
+{t(language, 'pdfEditor.duplicatePage')}
                       </button>
                       
                       <button 
@@ -1106,7 +1106,7 @@ const PDFEditor = () => {
                         }}
                         style={{ color: 'var(--destructive)' }}
                       >
-                        삭제
+{t(language, 'pdfEditor.deletePages')}
                       </button>
                       
                       <button 
@@ -1114,7 +1114,7 @@ const PDFEditor = () => {
                         onClick={() => extractSelectedPages()}
                         disabled={loading}
                       >
-                        선택 페이지 추출
+{t(language, 'pdfEditor.extractSelected')}
                       </button>
                     </div>
                   </>
@@ -1145,7 +1145,7 @@ const PDFEditor = () => {
                         onChange={() => togglePageSelection(index)}
                         onClick={(e) => e.stopPropagation()}
                       />
-                      <span className="page-number">페이지 {index + 1}</span>
+                      <span className="page-number">{t(language, 'common.page')} {index + 1}</span>
                       {page.rotation !== 0 && (
                         <span className="rotation-indicator">{page.rotation}°</span>
                       )}
@@ -1155,7 +1155,7 @@ const PDFEditor = () => {
                       {previewUrls[page.index] && (
                         <img 
                           src={previewUrls[page.index]} 
-                          alt={`페이지 ${index + 1}`}
+                          alt={`${t(language, 'common.page')} ${index + 1}`}
                           className="preview-image"
                           style={{ 
                             transform: `rotate(${pageRotations[index] || 0}deg)`,
@@ -1166,7 +1166,7 @@ const PDFEditor = () => {
                       )}
                       {page.deleted && (
                         <div className="deleted-overlay">
-                          <span>삭제됨</span>
+                          <span>{t(language, 'pdfEditor.deleted')}</span>
                         </div>
                       )}
                     </div>
@@ -1175,7 +1175,7 @@ const PDFEditor = () => {
                       <button 
                         className="control-btn"
                         onClick={() => rotateAdvancedPage(index, -90)}
-                        title="왼쪽 회전"
+                        title={t(language, 'pdfEditor.rotateLeft')}
                       >
                         ↶
                       </button>
@@ -1183,7 +1183,7 @@ const PDFEditor = () => {
                       <button 
                         className="control-btn"
                         onClick={() => rotateAdvancedPage(index, 90)}
-                        title="오른쪽 회전"
+                        title={t(language, 'pdfEditor.rotateRight')}
                       >
                         ↷
                       </button>
@@ -1191,7 +1191,7 @@ const PDFEditor = () => {
                       <button 
                         className="control-btn"
                         onClick={() => duplicateAdvancedPage(index)}
-                        title="복제"
+                        title={t(language, 'pdfEditor.duplicatePage')}
                       >
                         📋
                       </button>
@@ -1199,7 +1199,7 @@ const PDFEditor = () => {
                       <button 
                         className="control-btn delete"
                         onClick={() => deleteAdvancedPage(index)}
-                        title={page.deleted ? "복원" : "삭제"}
+                        title={page.deleted ? t(language, 'pdfEditor.restore') : t(language, 'common.delete')}
                       >
                         {page.deleted ? '↶' : '🗑'}
                       </button>
@@ -1245,7 +1245,7 @@ const PDFEditor = () => {
       downloadPDF(pdfBytes, `selected-pages-${pageNumbers}-${advancedFile.name}`);
       
     } catch (err) {
-      setErrorMessage('선택된 페이지 추출 중 오류가 발생했습니다: ' + err.message);
+      setErrorMessage(t(language, 'pdfEditor.errorProcessing') + ': ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -1255,7 +1255,7 @@ const PDFEditor = () => {
     <div className="pdf-editor-page">
       <div className="container">
         <div className="header">
-          <h1>PDF 에디터</h1>
+          <h1 className="text-2xl font-bold text-black">{t(language, 'pdfEditor.title')}</h1>
         </div>
 
         {/* 에러 표시 */}
@@ -1278,7 +1278,7 @@ const PDFEditor = () => {
                 <path d="M21 12a9 9 0 11-6.219-8.56"/>
               </svg>
             </div>
-            처리 중입니다...
+{t(language, 'pdfEditor.processing')}
           </div>
         )}
 

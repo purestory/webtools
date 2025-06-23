@@ -64,6 +64,7 @@ export const translations = {
       location: "위치",
       information: "정보",
       pages: "페이지",
+      page: "페이지",
       multipleFilesSupported: "여러 파일 선택 가능",
     },
 
@@ -337,7 +338,10 @@ export const translations = {
       deletedPages: "삭제된 페이지",
       finalPages: "최종 페이지",
       rotateLeft: "왼쪽 회전 (-90°)",
-      rotateRight: "오른쪽 회전 (+90°)"
+      rotateRight: "오른쪽 회전 (+90°)",
+      extractSelected: "선택 페이지 추출",
+      deleted: "삭제됨",
+      restore: "복원"
     },
 
     // URL 인코더
@@ -555,6 +559,7 @@ export const translations = {
       location: "Location",
       information: "Information",
       pages: "pages",
+      page: "Page",
       multipleFilesSupported: "Multiple files supported",
     },
 
@@ -828,7 +833,10 @@ export const translations = {
       deletedPages: "Deleted pages",
       finalPages: "Final pages",
       rotateLeft: "Rotate Left (-90°)",
-      rotateRight: "Rotate Right (+90°)"
+      rotateRight: "Rotate Right (+90°)",
+      extractSelected: "Extract Selected Pages",
+      deleted: "Deleted",
+      restore: "Restore"
     },
 
     // URL Encoder
