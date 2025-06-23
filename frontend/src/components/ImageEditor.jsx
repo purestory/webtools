@@ -480,7 +480,7 @@ const ImageEditor = () => {
       <div className="min-h-screen bg-background p-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-4">
-            <h1 className="text-2xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
+            <h1 className="text-3xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
           </div>
 
           <Card 
@@ -516,7 +516,7 @@ const ImageEditor = () => {
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
         </div>
 
         {/* Toolbar */}

@@ -112,7 +112,7 @@ const URLEncoder = () => {
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Page Header */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold tracking-tight">{t(language, 'urlEncoder.title')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'urlEncoder.title')}</h1>
         </div>
 
         {/* Mode and Type Selector */}

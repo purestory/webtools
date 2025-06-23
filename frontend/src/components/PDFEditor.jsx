@@ -1256,7 +1256,7 @@ const PDFEditor = () => {
       <div className="max-w-6xl mx-auto space-y-4">
         {/* 헤더 */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-foreground">{t(language, 'pdfEditor.title')}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t(language, 'pdfEditor.title')}</h1>
         </div>
 
         {/* 에러 표시 */}

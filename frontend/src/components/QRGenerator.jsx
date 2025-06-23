@@ -96,7 +96,7 @@ const QRGenerator = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-foreground">{t(language, 'qrGenerator.title')}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t(language, 'qrGenerator.title')}</h1>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">

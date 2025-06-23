@@ -73,7 +73,7 @@ const Base64Converter = () => {
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Page Header */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold tracking-tight">{t(language, 'base64Converter.title')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'base64Converter.title')}</h1>
         </div>
 
         {/* Mode Selector */}
