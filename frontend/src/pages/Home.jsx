@@ -119,27 +119,6 @@ const Home = () => {
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
           {t(language, 'home.title')}. {t(language, 'home.subtitle')}
         </p>
-        
-        <div className="flex gap-4 justify-center flex-wrap">
-          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="20,6 9,17 4,12"></polyline>
-            </svg>
-            React + Vite
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="20,6 9,17 4,12"></polyline>
-            </svg>
-            Responsive Design
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="20,6 9,17 4,12"></polyline>
-            </svg>
-            Open Source
-          </div>
-        </div>
       </div>
 
       {/* Tools Grid */}

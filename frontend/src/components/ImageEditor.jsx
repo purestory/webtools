@@ -478,7 +478,7 @@ const ImageEditor = () => {
   if (!image) {
     return (
       <div className="min-h-screen bg-background p-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-4">
             <h1 className="text-3xl font-bold text-foreground">{t(language, 'imageEditor.title')}</h1>
           </div>

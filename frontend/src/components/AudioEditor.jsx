@@ -216,15 +216,12 @@ const AudioEditor = () => {
   }, [reduceValue]);
 
   return (
-    <div className="audio-editor-page">
-      <div className="container">
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-6xl mx-auto space-y-4">
         {/* Page Header */}
-                  <div style={{ marginBottom: '2rem' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>{t(language, 'audioEditor.title')}</h1>
-            <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '1rem' }}>
-              {t(language, 'audioEditor.description')}
-            </p>
-          </div>
+        <div className="text-center mb-4">
+          <h1 className="text-3xl font-bold text-foreground">{t(language, 'audioEditor.title')}</h1>
+        </div>
 
         {/* Upload Section */}
         <div className="card">

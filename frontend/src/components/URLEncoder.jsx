@@ -109,7 +109,7 @@ const URLEncoder = () => {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="max-w-6xl mx-auto space-y-4">
         {/* Page Header */}
         <div className="text-center mb-4">
           <h1 className="text-3xl font-bold tracking-tight">{t(language, 'urlEncoder.title')}</h1>
@@ -197,31 +197,7 @@ const URLEncoder = () => {
           </CardContent>
         </Card>
 
-        {/* Examples */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Code className="h-5 w-5" />
-              {t(language, 'urlEncoder.examples')}
-            </CardTitle>
-            <CardDescription>
-              {t(language, 'urlEncoder.examplesDescription')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-2">
-              {presetExamples[mode].map((example, index) => (
-                <button
-                  key={index}
-                  onClick={() => loadExample(example)}
-                  className="text-left p-3 rounded-lg border border-border hover:border-primary hover:bg-accent transition-colors text-sm font-mono"
-                >
-                  {example}
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+
 
         {/* Input Section */}
         <Card>
@@ -242,6 +218,20 @@ const URLEncoder = () => {
                 rows={6}
                 className="resize-y min-h-[120px]"
               />
+              
+              {/* Quick Examples */}
+              <div className="flex flex-wrap gap-2">
+                <Label className="text-xs text-muted-foreground">{t(language, 'urlEncoder.examples')}:</Label>
+                {presetExamples[mode].slice(0, 3).map((example, index) => (
+                  <button
+                    key={index}
+                    onClick={() => loadExample(example)}
+                    className="text-xs px-2 py-1 rounded border border-border hover:border-primary hover:bg-accent transition-colors font-mono"
+                  >
+                    {example.length > 30 ? example.substring(0, 30) + '...' : example}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
