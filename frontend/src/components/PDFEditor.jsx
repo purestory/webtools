@@ -1,4 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { LanguageContext } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 import './PDFEditor.css';
 
 const PDFEditor = () => {
