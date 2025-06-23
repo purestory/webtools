@@ -696,7 +696,6 @@ const ImageEditor = () => {
               <CardContent className="space-y-4">
                 <Button
                   onClick={toggleCropMode}
-                  variant={cropMode ? "default" : "outline"}
                   className="w-full"
                 >
                   <Crop className="w-4 h-4 mr-2" />
