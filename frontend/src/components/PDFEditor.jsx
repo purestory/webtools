@@ -1252,9 +1252,10 @@ const PDFEditor = () => {
   };
 
   return (
-    <div className="pdf-editor-page">
-      <div className="container">
-        <div className="header">
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-6xl mx-auto space-y-4">
+        {/* 헤더 */}
+        <div className="text-center mb-4">
           <h1 className="text-2xl font-bold text-foreground">{t(language, 'pdfEditor.title')}</h1>
         </div>
 
