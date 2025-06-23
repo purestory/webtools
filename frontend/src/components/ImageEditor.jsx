@@ -97,11 +97,11 @@ const ImageEditor = () => {
       };
       img.onerror = (error) => {
         console.error('Image load error:', error);
-        alert('이미지를 로드할 수 없습니다.');
+        alert('Unable to load image.');
       };
       img.src = URL.createObjectURL(file);
     } else {
-      alert('이미지 파일만 업로드할 수 있습니다.');
+      alert('Only image files can be uploaded.');
     }
   }, [drawImageOnCanvas]);
 
@@ -426,6 +426,10 @@ const ImageEditor = () => {
     if (exportFormat === 'jpg' || exportFormat === 'jpeg') {
       link.download = `edited-image.${exportFormat}`;
       link.href = canvas.toDataURL('image/jpeg', exportQuality);
+    } else if (exportFormat === 'bmp') {
+      // BMP는 canvas에서 직접 지원하지 않으므로 PNG로 변환 후 BMP로 저장
+      link.download = `edited-image.bmp`;
+      link.href = canvas.toDataURL('image/png');
     } else {
       link.download = `edited-image.${exportFormat}`;
       link.href = canvas.toDataURL(`image/${exportFormat}`);
@@ -502,9 +506,9 @@ const ImageEditor = () => {
         {/* 헤더 */}
         <div className="text-center space-y-2">
           <ImageIcon className="h-12 w-12 mx-auto text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">이미지 편집기</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Image Editor</h1>
           <p className="text-muted-foreground">
-            이미지 크기 조절과 파일 형식 변환을 위한 간단한 이미지 편집기입니다.
+            A simple image editor for image resizing and file format conversion.
           </p>
         </div>
 
@@ -522,14 +526,15 @@ const ImageEditor = () => {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">이미지 업로드</h3>
+                <h3 className="text-lg font-semibold mb-2">Image Upload</h3>
                 <p className="text-muted-foreground mb-4">
-                  이미지 파일을 드래그하거나 클릭해서 선택하세요
+                                      Drag or click to select image files
                 </p>
                 <div className="flex gap-2 justify-center flex-wrap">
                   <span className="px-2 py-1 bg-muted rounded text-xs">JPG</span>
                   <span className="px-2 py-1 bg-muted rounded text-xs">PNG</span>
                   <span className="px-2 py-1 bg-muted rounded text-xs">WebP</span>
+                  <span className="px-2 py-1 bg-muted rounded text-xs">BMP</span>
                   <span className="px-2 py-1 bg-muted rounded text-xs">GIF</span>
                 </div>
               </div>
@@ -567,7 +572,7 @@ const ImageEditor = () => {
                       className="flex items-center gap-2"
                     >
                       <Upload className="h-4 w-4" />
-                      새 이미지
+                      New Image
                     </Button>
                   </div>
                 </CardHeader>
@@ -587,10 +592,10 @@ const ImageEditor = () => {
                   
                   {/* 이미지 정보 */}
                   <div className="mt-4 p-3 bg-muted/30 rounded-lg text-sm">
-                    <strong>현재 크기:</strong> {dimensions.width} × {dimensions.height}px
+                    <strong>Current Size:</strong> {dimensions.width} × {dimensions.height}px
                     {cropMode && (
                       <span className="ml-4">
-                        <strong>자르기 영역:</strong> {Math.round(cropArea.width)} × {Math.round(cropArea.height)}px
+                        <strong>Crop Area:</strong> {Math.round(cropArea.width)} × {Math.round(cropArea.height)}px
                       </span>
                     )}
                   </div>
@@ -603,7 +608,7 @@ const ImageEditor = () => {
               {/* 크기 조절 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">크기 조절</CardTitle>
+                  <CardTitle className="text-base">Resize</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-2">
@@ -637,10 +642,10 @@ const ImageEditor = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label className="text-xs">프리셋 크기</Label>
+                                          <Label className="text-xs">Preset Size</Label>
                     <Select onValueChange={(value) => value && applyPresetSize(value)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="크기 선택" />
+                        <SelectValue placeholder="Select Size" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="1920x1080">Full HD (1920×1080)</SelectItem>
@@ -654,7 +659,7 @@ const ImageEditor = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label className="text-xs">비율 변경</Label>
+                                          <Label className="text-xs">Scale</Label>
                     <div className="grid grid-cols-3 gap-1">
                       <Button variant="outline" size="sm" onClick={() => applyScaleResize(0.25)}>25%</Button>
                       <Button variant="outline" size="sm" onClick={() => applyScaleResize(0.5)}>50%</Button>
@@ -665,7 +670,7 @@ const ImageEditor = () => {
                   </div>
                   
                   <Button onClick={applyResize} className="w-full">
-                    크기 적용
+                                            Apply Resize
                   </Button>
                 </CardContent>
               </Card>
@@ -685,12 +690,12 @@ const ImageEditor = () => {
                     className="w-full flex items-center gap-2"
                   >
                     <Scissors className="h-4 w-4" />
-                    {cropMode ? '자르기 모드 해제' : '자르기 모드'}
+                                            {cropMode ? 'Exit Crop Mode' : 'Crop Mode'}
                   </Button>
                   
                   {cropMode && (
                     <Button onClick={applyCrop} className="w-full">
-                      자르기 적용
+                                              Apply Crop
                     </Button>
                   )}
                 </CardContent>
@@ -699,7 +704,7 @@ const ImageEditor = () => {
               {/* 파일 형식 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">파일 형식</CardTitle>
+                                      <CardTitle className="text-base">File Format</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
@@ -712,6 +717,7 @@ const ImageEditor = () => {
                         <SelectItem value="png">PNG (무손실)</SelectItem>
                         <SelectItem value="jpeg">JPG (압축)</SelectItem>
                         <SelectItem value="webp">WebP (최신)</SelectItem>
+                        <SelectItem value="bmp">BMP (비트맵)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

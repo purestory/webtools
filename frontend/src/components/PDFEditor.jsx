@@ -33,6 +33,10 @@ const PDFEditor = () => {
   const [previewUrls, setPreviewUrls] = useState({});
   const [pageRotations, setPageRotations] = useState({}); // 누적 회전 각도 추적
 
+  // 드래그 앤 드롭 상태
+  const [draggedPage, setDraggedPage] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+
   const fileInputRef = useRef(null);
 
   // 에러 설정
@@ -825,6 +829,94 @@ const PDFEditor = () => {
     });
   };
 
+  // 페이지 이동 함수
+  const moveAdvancedPage = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex) return;
+    
+    const newPages = [...advancedPages];
+    const [movedPage] = newPages.splice(fromIndex, 1);
+    newPages.splice(toIndex, 0, movedPage);
+    
+    setAdvancedPages(newPages);
+    
+    // 선택된 페이지 인덱스도 업데이트
+    const newSelectedPages = new Set();
+    selectedPages.forEach(pageIndex => {
+      let newIndex = pageIndex;
+      if (pageIndex === fromIndex) {
+        newIndex = toIndex;
+      } else if (pageIndex > fromIndex && pageIndex <= toIndex) {
+        newIndex = pageIndex - 1;
+      } else if (pageIndex < fromIndex && pageIndex >= toIndex) {
+        newIndex = pageIndex + 1;
+      }
+      newSelectedPages.add(newIndex);
+    });
+    setSelectedPages(newSelectedPages);
+  };
+
+  // 드래그 이벤트 핸들러들
+  const handleDragStart = (e, pageIndex) => {
+    setDraggedPage(pageIndex);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, pageIndex) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(pageIndex);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedPage !== null && draggedPage !== dropIndex) {
+      moveAdvancedPage(draggedPage, dropIndex);
+    }
+    setDraggedPage(null);
+    setDragOverIndex(null);
+  };
+
+  // 선택된 페이지들 이동 함수
+  const moveSelectedPagesUp = () => {
+    const sortedIndices = Array.from(selectedPages).sort((a, b) => a - b);
+    if (sortedIndices.length === 0 || sortedIndices[0] === 0) return;
+    
+    const newPages = [...advancedPages];
+    const newSelectedPages = new Set();
+    
+    sortedIndices.forEach(index => {
+      const temp = newPages[index];
+      newPages[index] = newPages[index - 1];
+      newPages[index - 1] = temp;
+      newSelectedPages.add(index - 1);
+    });
+    
+    setAdvancedPages(newPages);
+    setSelectedPages(newSelectedPages);
+  };
+
+  const moveSelectedPagesDown = () => {
+    const sortedIndices = Array.from(selectedPages).sort((a, b) => b - a);
+    if (sortedIndices.length === 0 || sortedIndices[0] === advancedPages.length - 1) return;
+    
+    const newPages = [...advancedPages];
+    const newSelectedPages = new Set();
+    
+    sortedIndices.forEach(index => {
+      const temp = newPages[index];
+      newPages[index] = newPages[index + 1];
+      newPages[index + 1] = temp;
+      newSelectedPages.add(index + 1);
+    });
+    
+    setAdvancedPages(newPages);
+    setSelectedPages(newSelectedPages);
+  };
+
   // 고급 편집 PDF 저장
   const saveAdvancedPDF = async () => {
     if (!advancedPdfDoc) return;
@@ -950,6 +1042,24 @@ const PDFEditor = () => {
                     <div className="batch-actions">
                       <button 
                         className="button button-outline"
+                        onClick={moveSelectedPagesUp}
+                        disabled={selectedPages.size === 0 || Math.min(...selectedPages) === 0}
+                        title="선택된 페이지들을 위로 이동"
+                      >
+                        ↑ 위로
+                      </button>
+                      
+                      <button 
+                        className="button button-outline"
+                        onClick={moveSelectedPagesDown}
+                        disabled={selectedPages.size === 0 || Math.max(...selectedPages) === advancedPages.length - 1}
+                        title="선택된 페이지들을 아래로 이동"
+                      >
+                        ↓ 아래로
+                      </button>
+                      
+                      <button 
+                        className="button button-outline"
                         onClick={() => {
                           selectedPages.forEach(pageIndex => {
                             rotateAdvancedPage(pageIndex, -90);
@@ -1012,9 +1122,17 @@ const PDFEditor = () => {
                 {advancedPages.map((page, index) => (
                   <div 
                     key={index} 
-                    className={`page-preview ${page.deleted ? 'deleted' : ''} ${selectedPages.has(index) ? 'selected' : ''}`}
+                    className={`page-preview ${page.deleted ? 'deleted' : ''} ${selectedPages.has(index) ? 'selected' : ''} ${dragOverIndex === index ? 'drag-over' : ''} ${draggedPage === index ? 'dragging' : ''}`}
                     onClick={() => togglePageSelection(index)}
                     data-page-index={index}
+                    draggable={!page.deleted}
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, index)}
+                    style={{
+                      cursor: page.deleted ? 'default' : 'grab'
+                    }}
                   >
                     <div className="page-header">
                       <input

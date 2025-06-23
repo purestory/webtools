@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import AudioEditorPage from './pages/AudioEditorPage';
 import ImageEditorPage from './pages/ImageEditorPage';
+import ImageConverterPage from './pages/ImageConverterPage';
 import QRGeneratorPage from './pages/QRGeneratorPage';
 import Base64ConverterPage from './pages/Base64ConverterPage';
 import IPInfoPage from './pages/IPInfoPage';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/json-formatter" element={<JSONFormatterPage />} />
           <Route path="/audio-editor" element={<AudioEditorPage />} />
           <Route path="/image-editor" element={<ImageEditorPage />} />
+          <Route path="/image-converter" element={<ImageConverterPage />} />
           <Route path="/qr-generator" element={<QRGeneratorPage />} />
           <Route path="/base64-converter" element={<Base64ConverterPage />} />
           <Route path="/ip-info" element={<IPInfoPage />} />

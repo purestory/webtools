@@ -73,7 +73,7 @@ const AudioEditor = () => {
           // 성공적으로 로드됨
         }
       } else {
-        alert('오디오 또는 비디오 파일만 업로드할 수 있습니다. (MP3, WAV, OGG, MP4, MOV, AVI 등)');
+        alert('Only audio or video files can be uploaded. (MP3, WAV, OGG, MP4, MOV, AVI, etc.)');
       }
     }
   };
@@ -112,7 +112,7 @@ const AudioEditor = () => {
 
   const handleVolumeChange = (e) => {
     const newVolume = parseInt(e.target.value);
-    console.log('볼륨 변경:', newVolume);
+    console.log('Volume changed:', newVolume);
     setVolumeValue(newVolume);
     
     // 슬라이더 스타일 업데이트
@@ -218,7 +218,7 @@ const AudioEditor = () => {
         <div style={{ marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>Audio Editor</h1>
           <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '1rem' }}>
-            오디오 파일을 업로드하고 편집해보세요. 드래그 앤 드롭으로 간편하게 시작할 수 있습니다.
+            Upload and edit audio files. You can easily start by drag and drop.
           </p>
         </div>
 
@@ -239,8 +239,8 @@ const AudioEditor = () => {
                   <line x1="12" x2="12" y1="15" y2="3"></line>
                 </svg>
               </div>
-              <h4 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>파일을 여기에 드롭하세요</h4>
-              <p style={{ color: 'hsl(var(--muted-foreground))', marginBottom: '1rem' }}>오디오 또는 비디오 파일을 클릭해서 선택하거나 드래그하세요</p>
+              <h4 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>Drop files here</h4>
+              <p style={{ color: 'hsl(var(--muted-foreground))', marginBottom: '1rem' }}>Click to select audio or video files or drag them here</p>
               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <span className="badge badge-outline">MP3</span>
                 <span className="badge badge-outline">WAV</span>
@@ -255,20 +255,20 @@ const AudioEditor = () => {
               {audioInfo.fileName && (
                 <div style={{ display: 'block', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid hsl(var(--border))' }}>
                   <div style={{ textAlign: 'left' }}>
-                    <div className="label" style={{ marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>업로드된 파일 정보</div>
+                    <div className="label" style={{ marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>Uploaded File Info</div>
                     <div style={{ marginBottom: '1rem' }}>
-                      <div className="label" style={{ fontSize: '0.875rem' }}>파일명</div>
-                      <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem', fontWeight: '500' }}>{audioInfo.fileName}</div>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem' }}>
-                      <div>
-                        <div className="label" style={{ fontSize: '0.875rem' }}>재생시간</div>
-                        <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.duration}</div>
+                                              <div className="label" style={{ fontSize: '0.875rem' }}>File Name</div>
+                        <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem', fontWeight: '500' }}>{audioInfo.fileName}</div>
                       </div>
-                      <div>
-                        <div className="label" style={{ fontSize: '0.875rem' }}>파일크기</div>
-                        <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.fileSize}</div>
-                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem' }}>
+                        <div>
+                          <div className="label" style={{ fontSize: '0.875rem' }}>Duration</div>
+                          <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.duration}</div>
+                        </div>
+                        <div>
+                          <div className="label" style={{ fontSize: '0.875rem' }}>File Size</div>
+                          <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.fileSize}</div>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -292,7 +292,7 @@ const AudioEditor = () => {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem', marginBottom: '0.5rem' }}>
                 {/* Playback Controls */}
                 <div className="control-group">
-                  <div className="label">재생 컨트롤</div>
+                  <div className="label">Playback Controls</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <div className="playback-controls">
                       <button className="button button-primary button-icon" onClick={play} disabled={!audioInfo.fileName || isPlaying}>
@@ -346,33 +346,33 @@ const AudioEditor = () => {
 
                 {/* Expanded Selection Controls */}
                 <div className="control-group">
-                  <div className="label" style={{ marginBottom: '1rem' }}>구간 선택</div>
+                  <div className="label" style={{ marginBottom: '1rem' }}>Selection</div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                     {/* 시작 시간 */}
                     <div>
-                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>시작 시간</div>
+                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>Start Time</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="number" className="input" placeholder="시" min="0" max="23" value={startTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Hr" min="0" max="23" value={startTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
-                        <input type="number" className="input" placeholder="분" min="0" max="59" value={startTime.minutes || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Min" min="0" max="59" value={startTime.minutes || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
-                        <input type="number" className="input" placeholder="초" min="0" max="59" step="0.1" value={startTime.seconds || ''} disabled={!audioInfo.fileName} style={{ width: '80px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Sec" min="0" max="59" step="0.1" value={startTime.seconds || ''} disabled={!audioInfo.fileName} style={{ width: '80px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                       </div>
                     </div>
                     {/* 종료 시간 */}
                     <div>
-                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>종료 시간</div>
+                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>End Time</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="number" className="input" placeholder="시" min="0" max="23" value={endTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Hr" min="0" max="23" value={endTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
-                        <input type="number" className="input" placeholder="분" min="0" max="59" value={endTime.minutes || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Min" min="0" max="59" value={endTime.minutes || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
-                        <input type="number" className="input" placeholder="초" min="0" max="59" step="0.1" value={endTime.seconds || ''} disabled={!audioInfo.fileName} style={{ width: '80px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
+                        <input type="number" className="input" placeholder="Sec" min="0" max="59" step="0.1" value={endTime.seconds || ''} disabled={!audioInfo.fileName} style={{ width: '80px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                       </div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
-                    <button className="button button-outline button-sm" onClick={clearSelection} disabled={!audioInfo.fileName}>선택 해제</button>
+                    <button className="button button-outline button-sm" onClick={clearSelection} disabled={!audioInfo.fileName}>Clear Selection</button>
                   </div>
                 </div>
               </div>
@@ -398,13 +398,51 @@ const AudioEditor = () => {
         {audioInfo.fileName && (
           <div className="card" id="effectsCard" style={{ display: 'block', marginTop: '0.5rem' }}>
             <div className="card-content" style={{ padding: '1rem' }}>
-              {/* Volume Controls Section */}
+              {/* Selection Edit Section - 먼저 배치 */}
+              <div className="selection-edit-section" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--secondary) / 0.3)' }}>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>Selection Edit</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                  <button className="button button-primary" onClick={() => trimSelection()} disabled={!audioInfo.fileName}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 12l2 2 4-4"></path>
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3 4-3 9-3 9 1.34 9 3Z"></path>
+                      <path d="M3 5v6h6"></path>
+                      <path d="M21 19v-6h-6"></path>
+                    </svg>
+                    Keep Selection Only
+                  </button>
+                  <button className="button button-destructive" onClick={() => deleteSelection()} disabled={!audioInfo.fileName}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                      <line x1="10" x2="10" y1="11" y2="17"></line>
+                      <line x1="14" x2="14" y1="11" y2="17"></line>
+                    </svg>
+                    Delete Selection
+                  </button>
+                </div>
+                <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'hsl(var(--muted) / 0.3)', borderRadius: 'var(--radius)', fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <span style={{ fontWeight: '500' }}>Usage:</span>
+                  </div>
+                  <div style={{ marginLeft: '1.25rem' }}>
+                    Drag with mouse or input time to select section, then click button.
+                  </div>
+                </div>
+              </div>
+
+              {/* Volume Controls Section - 두 번째로 배치 */}
               <div className="volume-effects-section" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--muted) / 0.3)' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>볼륨 조절</h4>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>Volume Control</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
                   {/* 증폭 컨트롤 */}
                   <div className="volume-control-group">
-                    <div className="label" style={{ marginBottom: '0.5rem' }}>소리 증폭</div>
+                    <div className="label" style={{ marginBottom: '0.5rem' }}>Amplify</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <input 
                         ref={amplifySliderRef} 
@@ -435,13 +473,13 @@ const AudioEditor = () => {
                         <line x1="22" x2="22" y1="9" y2="15"></line>
                         <line x1="19" x2="25" y1="12" y2="12"></line>
                       </svg>
-                      증폭 적용
+                      Apply Amplify
                     </button>
                   </div>
                   
                   {/* 감소 컨트롤 */}
                   <div className="volume-control-group">
-                    <div className="label" style={{ marginBottom: '0.5rem' }}>소리 감소</div>
+                    <div className="label" style={{ marginBottom: '0.5rem' }}>Reduce</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <input 
                         ref={reduceSliderRef} 
@@ -471,50 +509,13 @@ const AudioEditor = () => {
                         <line x1="23" x2="17" y1="9" y2="15"></line>
                         <line x1="17" x2="23" y1="9" y2="15"></line>
                       </svg>
-                      감소 적용
+                      Apply Reduce
                     </button>
                   </div>
                 </div>
               </div>
               
               {/* Other Effects */}
-              {/* Selection Edit Section */}
-              <div className="selection-edit-section" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--secondary) / 0.3)' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>선택 영역 편집</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                  <button className="button button-primary" onClick={() => trimSelection()} disabled={!audioInfo.fileName}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 12l2 2 4-4"></path>
-                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3 4-3 9-3 9 1.34 9 3Z"></path>
-                      <path d="M3 5v6h6"></path>
-                      <path d="M21 19v-6h-6"></path>
-                    </svg>
-                    선택 부분만 남기기
-                  </button>
-                  <button className="button button-destructive" onClick={() => deleteSelection()} disabled={!audioInfo.fileName}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 6h18"></path>
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                      <line x1="10" x2="10" y1="11" y2="17"></line>
-                      <line x1="14" x2="14" y1="11" y2="17"></line>
-                    </svg>
-                    선택 부분 삭제
-                  </button>
-                </div>
-                <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'hsl(var(--muted) / 0.3)', borderRadius: 'var(--radius)', fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <path d="M12 6v6l4 2"></path>
-                    </svg>
-                    <span style={{ fontWeight: '500' }}>사용법:</span>
-                  </div>
-                  <div style={{ marginLeft: '1.25rem' }}>
-                    마우스로 드래그하거나 시간 입력으로 구간을 선택한 후 버튼을 클릭하세요.
-                  </div>
-                </div>
-              </div>
 
               <div className="effects-grid">
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={applyFadeIn}>
@@ -523,7 +524,7 @@ const AudioEditor = () => {
                       <path d="M3 12h18l-3-3m0 6l3-3"></path>
                     </svg>
                   </div>
-                  <span>페이드 인</span>
+                  <span>Fade In</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={applyFadeOut}>
                   <div className="effect-icon">
@@ -531,7 +532,7 @@ const AudioEditor = () => {
                       <path d="M21 12H3l3-3m0 6l-3-3"></path>
                     </svg>
                   </div>
-                  <span>페이드 아웃</span>
+                  <span>Fade Out</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={handleApplyNormalize}>
                   <div className="effect-icon">
@@ -539,7 +540,7 @@ const AudioEditor = () => {
                       <path d="M12 2v20M2 7l10-5 10 5-10 5z"></path>
                     </svg>
                   </div>
-                  <span>정규화</span>
+                  <span>Normalize</span>
                 </button>
                 <button className="effect-button" disabled={!audioInfo.fileName} onClick={handleApplyReverse}>
                   <div className="effect-icon">
@@ -548,7 +549,7 @@ const AudioEditor = () => {
                       <path d="M8 21l4-7 4 7"></path>
                     </svg>
                   </div>
-                  <span>역재생</span>
+                  <span>Reverse</span>
                 </button>
               </div>
             </div>
@@ -566,7 +567,7 @@ const AudioEditor = () => {
                     <polyline points="8,12 12,16 16,12"></polyline>
                     <line x1="12" x2="12" y1="2" y2="16"></line>
                   </svg>
-                  <span style={{ fontWeight: '500', color: 'hsl(var(--primary))' }}>파일 형식:</span>
+                  <span style={{ fontWeight: '500', color: 'hsl(var(--primary))' }}>File Format:</span>
                   <select className="input" style={{ width: 'auto', minWidth: '80px' }} value={exportFormat} onChange={(e) => setExportFormat(e.target.value)}>
                     <option value="wav">WAV</option>
                     <option value="mp3">MP3</option>
@@ -579,7 +580,7 @@ const AudioEditor = () => {
                     <polyline points="8,12 12,16 16,12"></polyline>
                     <line x1="12" x2="12" y1="2" y2="16"></line>
                   </svg>
-                  편집된 오디오 다운로드
+                  Download Edited Audio
                 </button>
               </div>
             </div>

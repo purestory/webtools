@@ -563,9 +563,47 @@
 }
 
 .page-preview.deleted {
-  opacity: 0.6;
-  background: hsl(var(--destructive) / 0.05);
-  border-color: hsl(var(--destructive) / 0.3);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 드래그 앤 드롭 스타일 */
+.page-preview.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+  cursor: grabbing !important;
+}
+
+.page-preview.drag-over {
+  border: 2px dashed hsl(var(--primary));
+  background: hsl(var(--primary) / 0.1);
+  transform: scale(1.05);
+}
+
+.page-preview:not(.deleted) {
+  transition: all 0.2s ease;
+}
+
+.page-preview:not(.deleted):active {
+  cursor: grabbing;
+}
+
+/* 이동 버튼 스타일 개선 */
+.batch-actions .button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.batch-actions .button[title*="이동"] {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.05));
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+.batch-actions .button[title*="이동"]:hover:not(:disabled) {
+  background: hsl(var(--primary) / 0.1);
+  border-color: hsl(var(--primary));
+  transform: translateY(-1px);
 }
 
 .page-header {

@@ -181,6 +181,20 @@ body {
   padding: 0;
 }
 
+.button-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.button-primary svg {
+  color: hsl(var(--primary-foreground));
+}
+
+.button-outline svg {
+  color: hsl(var(--foreground));
+}
+
 .input {
   display: flex;
   height: 2.5rem;

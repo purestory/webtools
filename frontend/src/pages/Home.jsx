@@ -6,90 +6,100 @@ const Home = () => {
     {
       id: 'audio-editor',
       name: 'Audio Editor',
-      description: '오디오 파일을 편집하고 효과를 적용하세요. 파형 시각화와 구간 선택 기능을 제공합니다.',
+      description: 'Edit audio files and apply effects. Provides waveform visualization and section selection features.',
       icon: 'M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z M19 10v2a7 7 0 0 1-14 0v-2 M12 19v4',
       href: '/audio-editor',
-      features: ['파형 시각화', '구간 선택', '페이드 효과', '실시간 재생'],
+      features: ['Waveform Visualization', 'Section Selection', 'Fade Effects', 'Real-time Playback'],
       bgColor: 'from-blue-500/10 to-cyan-500/10',
       borderColor: 'border-blue-500/20'
     },
     {
       id: 'image-editor',
       name: 'Image Editor',
-      description: '이미지를 편집하고 다양한 필터와 변형을 적용하세요. 윈도우 그림판과 유사한 인터페이스를 제공합니다.',
+      description: 'Edit images and apply various filters and transformations. Provides a Windows Paint-like interface.',
       icon: 'M21 12a9 9 0 11-6.219-8.56',
       href: '/image-editor',
-      features: ['그리기 도구', '이미지 필터', '변형 기능', '다중 포맷 지원'],
+      features: ['Drawing Tools', 'Image Filters', 'Transform Functions', 'Multi-format Support'],
       bgColor: 'from-green-500/10 to-emerald-500/10',
       borderColor: 'border-green-500/20'
     },
     {
+      id: 'image-converter',
+      name: 'Image Converter',
+      description: 'Convert image file formats and batch generate multiple sizes for Windows icons. Optimized for ICO file creation.',
+      icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M12 18v-6 M9 15l3-3 3 3',
+      href: '/image-converter',
+      features: ['Format Conversion', 'Windows Icons', 'Batch Processing', 'Multiple Sizes'],
+      bgColor: 'from-emerald-500/10 to-teal-500/10',
+      borderColor: 'border-emerald-500/20'
+    },
+    {
       id: 'qr-generator',
       name: 'QR Generator',
-      description: 'URL, 텍스트, 연락처 정보 등을 QR 코드로 변환하세요. 다양한 설정과 스타일을 지원합니다.',
+      description: 'Convert URLs, text, contact information, etc. to QR codes. Supports various settings and styles.',
       icon: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z',
       href: '/qr-generator',
-      features: ['다양한 형식', '색상 커스터마이징', '크기 조절', '고화질 다운로드'],
+      features: ['Various Formats', 'Color Customization', 'Size Adjustment', 'High-quality Download'],
       bgColor: 'from-purple-500/10 to-pink-500/10',
       borderColor: 'border-purple-500/20'
     },
     {
       id: 'base64-converter',
-      name: 'Base64 변환기',
-      description: '텍스트를 Base64로 인코딩하거나 Base64를 텍스트로 디코딩합니다. 개발자를 위한 필수 도구입니다.',
+      name: 'Base64 Converter',
+      description: 'Encode text to Base64 or decode Base64 to text. Essential tool for developers.',
       icon: 'M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3',
       href: '/base64-converter',
-      features: ['텍스트 인코딩', 'Base64 디코딩', '복사 기능', '오류 처리'],
+      features: ['Text Encoding', 'Base64 Decoding', 'Copy Function', 'Error Handling'],
       bgColor: 'from-orange-500/10 to-red-500/10',
       borderColor: 'border-orange-500/20'
     },
     {
       id: 'ip-info',
-      name: 'IP 정보 조회',
-      description: 'IP 주소의 위치, ISP, 타임존 등 상세 정보를 조회합니다. 네트워크 분석에 유용합니다.',
+      name: 'IP Information',
+      description: 'Look up detailed information about IP addresses including location, ISP, timezone, etc. Useful for network analysis.',
       icon: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6z',
       href: '/ip-info',
-      features: ['지리적 위치', 'ISP 정보', '타임존', '지도 연동'],
+      features: ['Geographic Location', 'ISP Information', 'Timezone', 'Map Integration'],
       bgColor: 'from-teal-500/10 to-cyan-500/10',
       borderColor: 'border-teal-500/20'
     },
     {
       id: 'pdf-editor',
-      name: 'PDF 에디터',
-      description: 'PDF를 미리보면서 페이지 회전, 삭제, 복제 등의 고급 편집을 할 수 있습니다. 브라우저에서 안전하게 처리됩니다.',
+      name: 'PDF Editor',
+      description: 'Advanced PDF editing with page preview including rotation, deletion, duplication, etc. Processed safely in browser.',
       icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
       href: '/pdf-editor',
-      features: ['PDF 미리보기', '페이지 회전', '페이지 삭제/복제', '실시간 편집'],
+      features: ['PDF Preview', 'Page Rotation', 'Page Delete/Duplicate', 'Real-time Editing'],
       bgColor: 'from-rose-500/10 to-pink-500/10',
       borderColor: 'border-rose-500/20'
     },
     {
       id: 'url-encoder',
-      name: 'URL 인코더',
-      description: 'URL에 안전하게 사용할 수 있도록 텍스트를 인코딩하거나 디코딩합니다.',
+      name: 'URL Encoder',
+      description: 'Encode or decode text for safe use in URLs.',
       icon: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
       href: '/url-encoder',
-      features: ['URL 인코딩', 'URL 디코딩', '다양한 타입', '예시 제공'],
+      features: ['URL Encoding', 'URL Decoding', 'Various Types', 'Example Provided'],
       bgColor: 'from-indigo-500/10 to-purple-500/10',
       borderColor: 'border-indigo-500/20'
     },
     {
       id: 'json-formatter',
-      name: 'JSON 포맷터',
-      description: 'JSON 데이터를 포맷팅, 압축, 검증할 수 있는 도구입니다. 개발자를 위한 필수 JSON 처리 유틸리티입니다.',
+      name: 'JSON Formatter',
+      description: 'Tool for formatting, compressing, and validating JSON data. Essential JSON processing utility for developers.',
       icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M12 9l2 2 4-4',
       href: '/json-formatter',
-      features: ['JSON 포맷팅', 'JSON 압축', '유효성 검사', '구문 강조'],
+      features: ['JSON Formatting', 'JSON Compression', 'Validation', 'Syntax Highlighting'],
       bgColor: 'from-violet-500/10 to-purple-500/10',
       borderColor: 'border-violet-500/20'
     },
     {
       id: 'test-components',
-      name: 'UI 컴포넌트 테스트',
-      description: 'shadcn/ui 컴포넌트들의 테스트 페이지입니다. 개발자를 위한 UI 컴포넌트 동작 확인 도구입니다.',
+      name: 'UI Component Test',
+      description: 'Test page for shadcn/ui components. UI component behavior verification tool for developers.',
       icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
       href: '/test',
-      features: ['Button 테스트', 'Input 테스트', 'Select 테스트', 'CSS 변수 확인'],
+      features: ['Button Test', 'Input Test', 'Select Test', 'CSS Variable Check'],
       bgColor: 'from-yellow-500/10 to-amber-500/10',
       borderColor: 'border-yellow-500/20'
     }
@@ -103,7 +113,7 @@ const Home = () => {
           WebTools
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-          현대적인 웹 도구 모음집입니다. 오디오 편집, 이미지 편집, QR 코드 생성 등 다양한 기능을 제공합니다.
+          Modern web tools collection. Provides various functions including audio editing, image editing, QR code generation, and more.
         </p>
         
         <div className="flex gap-4 justify-center flex-wrap">
@@ -117,13 +127,13 @@ const Home = () => {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="20,6 9,17 4,12"></polyline>
             </svg>
-            반응형 디자인
+            Responsive Design
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-full text-sm text-muted-foreground">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="20,6 9,17 4,12"></polyline>
             </svg>
-            오픈소스
+            Open Source
           </div>
         </div>
       </div>
@@ -170,11 +180,11 @@ const Home = () => {
       {/* Footer Section */}
       <div className="text-center mt-16 pt-12 border-t border-border">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4 text-foreground">모든 도구가 한 곳에</h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            웹브라우저에서 바로 사용할 수 있는 다양한 유틸리티 도구들을 제공합니다. 
-            설치가 필요 없고, 개인정보는 안전하게 보호됩니다.
-          </p>
+          <h2 className="text-3xl font-bold mb-4 text-foreground">All Tools in One Place</h2>
+                      <p className="text-lg text-muted-foreground mb-8">
+              Provides various utility tools that can be used directly in web browsers. 
+              No installation required, and personal information is safely protected.
+            </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -182,8 +192,8 @@ const Home = () => {
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">안전한 처리</h3>
-              <p className="text-sm text-muted-foreground">모든 데이터는 브라우저에서만 처리되어 외부로 전송되지 않습니다.</p>
+              <h3 className="text-lg font-semibold mb-2">Secure Processing</h3>
+              <p className="text-sm text-muted-foreground">All data is processed only in the browser and not transmitted externally.</p>
             </div>
             <div>
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -191,8 +201,8 @@ const Home = () => {
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">빠른 실행</h3>
-              <p className="text-sm text-muted-foreground">설치 없이 웹브라우저에서 바로 실행할 수 있습니다.</p>
+              <h3 className="text-lg font-semibold mb-2">Fast Execution</h3>
+              <p className="text-sm text-muted-foreground">Can be executed directly in web browser without installation.</p>
             </div>
             <div>
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -201,8 +211,8 @@ const Home = () => {
                   <polyline points="22,6 12,13 2,6"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">오픈소스</h3>
-              <p className="text-sm text-muted-foreground">모든 코드가 공개되어 투명하고 신뢰할 수 있습니다.</p>
+              <h3 className="text-lg font-semibold mb-2">Open Source</h3>
+              <p className="text-sm text-muted-foreground">All code is public, making it transparent and trustworthy.</p>
             </div>
           </div>
         </div>

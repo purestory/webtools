@@ -7,7 +7,19 @@ alwaysApply: false
 
 ## 🚨 절대 하지 말 것
 
-### 1. nginx sites-enabled 폴더 관리
+### 1. 서버 상태 확인 금지
+```bash
+# ❌ 절대 하지 마세요!
+sudo systemctl status webtools
+sudo systemctl start webtools
+sudo systemctl stop webtools
+```
+**이유**: 
+- 이 프로젝트는 nginx로 구동되는 정적 웹사이트입니다
+- backend가 없으므로 별도의 systemd 서비스가 필요하지 않습니다
+- 프론트엔드 빌드 후에는 nginx 재시작만 필요합니다
+
+### 2. nginx sites-enabled 폴더 관리
 ```bash
 # ❌ 절대 하지 마세요!
 cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.backup
@@ -15,24 +27,53 @@ cp /etc/nginx/sites-available/purestory /etc/nginx/sites-enabled/purestory.bak
 ```
 **이유**: nginx는 sites-enabled 폴더의 **모든** 파일을 설정으로 읽습니다. 백업 파일도 예외가 아닙니다!
 
-### 2. 파일 권한 무시
+### 3. 파일 권한 무시
 - 파일 수정 전 반드시 `ls -la [파일경로]` 로 권한 확인
 - root 소유 파일 발견 시 즉시 `sudo chown purestory:purestory [파일경로]` 실행
 - nginx 설정은 반드시 `/home/purestory/tmp/`에서 편집
 
-### 3. 경로 및 포트 임의 설정
+### 4. 경로 및 포트 임의 설정
 - 포트번호를 임의로 지정하지 말고 사용자에게 확인
 - `~` 경로 사용 금지 (폴더로 생성될 수 있음)
 - basename은 `/webtools`로 고정
 
-### 4. 불필요한 nginx 상태 확인
-- 빌드 완료 후 nginx 상태 확인(`sudo systemctl status nginx`)은 불필요
-- nginx 설정 변경이 없었다면 상태 확인하지 말 것
-- 단순 프론트엔드 코드 수정 후에는 nginx 재시작 불필요
+### 5. 개발 서버 실행 금지
+```bash
+# ❌ 절대 하지 마세요!
+npm run dev
+cd /home/purestory/webtools/frontend && npm run dev
+```
+**이유**:
+- 이 프로젝트는 nginx로 정적 파일을 서빙하는 방식입니다
+- 개발 서버가 필요하지 않으며, 빌드 후 nginx로 바로 구동합니다
+- `npm run build` 후 nginx 재시작만으로 변경사항이 반영됩니다
+
+### 6. 불필요한 서버 상태 체크
+- 단순 프론트엔드 코드 수정 후에는 서버 상태 확인 불필요
+- systemd 서비스 상태 확인은 절대 하지 말 것
+- nginx 설정 변경이 없다면 nginx 상태 확인도 불필요
 
 ## ✅ 필수 준수 사항
 
-### 1. 파일 수정 프로세스
+### 1. 프로젝트 특성 이해
+- **정적 웹사이트**: React 빌드 결과물을 nginx로 서빙
+- **백엔드 없음**: 모든 기능은 클라이언트 사이드에서 처리
+- **배포 방식**: 빌드 → nginx document root에 복사
+
+### 2. 올바른 서버 구동 방식
+```bash
+# 기존 nginx 상태 확인 (필요시에만)
+sudo systemctl status nginx
+
+# nginx 가동 중이면 설정 리로드
+sudo systemctl reload nginx
+
+# nginx 중지 후 재시작 (설정 변경시에만)
+sudo systemctl stop nginx
+sudo systemctl start nginx
+```
+
+### 3. 파일 수정 프로세스
 ```bash
 # nginx 설정 파일 수정 시
 sudo cp /etc/nginx/sites-available/purestory /home/purestory/tmp/nginx_backup_$(date +%Y%m%d_%H%M%S).conf
@@ -44,7 +85,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### 2. React 컴포넌트 구조
+### 4. React 컴포넌트 구조
 ```jsx
 import { useState, useEffect } from 'react';
 import './ComponentName.css';
@@ -70,7 +111,7 @@ const ComponentName = () => {
 export default ComponentName;
 ```
 
-### 3. 에러 처리 패턴
+### 5. 에러 처리 패턴
 ```jsx
 const handleApiCall = async () => {
   try {
@@ -116,26 +157,30 @@ frontend/
 
 ## 🔧 개발 워크플로우
 
-### 빌드 및 배포
+### 표준 빌드 및 배포
 ```bash
 cd /home/purestory/webtools/frontend
 npm run build
+# nginx 설정 변경이 있었다면 reload만 실행
+sudo systemctl reload nginx
 ```
 
-### 서버 구동 시 체크
+### 올바른 개발 워크플로우
 ```bash
-# systemd 서비스 확인
-sudo systemctl status nginx
-# 가동 중이면 중지 후 재시작
-sudo systemctl stop nginx
-sudo systemctl start nginx
+# 코드 수정 후 빌드만 실행
+cd /home/purestory/webtools/frontend
+npm run build
+
+# nginx 설정 변경이 있었다면 reload (선택사항)
+sudo systemctl reload nginx
 ```
+**주의**: 이 프로젝트는 개발 서버(`npm run dev`)를 사용하지 않습니다!
 
 ### 배포 전 체크리스트
 - [ ] 콘솔 에러가 없는가?
-- [ ] nginx 설정 테스트: `sudo nginx -t`
+- [ ] nginx 설정 테스트: `sudo nginx -t` (설정 변경시에만)
 - [ ] 빌드 성공: `npm run build`
-- [ ] 파일 권한 확인: `ls -la`
+- [ ] 파일 권한 확인: `ls -la` (파일 수정 전에만)
 
 ## 🛡️ 보안 및 성능
 
@@ -161,6 +206,22 @@ const handleFileUpload = (file) => {
 };
 ```
 
+## 🎯 작업 우선순위
+
+### 1. 코드 수정 시
+- 직접 확인하고 분석하여 원인 파악
+- 예상, 추정, 가정으로 답변하지 않음
+- 로그 기록과 에러 내용 분석을 통한 문제 해결
+
+### 2. 시스템 명령 시
+- 모든 시스템 명령은 `sudo` 사용
+- nginx 설정 변경 시 `/home/purestory/tmp`에서 편집
+- 적용 전 변경사항 확인
+
+### 3. 확인 작업
+- 코드 확인, 로그 확인 등은 AI가 직접 수행
+- 사용자에게 확인 요청하지 말고 도구 사용
+
 ## 📋 중요 파일 참조
 
 ### 핵심 설정 파일
@@ -171,3 +232,6 @@ const handleFileUpload = (file) => {
 ### 메인 컴포넌트
 - [frontend/src/pages/Home.jsx](mdc:frontend/src/pages/Home.jsx) - 홈페이지
 - [frontend/src/components/Layout/Layout.jsx](mdc:frontend/src/components/Layout/Layout.jsx) - 레이아웃
+
+### UI 컴포넌트
+- [frontend/src/pages/TestPage.jsx](mdc:frontend/src/pages/TestPage.jsx) - UI 컴포넌트 테스트 페이지
