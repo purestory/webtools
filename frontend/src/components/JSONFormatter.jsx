@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { CheckCircle, AlertCircle, Copy, Settings, FileText, Code } from 'lucide-react';
+import { LanguageContext } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 import './JSONFormatter.css';
 
 const JSONFormatter = () => {
+  const { language } = useContext(LanguageContext);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
@@ -15,7 +19,7 @@ const JSONFormatter = () => {
 
   const formatJSON = () => {
     if (!input.trim()) {
-      setError('입력할 JSON 텍스트를 입력해주세요.');
+      setError(t(language, 'jsonFormatter.errorEmpty'));
       setOutput('');
       setIsValid(null);
       return;
@@ -28,7 +32,7 @@ const JSONFormatter = () => {
       setError('');
       setIsValid(true);
     } catch (err) {
-      setError(`JSON 파싱 오류: ${err.message}`);
+      setError(t(language, 'jsonFormatter.errorParse').replace('{error}', err.message));
       setOutput('');
       setIsValid(false);
     }
@@ -36,7 +40,7 @@ const JSONFormatter = () => {
 
   const minifyJSON = () => {
     if (!input.trim()) {
-      setError('입력할 JSON 텍스트를 입력해주세요.');
+      setError(t(language, 'jsonFormatter.errorEmpty'));
       setOutput('');
       return;
     }
@@ -48,7 +52,7 @@ const JSONFormatter = () => {
       setError('');
       setIsValid(true);
     } catch (err) {
-      setError(`JSON 파싱 오류: ${err.message}`);
+      setError(t(language, 'jsonFormatter.errorParse').replace('{error}', err.message));
       setOutput('');
       setIsValid(false);
     }
@@ -56,7 +60,7 @@ const JSONFormatter = () => {
 
   const validateJSON = () => {
     if (!input.trim()) {
-      setError('검증할 JSON 텍스트를 입력해주세요.');
+      setError(t(language, 'jsonFormatter.errorValidateEmpty'));
       setIsValid(null);
       return;
     }
@@ -66,7 +70,7 @@ const JSONFormatter = () => {
       setError('');
       setIsValid(true);
     } catch (err) {
-      setError(`JSON 유효성 검사 실패: ${err.message}`);
+      setError(t(language, 'jsonFormatter.errorValidate').replace('{error}', err.message));
       setIsValid(false);
     }
   };
@@ -80,7 +84,7 @@ const JSONFormatter = () => {
 
   const copyOutput = async () => {
     if (!output) {
-      setError('복사할 내용이 없습니다.');
+      setError(t(language, 'jsonFormatter.errorCopyEmpty'));
       return;
     }
 
@@ -88,10 +92,10 @@ const JSONFormatter = () => {
       await navigator.clipboard.writeText(output);
       // 간단한 피드백 (실제로는 toast나 notification 라이브러리 사용 권장)
       const originalText = error;
-      setError('클립보드에 복사되었습니다!');
+      setError(t(language, 'jsonFormatter.copied'));
       setTimeout(() => setError(originalText), 2000);
     } catch (err) {
-      setError('클립보드 복사에 실패했습니다.');
+      setError(t(language, 'jsonFormatter.errorCopyFailed'));
     }
   };
 
@@ -132,17 +136,28 @@ const JSONFormatter = () => {
   };
 
   return (
-    <div className="json-formatter">
-      <div className="space-y-6">
-        {/* 설정 섹션 */}
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Page Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'jsonFormatter.title')}</h1>
+          <p className="text-muted-foreground">
+            {t(language, 'jsonFormatter.description')}
+          </p>
+        </div>
+
+        {/* Settings Section */}
         <Card>
           <CardHeader>
-            <CardTitle>설정</CardTitle>
-            <CardDescription>JSON 포맷팅 옵션을 설정하세요</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              {t(language, 'jsonFormatter.settingsTitle')}
+            </CardTitle>
+            <CardDescription>{t(language, 'jsonFormatter.settingsDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-4">
-              <Label htmlFor="indent-size">들여쓰기 크기:</Label>
+              <Label htmlFor="indent-size">{t(language, 'jsonFormatter.indentSize')}</Label>
               <Select value={indentSize} onValueChange={setIndentSize}>
                 <SelectTrigger className="w-24">
                   <SelectValue />
@@ -157,95 +172,108 @@ const JSONFormatter = () => {
             
             <div className="flex space-x-2">
               <Button onClick={loadSampleData} variant="outline" size="sm">
-                샘플 데이터 로드
+                {t(language, 'jsonFormatter.loadSample')}
               </Button>
               <Button onClick={clearAll} variant="outline" size="sm">
-                전체 지우기
+                {t(language, 'jsonFormatter.clearAll')}
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* 입력 섹션 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>JSON 입력</CardTitle>
-            <CardDescription>포맷팅하거나 검증할 JSON을 입력하세요</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder='{"name": "example", "value": 123}'
-              className="min-h-[200px] font-mono text-sm"
-            />
-            
-            <div className="flex space-x-2 mt-4">
-              <Button onClick={formatJSON} className="flex-1">
-                포맷팅
-              </Button>
-              <Button onClick={minifyJSON} variant="outline" className="flex-1">
-                압축
-              </Button>
-              <Button onClick={validateJSON} variant="outline" className="flex-1">
-                검증
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 상태 표시 */}
-        {(error || isValid !== null) && (
-          <Card>
-            <CardContent className="pt-6">
-              {error && (
-                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
-                  {error}
-                </div>
-              )}
-              {isValid === true && !error && (
-                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-md text-green-700 text-sm">
-                  ✅ 유효한 JSON입니다
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* 출력 섹션 */}
-        {output && (
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Input Section */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>출력 결과</CardTitle>
-                  <CardDescription>포맷팅된 JSON 결과</CardDescription>
-                </div>
-                <Button onClick={copyOutput} variant="outline" size="sm">
-                  복사
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {t(language, 'jsonFormatter.inputTitle')}
+              </CardTitle>
+              <CardDescription>{t(language, 'jsonFormatter.inputDescription')}</CardDescription>
+            </CardHeader>
+            
+            <CardContent>
+              <Textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={t(language, 'jsonFormatter.inputPlaceholder')}
+                className="min-h-[300px] font-mono text-sm"
+              />
+              
+              <div className="flex space-x-2 mt-4">
+                <Button onClick={formatJSON} className="flex-1">
+                  {t(language, 'jsonFormatter.format')}
+                </Button>
+                <Button onClick={minifyJSON} variant="outline" className="flex-1">
+                  {t(language, 'jsonFormatter.minify')}
+                </Button>
+                <Button onClick={validateJSON} variant="outline" className="flex-1">
+                  {t(language, 'jsonFormatter.validate')}
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Output Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Code className="h-5 w-5" />
+                {t(language, 'jsonFormatter.outputTitle')}
+              </CardTitle>
+              <CardDescription>{t(language, 'jsonFormatter.outputDescription')}</CardDescription>
             </CardHeader>
+            
             <CardContent>
-              <pre className="bg-muted p-4 rounded-md overflow-auto max-h-[400px] text-sm font-mono whitespace-pre-wrap">
-                {output}
-              </pre>
+              <Textarea
+                value={output}
+                readOnly
+                placeholder={t(language, 'jsonFormatter.outputDescription')}
+                className="min-h-[300px] font-mono text-sm bg-muted/30"
+              />
+              
+              <div className="flex items-center justify-between mt-4">
+                <Button onClick={copyOutput} variant="outline" disabled={!output}>
+                  <Copy className="h-4 w-4 mr-2" />
+                  {t(language, 'common.copy')}
+                </Button>
+                
+                {/* Validation Status */}
+                {isValid !== null && (
+                  <div className="flex items-center gap-2">
+                    {isValid ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span className="text-sm text-green-500">{t(language, 'jsonFormatter.validJson')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-4 w-4 text-red-500" />
+                        <span className="text-sm text-red-500">{t(language, 'jsonFormatter.invalidJson')}</span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Status Display */}
+        {error && (
+          <Card className={`${error === t(language, 'jsonFormatter.copied') ? 'border-green-500' : 'border-destructive'}`}>
+            <CardContent className="pt-6">
+              <div className={`flex items-center gap-2 ${error === t(language, 'jsonFormatter.copied') ? 'text-green-500' : 'text-destructive'}`}>
+                {error === t(language, 'jsonFormatter.copied') ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  <AlertCircle className="h-4 w-4" />
+                )}
+                <span>{error}</span>
+              </div>
             </CardContent>
           </Card>
         )}
-
-        {/* 도움말 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>사용법</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p>• <strong>포맷팅:</strong> JSON을 읽기 쉽게 들여쓰기와 줄바꿈을 추가합니다</p>
-            <p>• <strong>압축:</strong> JSON에서 불필요한 공백과 줄바꿈을 제거합니다</p>
-            <p>• <strong>검증:</strong> JSON 구문이 올바른지 확인합니다</p>
-            <p>• <strong>샘플 데이터:</strong> 테스트용 JSON 데이터를 불러옵니다</p>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

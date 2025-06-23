@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Search, User, MapPin, Globe, Copy, ExternalLink, AlertCircle, Wifi } from 'lucide-react';
+import { LanguageContext } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 
 const IPInfo = () => {
+  const { language } = useContext(LanguageContext);
   const [ipAddress, setIpAddress] = useState('');
   const [ipInfo, setIpInfo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +29,7 @@ const IPInfo = () => {
       setIpAddress(data.ip);
       await getIPInfo(data.ip);
     } catch (err) {
-      setError('내 IP 주소를 가져오는 중 오류가 발생했습니다.');
+      setError(t(language, 'ipInfo.errorMyIp'));
     } finally {
       setLoading(false);
     }
@@ -34,12 +37,12 @@ const IPInfo = () => {
 
   const getIPInfo = async (targetIP = ipAddress) => {
     if (!targetIP.trim()) {
-      setError('IP 주소를 입력해주세요.');
+      setError(t(language, 'ipInfo.errorEmpty'));
       return;
     }
 
     if (!validateIP(targetIP.trim())) {
-      setError('올바른 IP 주소 형식이 아닙니다.');
+      setError(t(language, 'ipInfo.errorInvalid'));
       return;
     }
 
@@ -52,7 +55,7 @@ const IPInfo = () => {
       const data = await response.json();
       
       if (data.error) {
-        setError(data.reason || 'IP 정보를 가져올 수 없습니다.');
+        setError(data.reason || t(language, 'ipInfo.errorReason'));
         return;
       }
 
@@ -75,7 +78,7 @@ const IPInfo = () => {
 
       setIpInfo(transformedData);
     } catch (err) {
-      setError('IP 정보를 가져오는 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.');
+      setError(t(language, 'ipInfo.errorFetch'));
     } finally {
       setLoading(false);
     }
@@ -104,30 +107,30 @@ const IPInfo = () => {
         {/* Page Header */}
         <div className="text-center space-y-2">
           <Globe className="h-12 w-12 mx-auto text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">IP 정보 조회</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'ipInfo.title')}</h1>
           <p className="text-muted-foreground">
-            IP 주소의 위치, ISP, 타임존 등 상세 정보를 조회합니다.
+            {t(language, 'ipInfo.description')}
           </p>
         </div>
 
         {/* Input Section */}
         <Card>
           <CardHeader>
-            <CardTitle>IP 주소 입력</CardTitle>
+            <CardTitle>{t(language, 'ipInfo.inputTitle')}</CardTitle>
             <CardDescription>
-              조회할 IP 주소를 입력하거나 현재 IP를 확인하세요.
+              {t(language, 'ipInfo.inputDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="ip-address">IP 주소</Label>
+                <Label htmlFor="ip-address">{t(language, 'ipInfo.ipLabel')}</Label>
                 <Input
                   id="ip-address"
                   type="text"
                   value={ipAddress}
                   onChange={(e) => setIpAddress(e.target.value)}
-                  placeholder="예: 8.8.8.8 또는 2001:4860:4860::8888"
+                  placeholder={t(language, 'ipInfo.ipPlaceholder')}
                 />
               </div>
 
@@ -138,7 +141,7 @@ const IPInfo = () => {
                   className="flex items-center gap-2"
                 >
                   <Search className="h-4 w-4" />
-                  {loading ? '조회 중...' : 'IP 정보 조회'}
+                  {loading ? t(language, 'ipInfo.lookupInProgress') : t(language, 'ipInfo.lookup')}
                 </Button>
                 <Button 
                   type="button" 
@@ -148,7 +151,7 @@ const IPInfo = () => {
                   className="flex items-center gap-2"
                 >
                   <User className="h-4 w-4" />
-                  내 IP 조회
+                  {t(language, 'ipInfo.myIp')}
                 </Button>
               </div>
             </form>
@@ -173,7 +176,7 @@ const IPInfo = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                IP 정보: {ipInfo.query}
+                {t(language, 'ipInfo.resultTitle').replace('{ip}', ipInfo.query)}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -182,11 +185,11 @@ const IPInfo = () => {
                 <div className="space-y-4">
                   <h4 className="text-lg font-semibold flex items-center gap-2">
                     <MapPin className="h-5 w-5" />
-                    위치 정보
+                    {t(language, 'ipInfo.locationInfo')}
                   </h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">국가:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.country')}:</span>
                       <div className="flex items-center gap-2">
                         <span>{ipInfo.country} ({ipInfo.countryCode})</span>
                         <Button 
@@ -198,8 +201,9 @@ const IPInfo = () => {
                         </Button>
                       </div>
                     </div>
+
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">지역:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.region')}:</span>
                       <div className="flex items-center gap-2">
                         <span>{ipInfo.regionName}</span>
                         <Button 
@@ -211,8 +215,9 @@ const IPInfo = () => {
                         </Button>
                       </div>
                     </div>
+
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">도시:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.city')}:</span>
                       <div className="flex items-center gap-2">
                         <span>{ipInfo.city}</span>
                         <Button 
@@ -224,9 +229,10 @@ const IPInfo = () => {
                         </Button>
                       </div>
                     </div>
+
                     {ipInfo.zip && (
                       <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                        <span className="text-sm font-medium">우편번호:</span>
+                        <span className="text-sm font-medium">{t(language, 'ipInfo.zipCode')}:</span>
                         <div className="flex items-center gap-2">
                           <span>{ipInfo.zip}</span>
                           <Button 
@@ -239,10 +245,11 @@ const IPInfo = () => {
                         </div>
                       </div>
                     )}
+
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">좌표:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.coordinates')}:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs">{formatCoordinates(ipInfo.lat, ipInfo.lon)}</span>
+                        <span>{formatCoordinates(ipInfo.lat, ipInfo.lon)}</span>
                         <Button 
                           size="sm" 
                           variant="ghost" 
@@ -250,10 +257,18 @@ const IPInfo = () => {
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => window.open(`https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}`, '_blank')}
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
                       </div>
                     </div>
+
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">타임존:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.timezone')}:</span>
                       <div className="flex items-center gap-2">
                         <span>{ipInfo.timezone}</span>
                         <Button 
@@ -272,13 +287,13 @@ const IPInfo = () => {
                 <div className="space-y-4">
                   <h4 className="text-lg font-semibold flex items-center gap-2">
                     <Wifi className="h-5 w-5" />
-                    네트워크 정보
+                    {t(language, 'ipInfo.networkInfo')}
                   </h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">ISP:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.isp')}:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-right text-sm">{ipInfo.isp}</span>
+                        <span className="text-right">{ipInfo.isp}</span>
                         <Button 
                           size="sm" 
                           variant="ghost" 
@@ -288,10 +303,11 @@ const IPInfo = () => {
                         </Button>
                       </div>
                     </div>
+
                     <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">조직:</span>
+                      <span className="text-sm font-medium">{t(language, 'ipInfo.organization')}:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-right text-sm">{ipInfo.org}</span>
+                        <span className="text-right">{ipInfo.org}</span>
                         <Button 
                           size="sm" 
                           variant="ghost" 
@@ -301,59 +317,23 @@ const IPInfo = () => {
                         </Button>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
-                      <span className="text-sm font-medium">AS:</span>
-                      <div className="flex items-center gap-2">
-                        <span>{ipInfo.as}</span>
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => copyToClipboard(ipInfo.as)}
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Map Section */}
-              <div className="border-t pt-6">
-                <h4 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                  <MapPin className="h-5 w-5" />
-                  지도에서 위치 보기
-                </h4>
-                <div className="w-full h-96 rounded-lg overflow-hidden border">
-                  <iframe
-                    src={`https://www.openstreetmap.org/export/embed.html?bbox=${ipInfo.lon-0.01},${ipInfo.lat-0.01},${ipInfo.lon+0.01},${ipInfo.lat+0.01}&layer=mapnik&marker=${ipInfo.lat},${ipInfo.lon}`}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    title={`${ipInfo.city}, ${ipInfo.country} 위치`}
-                  />
-                </div>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  <Button variant="outline" size="sm" asChild>
-                    <a 
-                      href={`https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      새 창에서 열기
-                    </a>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => copyToClipboard(`${ipInfo.lat}, ${ipInfo.lon}`)}
-                    className="flex items-center gap-2"
-                  >
-                    <Copy className="h-3 w-3" />
-                    좌표 복사
-                  </Button>
+                    {ipInfo.as && (
+                      <div className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
+                        <span className="text-sm font-medium">{t(language, 'ipInfo.asNumber')}:</span>
+                        <div className="flex items-center gap-2">
+                          <span>{ipInfo.as}</span>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={() => copyToClipboard(ipInfo.as)}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>

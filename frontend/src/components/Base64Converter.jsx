@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { ArrowLeftRight, Copy, RotateCcw, Hash, AlertCircle, FileText, Binary } from 'lucide-react';
+import { LanguageContext } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 
 const Base64Converter = () => {
+  const { language } = useContext(LanguageContext);
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [mode, setMode] = useState('encode'); // 'encode' or 'decode'
@@ -17,7 +20,7 @@ const Base64Converter = () => {
       const encoded = btoa(unescape(encodeURIComponent(inputText)));
       setOutputText(encoded);
     } catch (err) {
-      setError('인코딩 중 오류가 발생했습니다: ' + err.message);
+      setError(t(language, 'base64Converter.errorEncode').replace('{error}', err.message));
     }
   };
 
@@ -27,13 +30,13 @@ const Base64Converter = () => {
       const decoded = decodeURIComponent(escape(atob(inputText)));
       setOutputText(decoded);
     } catch (err) {
-      setError('디코딩 중 오류가 발생했습니다. 올바른 Base64 문자열인지 확인해주세요.');
+      setError(t(language, 'base64Converter.errorDecode'));
     }
   };
 
   const handleConvert = () => {
     if (!inputText.trim()) {
-      setError('변환할 텍스트를 입력해주세요.');
+      setError(t(language, 'base64Converter.errorEmpty'));
       return;
     }
 
@@ -70,9 +73,9 @@ const Base64Converter = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Page Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Base64 변환기</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'base64Converter.title')}</h1>
           <p className="text-muted-foreground">
-            텍스트를 Base64로 인코딩하거나 Base64를 텍스트로 디코딩합니다.
+            {t(language, 'base64Converter.description')}
           </p>
         </div>
 
@@ -81,10 +84,10 @@ const Base64Converter = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Hash className="h-5 w-5" />
-              변환 모드
+              {t(language, 'base64Converter.mode')}
             </CardTitle>
             <CardDescription>
-              인코딩 또는 디코딩 모드를 선택하세요.
+              {t(language, 'base64Converter.modeDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -99,7 +102,7 @@ const Base64Converter = () => {
                   className="h-4 w-4 text-primary"
                 />
                 <Label htmlFor="encode" className="cursor-pointer">
-                  텍스트 → Base64 (인코딩)
+                  {t(language, 'base64Converter.encodeMode')}
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
@@ -112,7 +115,7 @@ const Base64Converter = () => {
                   className="h-4 w-4 text-primary"
                 />
                 <Label htmlFor="decode" className="cursor-pointer">
-                  Base64 → 텍스트 (디코딩)
+                  {t(language, 'base64Converter.decodeMode')}
                 </Label>
               </div>
             </div>
@@ -124,19 +127,19 @@ const Base64Converter = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              입력
+              {t(language, 'common.input')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="input-text">
-                {mode === 'encode' ? '변환할 텍스트' : 'Base64 문자열'}
+                {mode === 'encode' ? t(language, 'base64Converter.inputLabel') : t(language, 'base64Converter.base64Label')}
               </Label>
               <Textarea
                 id="input-text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={mode === 'encode' ? '여기에 텍스트를 입력하세요...' : 'Base64 문자열을 입력하세요...'}
+                placeholder={mode === 'encode' ? t(language, 'base64Converter.inputPlaceholder') : t(language, 'base64Converter.base64Placeholder')}
                 rows={6}
                 className="resize-y min-h-[120px]"
               />
@@ -145,15 +148,15 @@ const Base64Converter = () => {
             <div className="flex flex-wrap gap-2">
               <Button onClick={handleConvert} className="flex items-center gap-2">
                 <ArrowLeftRight className="h-4 w-4" />
-                {mode === 'encode' ? '인코딩' : '디코딩'}
+                {mode === 'encode' ? t(language, 'base64Converter.encode') : t(language, 'base64Converter.decode')}
               </Button>
               <Button variant="outline" onClick={handleSwap} disabled={!outputText} className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" />
-                입력/출력 바꾸기
+                {t(language, 'base64Converter.swap')}
               </Button>
               <Button variant="outline" onClick={handleClear} className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" />
-                초기화
+                {t(language, 'common.clear')}
               </Button>
             </div>
           </CardContent>
@@ -177,16 +180,16 @@ const Base64Converter = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Binary className="h-5 w-5" />
-                결과
+                {t(language, 'base64Converter.resultTitle')}
               </CardTitle>
               <CardDescription>
-                {outputText.length} 문자
+                {t(language, 'base64Converter.charactersCount').replace('{count}', outputText.length)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="output-text">
-                  {mode === 'encode' ? 'Base64 결과' : '텍스트 결과'}
+                  {mode === 'encode' ? t(language, 'base64Converter.resultBase64') : t(language, 'base64Converter.resultText')}
                 </Label>
                 <Textarea
                   id="output-text"
@@ -199,7 +202,7 @@ const Base64Converter = () => {
 
               <Button variant="outline" onClick={handleCopy} className="flex items-center gap-2">
                 <Copy className="h-4 w-4" />
-                결과 복사
+                {t(language, 'common.copy')}
               </Button>
             </CardContent>
           </Card>

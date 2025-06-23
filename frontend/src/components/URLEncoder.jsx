@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -6,8 +6,11 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ArrowLeftRight, Copy, RotateCcw, Zap, AlertCircle, Code, Globe } from 'lucide-react';
+import { LanguageContext } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 
 const URLEncoder = () => {
+  const { language } = useContext(LanguageContext);
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [mode, setMode] = useState('encode'); // 'encode' or 'decode'
@@ -27,7 +30,7 @@ const URLEncoder = () => {
       
       setOutputText(encoded);
     } catch (err) {
-      setError('인코딩 중 오류가 발생했습니다: ' + err.message);
+      setError(t(language, 'urlEncoder.errorEncode').replace('{error}', err.message));
     }
   };
 
@@ -44,13 +47,13 @@ const URLEncoder = () => {
       
       setOutputText(decoded);
     } catch (err) {
-      setError('디코딩 중 오류가 발생했습니다. 올바른 URL 인코딩 문자열인지 확인해주세요.');
+      setError(t(language, 'urlEncoder.errorDecode'));
     }
   };
 
   const handleConvert = () => {
     if (!inputText.trim()) {
-      setError('변환할 텍스트를 입력해주세요.');
+      setError(t(language, 'urlEncoder.errorEmpty'));
       return;
     }
 
@@ -109,9 +112,9 @@ const URLEncoder = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Page Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">URL 인코더/디코더</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t(language, 'urlEncoder.title')}</h1>
           <p className="text-muted-foreground">
-            URL에 안전하게 사용할 수 있도록 텍스트를 인코딩하거나 인코딩된 URL을 디코딩합니다.
+            {t(language, 'urlEncoder.description')}
           </p>
         </div>
 
@@ -120,17 +123,17 @@ const URLEncoder = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5" />
-              변환 설정
+              {t(language, 'urlEncoder.settings')}
             </CardTitle>
             <CardDescription>
-              변환 모드와 인코딩 타입을 선택하세요.
+              {t(language, 'urlEncoder.settingsDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 변환 모드 */}
               <div className="space-y-3">
-                <Label className="text-base font-semibold">변환 모드</Label>
+                <Label className="text-base font-semibold">{t(language, 'urlEncoder.mode')}</Label>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <input 
@@ -142,7 +145,7 @@ const URLEncoder = () => {
                       className="h-4 w-4 text-primary"
                     />
                     <Label htmlFor="encode" className="text-sm font-normal cursor-pointer">
-                      텍스트 → URL 인코딩
+                      {t(language, 'urlEncoder.encodeMode')}
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -155,7 +158,7 @@ const URLEncoder = () => {
                       className="h-4 w-4 text-primary"
                     />
                     <Label htmlFor="decode" className="text-sm font-normal cursor-pointer">
-                      URL 디코딩 → 텍스트
+                      {t(language, 'urlEncoder.decodeMode')}
                     </Label>
                   </div>
                 </div>
@@ -163,7 +166,7 @@ const URLEncoder = () => {
 
               {/* 인코딩 타입 */}
               <div className="space-y-3">
-                <Label className="text-base font-semibold">인코딩 타입</Label>
+                <Label className="text-base font-semibold">{t(language, 'urlEncoder.encodingType')}</Label>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <input 
@@ -175,7 +178,7 @@ const URLEncoder = () => {
                       className="h-4 w-4 text-primary"
                     />
                     <Label htmlFor="component" className="text-sm font-normal cursor-pointer">
-                      Component (완전 인코딩)
+                      {t(language, 'urlEncoder.componentType')}
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -188,7 +191,7 @@ const URLEncoder = () => {
                       className="h-4 w-4 text-primary"
                     />
                     <Label htmlFor="uri" className="text-sm font-normal cursor-pointer">
-                      URI (기본 인코딩)
+                      {t(language, 'urlEncoder.uriType')}
                     </Label>
                   </div>
                 </div>
@@ -200,21 +203,24 @@ const URLEncoder = () => {
         {/* Examples */}
         <Card>
           <CardHeader>
-            <CardTitle>예시 (클릭하여 적용)</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Code className="h-5 w-5" />
+              {t(language, 'urlEncoder.examples')}
+            </CardTitle>
+            <CardDescription>
+              {t(language, 'urlEncoder.examplesDescription')}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid gap-2">
               {presetExamples[mode].map((example, index) => (
-                <Button
+                <button
                   key={index}
-                  variant="outline"
-                  size="sm"
                   onClick={() => loadExample(example)}
-                  className="text-xs"
-                  title={example}
+                  className="text-left p-3 rounded-lg border border-border hover:border-primary hover:bg-accent transition-colors text-sm font-mono"
                 >
-                  {example.length > 30 ? example.substring(0, 30) + '...' : example}
-                </Button>
+                  {example}
+                </button>
               ))}
             </div>
           </CardContent>
@@ -224,40 +230,35 @@ const URLEncoder = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Code className="h-5 w-5" />
-              입력
+              <Globe className="h-5 w-5" />
+              {t(language, 'common.input')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="input-text">
-                {mode === 'encode' ? '인코딩할 텍스트 또는 URL' : '디코딩할 URL 인코딩 문자열'}
-              </Label>
+              <Label htmlFor="input-text">{t(language, 'urlEncoder.inputLabel')}</Label>
               <Textarea
                 id="input-text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={mode === 'encode' ? 
-                  '예: https://example.com/search?q=안녕하세요' : 
-                  '예: https%3A//example.com/search%3Fq%3D%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94'
-                }
-                rows={4}
-                className="resize-y min-h-[100px]"
+                placeholder={t(language, 'urlEncoder.inputPlaceholder')}
+                rows={6}
+                className="resize-y min-h-[120px]"
               />
             </div>
 
             <div className="flex flex-wrap gap-2">
               <Button onClick={handleConvert} className="flex items-center gap-2">
                 <ArrowLeftRight className="h-4 w-4" />
-                {mode === 'encode' ? 'URL 인코딩' : 'URL 디코딩'}
+                {mode === 'encode' ? t(language, 'common.encoding') : t(language, 'common.decoding')}
               </Button>
               <Button variant="outline" onClick={handleSwap} disabled={!outputText} className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" />
-                입력/출력 바꾸기
+                {t(language, 'base64Converter.swap')}
               </Button>
               <Button variant="outline" onClick={handleClear} className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" />
-                초기화
+                {t(language, 'common.clear')}
               </Button>
             </div>
           </CardContent>
@@ -280,74 +281,56 @@ const URLEncoder = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5" />
-                결과
+                <Code className="h-5 w-5" />
+                {t(language, 'common.result')}
               </CardTitle>
               <CardDescription>
-                {outputText.length} 문자
+                {t(language, 'base64Converter.charactersCount').replace('{count}', outputText.length)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="output-text">
-                  {mode === 'encode' ? 'URL 인코딩 결과' : '디코딩 결과'}
-                </Label>
+                <Label htmlFor="output-text">{t(language, 'common.output')}</Label>
                 <Textarea
                   id="output-text"
                   value={outputText}
                   readOnly
-                  rows={4}
-                  className="resize-y min-h-[100px] bg-muted/30"
+                  rows={6}
+                  className="resize-y min-h-[120px] bg-muted/30"
                 />
               </div>
 
               <Button variant="outline" onClick={handleCopy} className="flex items-center gap-2">
                 <Copy className="h-4 w-4" />
-                결과 복사
+                {t(language, 'common.copy')}
               </Button>
             </CardContent>
           </Card>
         )}
 
-        {/* Info Section */}
+        {/* Quick Tips */}
         <Card>
           <CardHeader>
-            <CardTitle>URL 인코딩이란?</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              {t(language, 'urlEncoder.quickTips')}
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
-              URL 인코딩(퍼센트 인코딩)은 URL에서 특별한 의미를 갖는 문자들을 안전하게 전송하기 위해 변환하는 방법입니다.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <h4 className="font-semibold">encodeURIComponent</h4>
-                <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                  <li>모든 특수 문자를 인코딩</li>
-                  <li>URL 매개변수 값에 적합</li>
-                  <li>: / ? # [ ] @ 등도 인코딩</li>
-                </ul>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="font-semibold">encodeURI</h4>
-                <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                  <li>URL 구조 문자는 유지</li>
-                  <li>완전한 URL 인코딩에 적합</li>
-                  <li>: / ? # [ ] @ 등은 그대로 유지</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="bg-muted/10 p-4 rounded-lg space-y-2">
-              <h4 className="font-semibold">언제 사용하나요?</h4>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                <li><strong>웹 개발:</strong> URL 매개변수에 특수문자나 한글 포함</li>
-                <li><strong>API 호출:</strong> 검색어나 사용자 입력을 URL에 포함</li>
-                <li><strong>폼 데이터:</strong> GET 방식으로 데이터 전송</li>
-                <li><strong>브라우저 호환성:</strong> 모든 브라우저에서 안전한 URL 보장</li>
-              </ul>
-            </div>
+          <CardContent>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                {t(language, 'urlEncoder.tip1')}
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                {t(language, 'urlEncoder.tip2')}
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                {t(language, 'urlEncoder.tip3')}
+              </li>
+            </ul>
           </CardContent>
         </Card>
       </div>

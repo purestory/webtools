@@ -1,5 +1,7 @@
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAudioEditor } from '../hooks/useAudioEditor';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../locales/translations';
 import './AudioEditor.css';
 
 const AudioEditor = () => {
@@ -42,6 +44,8 @@ const AudioEditor = () => {
     applyNormalize,
     applyReverse
   } = useAudioEditor();
+
+  const { language } = useLanguage();
 
   // 선택된 구간의 시간을 시:분:초로 분해하는 함수
   const parseTime = (seconds) => {
@@ -215,12 +219,12 @@ const AudioEditor = () => {
     <div className="audio-editor-page">
       <div className="container">
         {/* Page Header */}
-        <div style={{ marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>Audio Editor</h1>
-          <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '1rem' }}>
-            Upload and edit audio files. You can easily start by drag and drop.
-          </p>
-        </div>
+                  <div style={{ marginBottom: '2rem' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>{t(language, 'audioEditor.title')}</h1>
+            <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '1rem' }}>
+              {t(language, 'audioEditor.description')}
+            </p>
+          </div>
 
         {/* Upload Section */}
         <div className="card">
@@ -239,8 +243,8 @@ const AudioEditor = () => {
                   <line x1="12" x2="12" y1="15" y2="3"></line>
                 </svg>
               </div>
-              <h4 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>Drop files here</h4>
-              <p style={{ color: 'hsl(var(--muted-foreground))', marginBottom: '1rem' }}>Click to select audio or video files or drag them here</p>
+                              <h4 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>{t(language, 'audioEditor.upload.title')}</h4>
+                <p style={{ color: 'hsl(var(--muted-foreground))', marginBottom: '1rem' }}>{t(language, 'audioEditor.upload.subtitle')}</p>
               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <span className="badge badge-outline">MP3</span>
                 <span className="badge badge-outline">WAV</span>
@@ -255,18 +259,18 @@ const AudioEditor = () => {
               {audioInfo.fileName && (
                 <div style={{ display: 'block', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid hsl(var(--border))' }}>
                   <div style={{ textAlign: 'left' }}>
-                    <div className="label" style={{ marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>Uploaded File Info</div>
-                    <div style={{ marginBottom: '1rem' }}>
-                                              <div className="label" style={{ fontSize: '0.875rem' }}>File Name</div>
+                                          <div className="label" style={{ marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.upload.fileInfo')}</div>
+                      <div style={{ marginBottom: '1rem' }}>
+                                              <div className="label" style={{ fontSize: '0.875rem' }}>{t(language, 'audioEditor.upload.fileName')}</div>
                         <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem', fontWeight: '500' }}>{audioInfo.fileName}</div>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem' }}>
                         <div>
-                          <div className="label" style={{ fontSize: '0.875rem' }}>Duration</div>
+                          <div className="label" style={{ fontSize: '0.875rem' }}>{t(language, 'audioEditor.upload.duration')}</div>
                           <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.duration}</div>
                         </div>
                         <div>
-                          <div className="label" style={{ fontSize: '0.875rem' }}>File Size</div>
+                          <div className="label" style={{ fontSize: '0.875rem' }}>{t(language, 'audioEditor.upload.fileSize')}</div>
                           <div style={{ color: 'hsl(var(--muted-foreground))', marginTop: '0.25rem' }}>{audioInfo.fileSize}</div>
                         </div>
                     </div>
@@ -291,8 +295,8 @@ const AudioEditor = () => {
               {/* Combined Playback and Volume Controls */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem', marginBottom: '0.5rem' }}>
                 {/* Playback Controls */}
-                <div className="control-group">
-                  <div className="label">Playback Controls</div>
+                                  <div className="control-group">
+                    <div className="label">{t(language, 'audioEditor.controls.playbackControls')}</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <div className="playback-controls">
                       <button 
@@ -357,12 +361,12 @@ const AudioEditor = () => {
                 </div>
 
                 {/* Expanded Selection Controls */}
-                <div className="control-group">
-                  <div className="label" style={{ marginBottom: '1rem' }}>Selection</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    {/* 시작 시간 */}
-                    <div>
-                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>Start Time</div>
+                                  <div className="control-group">
+                    <div className="label" style={{ marginBottom: '1rem' }}>{t(language, 'audioEditor.controls.selection')}</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      {/* 시작 시간 */}
+                      <div>
+                        <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.controls.startTime')}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <input type="number" className="input" placeholder="Hr" min="0" max="23" value={startTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
@@ -371,9 +375,9 @@ const AudioEditor = () => {
                         <input type="number" className="input" placeholder="Sec" min="0" max="59" step="0.1" value={startTime.seconds || ''} disabled={!audioInfo.fileName} style={{ width: '80px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                       </div>
                     </div>
-                    {/* 종료 시간 */}
-                    <div>
-                      <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>End Time</div>
+                                          {/* 종료 시간 */}
+                      <div>
+                        <div className="label" style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.controls.endTime')}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <input type="number" className="input" placeholder="Hr" min="0" max="23" value={endTime.hours || ''} disabled={!audioInfo.fileName} style={{ width: '60px', height: '40px', fontSize: '0.9rem', textAlign: 'center' }} readOnly />
                         <span style={{ fontSize: '1rem', fontWeight: '500' }}>:</span>
@@ -383,9 +387,9 @@ const AudioEditor = () => {
                       </div>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
-                    <button className="button button-outline button-sm" onClick={clearSelection} disabled={!audioInfo.fileName}>Clear Selection</button>
-                  </div>
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+                      <button className="button button-outline button-sm" onClick={clearSelection} disabled={!audioInfo.fileName}>{t(language, 'audioEditor.controls.clearSelection')}</button>
+                    </div>
                 </div>
               </div>
 
@@ -412,7 +416,7 @@ const AudioEditor = () => {
             <div className="card-content" style={{ padding: '1rem' }}>
               {/* Selection Edit Section - 먼저 배치 */}
               <div className="selection-edit-section" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--secondary) / 0.3)' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>Selection Edit</h4>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: 'hsl(var(--primary))' }}>{t(language, 'audioEditor.controls.selectionEdit')}</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <button className="button button-primary" onClick={() => trimSelection()} disabled={!audioInfo.fileName}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -421,7 +425,7 @@ const AudioEditor = () => {
                       <path d="M3 5v6h6"></path>
                       <path d="M21 19v-6h-6"></path>
                     </svg>
-                    Keep Selection Only
+                    {t(language, 'audioEditor.controls.keepSelection')}
                   </button>
                   <button className="button button-destructive" onClick={() => deleteSelection()} disabled={!audioInfo.fileName}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
