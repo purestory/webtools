@@ -98,6 +98,16 @@ const Home = () => {
       borderColor: 'border-violet-500/20'
     },
     {
+      id: 'text-repairer',
+      name: t(language, 'home.tools.textRepairer.name'),
+      description: t(language, 'home.tools.textRepairer.description'),
+      icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M12 9h-2 M10 21V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14',
+      href: '/text-repairer',
+      features: t(language, 'home.tools.textRepairer.features'),
+      bgColor: 'from-slate-500/10 to-gray-500/10',
+      borderColor: 'border-slate-500/20'
+    },
+    {
       id: 'test-components',
       name: 'UI Component Test',
       description: 'Test page for shadcn/ui components. UI component behavior verification tool for developers.',

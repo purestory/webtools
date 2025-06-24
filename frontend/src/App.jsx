@@ -12,6 +12,7 @@ import PDFEditorPage from './pages/PDFEditorPage';
 import URLEncoderPage from './pages/URLEncoderPage';
 import TestPage from './pages/TestPage';
 import JSONFormatterPage from './pages/JSONFormatterPage';
+import TextRepairerPage from './pages/TextRepairerPage';
 import './App.css';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/ip-info" element={<IPInfoPage />} />
             <Route path="/pdf-editor" element={<PDFEditorPage />} />
             <Route path="/url-encoder" element={<URLEncoderPage />} />
+            <Route path="/text-repairer" element={<TextRepairerPage />} />
           </Routes>
         </Layout>
       </Router>

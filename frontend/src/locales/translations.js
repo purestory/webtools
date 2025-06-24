@@ -136,6 +136,11 @@ export const translations = {
           name: "JSON Formatter",
           description: "JSON 데이터를 포맷팅하고 검증합니다",
           features: ["포맷팅", "압축", "검증", "트리 뷰"]
+        },
+        textRepairer: {
+          name: "Text Repairer",
+          description: "Fix broken text and encoding issues",
+          features: ["이스케이프 문자 변환", "인코딩 문제 수정", "줄바꿈 정규화", "유니코드 변환"]
         }
       }
     },
@@ -491,6 +496,46 @@ export const translations = {
       standardSizes: "표준 크기",
       customSize: "사용자 정의 크기",
       addCustomSize: "사용자 정의 크기 추가"
+    },
+
+    // 텍스트 복구 도구 페이지
+    textRepairer: {
+      title: "Text Repairer",
+      description: "Fix broken text with escape characters, encoding issues, and line break problems.",
+      input: {
+        title: "입력 텍스트",
+        placeholder: "복구할 텍스트를 입력하거나 붙여넣으세요...\n\n예시:\n\"\"\"\\n제목: 샘플 텍스트\\n작성자: 홍길동\\n\"\"\""
+      },
+      output: {
+        title: "복구된 텍스트",
+        placeholder: "복구된 텍스트가 여기에 표시됩니다..."
+      },
+      mode: {
+        label: "복구 모드",
+        escapeChars: "이스케이프 문자 (\\n, \\t 등)",
+        unicodeEscape: "유니코드 이스케이프 (\\u0000, \\x00)",
+        jsonString: "JSON 문자열 형식",
+        encodingFix: "인코딩 문제",
+        lineBreaks: "줄바꿈 정규화",
+        all: "모든 복구 (권장)"
+      },
+      encoding: {
+        label: "파일 인코딩"
+      },
+      upload: {
+        button: "텍스트 파일 업로드"
+      },
+      process: {
+        button: "텍스트 복구"
+      },
+      examples: {
+        title: "예시",
+        before: "복구 전 (깨진 텍스트)",
+        after: "복구 후 (정상 텍스트)"
+      },
+      errors: {
+        invalidFileType: "텍스트 파일만 지원됩니다 (txt, js, json, html, css, md, log, conf, ini, yml, yaml)."
+      }
     }
   },
 
@@ -986,6 +1031,193 @@ export const translations = {
       standardSizes: "Standard Sizes",
       customSize: "Custom Size",
       addCustomSize: "Add Custom Size"
+    }
+  },
+
+  en: {
+    // 공통
+    common: {
+      appName: "WebTools",
+      language: "Language",
+      korean: "한국어",
+      english: "English",
+      back: "Back",
+      home: "Home",
+      upload: "Upload",
+      download: "Download",
+      convert: "Convert",
+      edit: "Edit",
+      save: "Save",
+      cancel: "Cancel",
+      delete: "Delete",
+      clear: "Clear",
+      apply: "Apply",
+      loading: "Loading...",
+      error: "Error",
+      success: "Success",
+      warning: "Warning",
+      info: "Info",
+      copy: "Copy",
+      paste: "Paste",
+      select: "Select",
+      deselect: "Deselect",
+      duplicate: "Duplicate",
+      move: "Move",
+      rotate: "Rotate",
+      resize: "Resize",
+      close: "Close",
+      open: "Open",
+      settings: "Settings",
+      examples: "Examples",
+      help: "Help",
+      format: "Format",
+      quality: "Quality",
+      size: "Size",
+      filename: "Filename",
+      width: "Width",
+      height: "Height",
+      encoding: "Encoding",
+      decoding: "Decoding",
+      validation: "Validation",
+      preview: "Preview",
+      input: "Input",
+      output: "Output",
+      result: "Result",
+      options: "Options",
+      advanced: "Advanced",
+      basic: "Basic",
+      text: "Text",
+      file: "File",
+      url: "URL",
+      image: "Image",
+      audio: "Audio",
+      video: "Video",
+      pdf: "PDF",
+      json: "JSON",
+      base64: "Base64",
+      qrcode: "QR Code",
+      location: "Location",
+      information: "Information",
+      pages: "Pages",
+      page: "Page",
+      multipleFilesSupported: "Multiple files supported",
+    },
+
+    // Home page
+    home: {
+      title: "Modern Web Tools Collection",
+      subtitle: "Powerful editing tools available directly in your browser",
+      features: {
+        title: "Key Features",
+        secure: {
+          title: "Secure Processing",
+          description: "All files are processed locally in your browser and never sent to servers"
+        },
+        fast: {
+          title: "Fast Processing",
+          description: "Direct local processing eliminates upload/download time"
+        },
+        easy: {
+          title: "Easy to Use",
+          description: "No complex installation required - use directly in your browser"
+        },
+        allInOne: {
+          title: "All Tools in One Place",
+          description: "Various editing tools provided on a single platform"
+        }
+      },
+      tools: {
+        audioEditor: {
+          name: "Audio Editor",
+          description: "Cut and edit audio files with advanced features",
+          features: ["Waveform Visualization", "Selection & Editing", "Volume Control", "Fade Effects"]
+        },
+        imageEditor: {
+          name: "Image Editor", 
+          description: "Resize and crop images with professional tools",
+          features: ["Resize", "Crop", "Rotate", "Filters"]
+        },
+        imageConverter: {
+          name: "Image Converter",
+          description: "Convert image formats and generate Windows icons",
+          features: ["Format Conversion", "Windows Icon Generation", "Quality Control", "Batch Processing"]
+        },
+        qrGenerator: {
+          name: "QR Code Generator",
+          description: "Convert text or URLs into QR codes",
+          features: ["Text QR", "URL QR", "Size Control", "Color Customization"]
+        },
+        base64Converter: {
+          name: "Base64 Converter", 
+          description: "Encode/decode text to Base64 format",
+          features: ["Encoding", "Decoding", "File Conversion", "URL Safe"]
+        },
+        ipInfo: {
+          name: "IP Information",
+          description: "Look up location and information for IP addresses",
+          features: ["Location Info", "ISP Info", "Timezone", "Security Info"]
+        },
+        pdfEditor: {
+          name: "PDF Editor",
+          description: "Edit PDF files and manage pages",
+          features: ["Page Split", "Merge", "Rotate", "Text Extract"]
+        },
+        urlEncoder: {
+          name: "URL Encoder",
+          description: "Encode/decode URLs safely",
+          features: ["URL Encoding", "Decoding", "Component Analysis", "Safe Conversion"]
+        },
+        jsonFormatter: {
+          name: "JSON Formatter",
+          description: "Format and validate JSON data",
+          features: ["Formatting", "Compression", "Validation", "Tree View"]
+        },
+        textRepairer: {
+          name: "Text Repairer",
+          description: "Fix broken text and encoding issues",
+          features: ["Escape Character Conversion", "Encoding Issue Fix", "Line Break Normalization", "Unicode Conversion"]
+        }
+      }
+    },
+
+    // Text Repairer Page
+    textRepairer: {
+      title: "Text Repairer",
+      description: "Fix broken text with escape characters, encoding issues, and line break problems.",
+      input: {
+        title: "Input Text",
+        placeholder: "Enter or paste broken text here...\n\nExample:\n\"\"\"\\ntitle: Sample Text\\nauthors: John Doe\\n\"\"\""
+      },
+      output: {
+        title: "Fixed Text",
+        placeholder: "Fixed text will appear here..."
+      },
+      mode: {
+        label: "Repair Mode",
+        escapeChars: "Escape Characters (\\n, \\t, etc.)",
+        unicodeEscape: "Unicode Escape (\\u0000, \\x00)",
+        jsonString: "JSON String Format",
+        encodingFix: "Encoding Issues",
+        lineBreaks: "Line Break Normalization",
+        all: "All Repairs (Recommended)"
+      },
+      encoding: {
+        label: "File Encoding"
+      },
+      upload: {
+        button: "Upload Text File"
+      },
+      process: {
+        button: "Fix Text"
+      },
+      examples: {
+        title: "Examples",
+        before: "Before (Broken)",
+        after: "After (Fixed)"
+      },
+      errors: {
+        invalidFileType: "Only text files are supported (txt, js, json, html, css, md, log, conf, ini, yml, yaml)."
+      }
     }
   }
 };

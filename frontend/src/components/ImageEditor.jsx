@@ -583,11 +583,6 @@ const ImageEditor = () => {
                   </Select>
                 </div>
 
-                <div className="p-3 bg-muted/50 rounded-lg">
-                  <h4 className="text-sm font-medium mb-2">{t(language, 'imageEditor.dimensions')}</h4>
-                  <p className="text-sm text-muted-foreground">{dimensions.width} × {dimensions.height}</p>
-                </div>
-
                 {resizeMode === 'manual' && (
                   <div className="space-y-4">
                     <div className="space-y-2">
